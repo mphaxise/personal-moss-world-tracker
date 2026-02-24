@@ -14,6 +14,7 @@ Turns everyday moss sightings into a lightweight community discovery product wit
 - Local persistence via `localStorage` is implemented.
 - Minimal API + SQLite persistence backend is implemented.
 - Discovery upgrades shipped: search, filters, nearby mode, ranked sort, map actions.
+- Startup behavior: cached entries/photos load first, then sync to SQLite API when available.
 
 ## Contributor anonymity (public view)
 

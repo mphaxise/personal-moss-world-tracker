@@ -106,20 +106,40 @@ function wireEvents() {
 }
 
 async function initializeData() {
+  const cachedEntries = loadEntriesFromLocal();
+  if (cachedEntries.length > 0) {
+    state.entries = cachedEntries;
+    setBrowseStatus(`Loaded ${cachedEntries.length} cached entries.`);
+  }
+
   state.apiOnline = await probeApi();
 
   if (state.apiOnline) {
-    setDataModeBadge("Data mode: online API + SQLite");
-    await refreshEntriesFromApi();
-    persistEntriesToLocal();
-    return;
+    setDataModeBadge("Data mode: online API + SQLite + local cache");
+
+    try {
+      const apiEntries = await fetchEntriesFromApi();
+      const apiIds = new Set(apiEntries.map((entry) => entry.id));
+      const localOnlyEntries = state.entries.filter((entry) => !apiIds.has(entry.id));
+
+      if (localOnlyEntries.length > 0) {
+        await importEntriesViaApi(localOnlyEntries);
+        setBrowseStatus(`Synced ${localOnlyEntries.length} cached entries to local API database.`);
+      }
+
+      await refreshEntriesFromApi();
+      persistEntriesToLocal();
+      return;
+    } catch (error) {
+      console.error(error);
+      setDataModeBadge("Data mode: offline local cache (API unavailable)");
+      state.apiOnline = false;
+    }
+  } else {
+    setDataModeBadge("Data mode: offline local cache");
   }
 
-  setDataModeBadge("Data mode: offline local cache");
-  const cached = loadEntriesFromLocal();
-
-  if (cached.length > 0) {
-    state.entries = cached;
+  if (state.entries.length > 0) {
     return;
   }
 
@@ -137,7 +157,7 @@ async function probeApi() {
   }
 }
 
-async function refreshEntriesFromApi() {
+async function fetchEntriesFromApi() {
   const response = await fetch(`${API_BASE}/entries`, { headers: { Accept: "application/json" } });
 
   if (!response.ok) {
@@ -146,7 +166,11 @@ async function refreshEntriesFromApi() {
 
   const payload = await response.json();
   const rawEntries = Array.isArray(payload.entries) ? payload.entries : [];
-  state.entries = dedupeEntries(rawEntries.map((entry) => normalizeEntry(entry)));
+  return dedupeEntries(rawEntries.map((entry) => normalizeEntry(entry)));
+}
+
+async function refreshEntriesFromApi() {
+  state.entries = await fetchEntriesFromApi();
 }
 
 async function loadSeedEntries() {
