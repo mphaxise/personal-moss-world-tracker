@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Personal Moss World Tracker</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="hero">
+        <p class="eyebrow">community moss discoveries</p>
+        <h1>Personal Moss World Tracker</h1>
+        <p class="hero-copy">
+          Share everyday moss sightings in under a minute, then explore them as
+          visual cards or map markers.
+        </p>
+        <div class="hero-meta">
+          <span id="entryCount">0 entries</span>
+          <span>public contributor policy: anonymous only</span>
+        </div>
+      </header>
+
+      <main>
+        <section class="panel" aria-labelledby="submitHeading">
+          <div class="panel-head">
+            <h2 id="submitHeading">Submit a Moss Sighting</h2>
+            <p>
+              Public display always hides identity. Submissions are shown as
+              anonymous contributors.
+            </p>
+          </div>
+
+          <form id="entryForm" class="entry-form" novalidate>
+            <label>
+              Title
+              <input name="title" type="text" required maxlength="90" placeholder="Moss at the corner mailbox" />
+            </label>
+
+            <label>
+              Short note
+              <textarea
+                name="description"
+                rows="3"
+                maxlength="240"
+                placeholder="What makes this moss world interesting?"
+              ></textarea>
+            </label>
+
+            <div class="field-row">
+              <label>
+                Photo URL (optional if uploading a file)
+                <input name="photoUrl" type="url" placeholder="https://..." />
+              </label>
+              <label>
+                Upload photo (optional if URL provided)
+                <input name="photoFile" type="file" accept="image/*" />
+              </label>
+            </div>
+
+            <div class="field-row">
+              <label>
+                Location label
+                <input name="locationLabel" type="text" maxlength="120" placeholder="Valli Street, San Francisco" />
+              </label>
+              <label>
+                Captured date
+                <input name="capturedAt" type="date" />
+              </label>
+            </div>
+
+            <div class="field-row">
+              <label>
+                Latitude
+                <input name="latitude" type="number" step="any" placeholder="37.7749" />
+              </label>
+              <label>
+                Longitude
+                <input name="longitude" type="number" step="any" placeholder="-122.4194" />
+              </label>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" id="submitBtn">Add anonymous sighting</button>
+              <p id="formStatus" role="status" aria-live="polite"></p>
+            </div>
+          </form>
+        </section>
+
+        <section class="panel" aria-label="Moss worlds browse area">
+          <div class="toolbar">
+            <div class="view-toggle" role="tablist" aria-label="Toggle between card and map views">
+              <button id="cardsBtn" class="is-active" data-view="cards" role="tab" aria-selected="true">
+                Card view
+              </button>
+              <button id="mapBtn" data-view="map" role="tab" aria-selected="false">
+                Map view
+              </button>
+            </div>
+            <p class="toolbar-note">Entries are publicly shown with anonymous contributor labels.</p>
+          </div>
+
+          <div id="cardsView" class="view view-cards" role="tabpanel">
+            <div id="cardsGrid" class="cards-grid"></div>
+          </div>
+
+          <div id="mapView" class="view view-map is-hidden" role="tabpanel" aria-hidden="true">
+            <div id="mapCanvas" aria-label="Moss entries map"></div>
+            <div class="missing-location">
+              <h3>Entries without coordinates</h3>
+              <ul id="missingLocationList"></ul>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
+    <script type="module" src="app.js"></script>
+  </body>
+</html>

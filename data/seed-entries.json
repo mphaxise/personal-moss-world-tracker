@@ -1,0 +1,44 @@
+[
+  {
+    "id": "seed-valli-stump",
+    "title": "Moss-Covered Tree Stump",
+    "description": "Urban moss cluster on a weathered stump with strong texture and shade.",
+    "photo_url": "https://images.unsplash.com/photo-1473448912268-2022ce9509d8?auto=format&fit=crop&w=1200&q=80",
+    "captured_at": "2026-02-24",
+    "latitude": 37.7597,
+    "longitude": -122.4148,
+    "location_label": "Valli Street area, San Francisco",
+    "created_at": "2026-02-24T18:00:00.000Z",
+    "contributor_token": "seed-anon-001",
+    "inat_observation_id": "",
+    "inat_summary": ""
+  },
+  {
+    "id": "seed-park-wall",
+    "title": "Fog Line Wall Moss",
+    "description": "Thin green sheet spreading along a damp retaining wall after morning fog.",
+    "photo_url": "https://images.unsplash.com/photo-1518495973542-4542c06a5843?auto=format&fit=crop&w=1200&q=80",
+    "captured_at": "2026-02-23",
+    "latitude": 37.7694,
+    "longitude": -122.4862,
+    "location_label": "Near Golden Gate Park, San Francisco",
+    "created_at": "2026-02-24T18:20:00.000Z",
+    "contributor_token": "seed-anon-002",
+    "inat_observation_id": "",
+    "inat_summary": ""
+  },
+  {
+    "id": "seed-alley-pot",
+    "title": "Alley Pot Moss Pocket",
+    "description": "A tiny moss world thriving in a ceramic pot near a side alley.",
+    "photo_url": "https://images.unsplash.com/photo-1498429152472-2f14c582db9d?auto=format&fit=crop&w=1200&q=80",
+    "captured_at": "2026-02-22",
+    "latitude": null,
+    "longitude": null,
+    "location_label": "Mission District, San Francisco",
+    "created_at": "2026-02-24T18:40:00.000Z",
+    "contributor_token": "seed-anon-003",
+    "inat_observation_id": "",
+    "inat_summary": ""
+  }
+]
