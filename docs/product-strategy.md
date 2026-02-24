@@ -24,7 +24,8 @@ Out of scope:
 - Public feed never exposes contributor name, handle, email, or contact info.
 - Every public entry displays the same label: `Anonymous contributor`.
 - Internal entry records use non-identifying contributor tokens (`anon-xxxx`).
-- Any future private contact channel must be strictly separate from public rendering.
+- Contact details in entry text are redacted.
+- Uploaded images are re-encoded client-side to reduce metadata leakage.
 
 ## Target users and jobs
 
@@ -49,7 +50,7 @@ Out of scope:
 - Graceful fallback: missing metadata never blocks contribution.
 - Anonymous-by-default: contributor identity is hidden in public views.
 
-## Proposed data model (v1)
+## Data model (implemented)
 
 Entity: `moss_entry`
 - `id` (string)
@@ -69,44 +70,25 @@ Public rendering fields (subset):
 - `title`, `description`, `photo_url`, `captured_at`, `latitude`, `longitude`, `location_label`, `inat_summary`
 - `public_contributor_label` (constant): `Anonymous contributor`
 
-## Technical direction (prototype)
+## Technical architecture (implemented)
 
-- Frontend: single-page web app.
-- Storage: local seeded JSON plus in-memory additions for prototype phase.
-- Map: lightweight map component with marker rendering.
-- Enrichment spike: test an iNaturalist lookup path and log results/constraints.
-
-## Milestones
-
-Milestone 1 (60-90 min target):
-- Build one-page UI shell.
-- Implement submission form and local state updates.
-- Render card list and map markers from shared entry state.
-
-End-of-day target:
-- Working one-page moss tracker with seeded entries.
-- iNaturalist enrichment spike documented (what worked, what failed, next step).
-
-## Definition of done
-
-- Prototype runs locally without backend dependencies.
-- Submission flow and view toggle are functional.
-- At least one seeded entry and one newly submitted entry render in both views.
-- Public entry display is anonymous for all contributors.
-- iNaturalist spike notes are captured in project docs.
+- Frontend: static SPA (`index.html`, `styles.css`, `app.js`).
+- API backend: Python `server.py` (`GET/POST/PATCH` endpoints).
+- Durable storage: SQLite (`data/moss_tracker.db`).
+- Offline fallback: `localStorage` + seed JSON.
+- Discovery controls: search, filters, nearby mode, ranked sorting.
+- Import/export: JSON round-trip for local portability.
 
 ## Post-MVP reflection (2026-02-24)
 
 - MVP objective is met and runnable locally.
-- Anonymous public display is implemented end-to-end in UI rendering.
-- Map and cards are synchronized via one shared entry model.
-- Main maturity gap is persistence (entries reset on page refresh).
+- Anonymous public display is implemented end-to-end.
+- API durability and offline fallback coexist.
+- Discovery UX has first-pass quality controls.
 
 ## Next execution menu
 
-1. Durable local MVP: add `localStorage` persistence + JSON import/export.
-2. Privacy hardening: add media/payload sanitization and stronger public output guards.
-3. Backend path: create minimal API + persistent store with anonymous public schema.
-4. Discovery UX: filters, improved map controls, and ranked browsing.
-
-Detailed option analysis: `docs/status-and-next-steps.md`.
+1. Operational hardening: request limits, abuse guardrails, backups.
+2. Moderation workflow: flag/review/hide pipeline.
+3. Automated testing: UI + API behavior tests.
+4. Deployment hardening: containerization, TLS domain, production config.

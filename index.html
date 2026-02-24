@@ -23,6 +23,7 @@
         </p>
         <div class="hero-meta">
           <span id="entryCount">0 entries</span>
+          <span id="dataModeBadge">Data mode: checking...</span>
           <span>public contributor policy: anonymous only</span>
         </div>
       </header>
@@ -32,8 +33,8 @@
           <div class="panel-head">
             <h2 id="submitHeading">Submit a Moss Sighting</h2>
             <p>
-              Public display always hides identity. Submissions are shown as
-              anonymous contributors.
+              Public display always hides identity. Contact details are
+              automatically redacted from public text.
             </p>
           </div>
 
@@ -86,6 +87,12 @@
               </label>
             </div>
 
+            <div class="privacy-note">
+              Privacy guardrails: no names/emails/phone numbers in public entry
+              text, image uploads are re-encoded client-side to reduce metadata
+              leakage.
+            </div>
+
             <div class="form-actions">
               <button type="submit" id="submitBtn">Add anonymous sighting</button>
               <p id="formStatus" role="status" aria-live="polite"></p>
@@ -95,15 +102,67 @@
 
         <section class="panel" aria-label="Moss worlds browse area">
           <div class="toolbar">
-            <div class="view-toggle" role="tablist" aria-label="Toggle between card and map views">
-              <button id="cardsBtn" class="is-active" data-view="cards" role="tab" aria-selected="true">
-                Card view
-              </button>
-              <button id="mapBtn" data-view="map" role="tab" aria-selected="false">
-                Map view
-              </button>
+            <div class="toolbar-row">
+              <div class="view-toggle" role="tablist" aria-label="Toggle between card and map views">
+                <button id="cardsBtn" class="is-active" data-view="cards" role="tab" aria-selected="true">
+                  Card view
+                </button>
+                <button id="mapBtn" data-view="map" role="tab" aria-selected="false">
+                  Map view
+                </button>
+              </div>
+              <p class="toolbar-note">Entries are publicly shown with anonymous contributor labels.</p>
             </div>
-            <p class="toolbar-note">Entries are publicly shown with anonymous contributor labels.</p>
+
+            <div class="toolbar-row controls-row">
+              <label class="compact-field">
+                Search
+                <input id="searchInput" type="search" placeholder="Title, note, location" />
+              </label>
+
+              <label class="compact-field">
+                Sort
+                <select id="sortSelect">
+                  <option value="ranked">Ranked (recency + proximity)</option>
+                  <option value="newest">Newest</option>
+                  <option value="nearest">Nearest to me</option>
+                </select>
+              </label>
+
+              <label class="check-field">
+                <input id="coordsOnly" type="checkbox" />
+                Has map coordinates
+              </label>
+
+              <label class="check-field">
+                <input id="inatOnly" type="checkbox" />
+                Has iNaturalist match
+              </label>
+
+              <label class="check-field">
+                <input id="nearbyOnly" type="checkbox" />
+                Nearby only
+              </label>
+
+              <label class="compact-field">
+                Nearby radius
+                <select id="radiusSelect">
+                  <option value="1">1 km</option>
+                  <option value="3" selected>3 km</option>
+                  <option value="5">5 km</option>
+                  <option value="10">10 km</option>
+                </select>
+              </label>
+            </div>
+
+            <div class="toolbar-row actions-row">
+              <button id="centerMeBtn" type="button" class="ghost-btn">Center on me</button>
+              <button id="fitBoundsBtn" type="button" class="ghost-btn">Fit map to filtered</button>
+              <button id="exportBtn" type="button" class="ghost-btn">Export JSON</button>
+              <button id="importBtn" type="button" class="ghost-btn">Import JSON</button>
+              <input id="importFileInput" type="file" accept="application/json" class="is-hidden" />
+              <span id="browseStatus" class="toolbar-note" role="status" aria-live="polite"></span>
+            </div>
           </div>
 
           <div id="cardsView" class="view view-cards" role="tabpanel">
@@ -113,7 +172,7 @@
           <div id="mapView" class="view view-map is-hidden" role="tabpanel" aria-hidden="true">
             <div id="mapCanvas" aria-label="Moss entries map"></div>
             <div class="missing-location">
-              <h3>Entries without coordinates</h3>
+              <h3>Filtered entries without coordinates</h3>
               <ul id="missingLocationList"></ul>
             </div>
           </div>

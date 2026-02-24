@@ -64,8 +64,8 @@ Delivered against milestone:
 - Public display enforces anonymous contributor labels.
 
 Remaining to fully mature product:
-- Durable storage beyond in-memory session state.
-- Privacy hardening around uploaded media metadata and payload controls.
+- Automated abuse/moderation safeguards.
+- Operational hardening for public deployment.
 - Small test suite for core form and rendering behavior.
 
 ## Risks and mitigations

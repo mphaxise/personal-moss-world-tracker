@@ -2,63 +2,48 @@
 
 ## Project status (as of 2026-02-24)
 
-MVP is shipped as a static single-page app and runs locally.
+MVP is shipped with both frontend and backend paths.
 
-Implemented:
-- One submission flow for moss sightings (photo URL or image upload).
-- Toggleable card and map views backed by shared entry state.
-- Seeded entries loaded from `data/seed-entries.json`.
-- Optional per-entry iNaturalist lookup.
-- Public contributor anonymity enforced in cards and map popups.
+Completed in this iteration:
+- Option 1 complete: local persistence (`localStorage`) + JSON import/export.
+- Option 2 complete: privacy hardening (text redaction, image re-encoding, payload sanitization).
+- Option 3 complete: backend API + SQLite durable storage.
+- Option 4 complete: discovery upgrades (search, filters, nearby mode, ranked sorting, map fit/center actions).
+- Option 5 complete: remote setup + push to GitHub target.
 
 Current architecture:
-- `index.html`: page structure and UI shell.
-- `styles.css`: responsive styling and visual system.
-- `app.js`: state, form flow, rendering, map integration, iNaturalist calls.
+- `index.html`: page structure and control surface.
+- `styles.css`: responsive styling and layout.
+- `app.js`: client state, filters, ranking, import/export, API/local persistence, privacy safeguards.
+- `server.py`: static hosting + API layer + SQLite persistence.
 - `data/seed-entries.json`: initial seed dataset.
 
 ## Reflection
 
 What worked well:
-- MVP scope stayed tight and shipped quickly.
-- Card and map views reuse the same entry model.
-- Anonymous-by-default policy is explicit in both product docs and UI.
+- Frontend remained single-page and fast while gaining significant capability.
+- Anonymous-by-default policy is explicit in UI and enforced in rendering.
+- API and offline/local modes coexist without blocking usability.
 
-Current gaps:
-- New entries are in-memory only and disappear after refresh.
-- No server/API yet for durable storage, moderation, or feed controls.
-- iNaturalist enrichment has no caching, confidence score, or retry policy.
-- No automated tests yet.
+Known constraints:
+- No auth/admin flows yet for abuse handling.
+- iNaturalist lookup remains client-side with no cache/proxy.
+- No automated test suite yet.
 
-## Recommended execution options
+## Recommended next options
 
-1. **Option A: Durable local MVP (recommended next)**
-   - Add `localStorage` persistence for entries.
-   - Add import/export JSON backup.
-   - Add basic client-side validation hardening.
-   - Outcome: reliable demo that survives reloads without backend work.
+1. **Operational hardening**
+   - Add basic request logging, per-IP rate limits, and payload size caps in API.
+   - Add backup/restore script for SQLite data.
 
-2. **Option B: Backend-ready MVP**
-   - Add a minimal API (create/list entries).
-   - Move seed + user entries to persistent storage.
-   - Keep public response shape anonymous by design.
-   - Outcome: shareable multi-user prototype with durable data.
+2. **Moderation layer**
+   - Add server-side flagged-content queue and hide/unhide workflow.
+   - Add simple profanity and duplicate-photo heuristics.
 
-3. **Option C: Discovery quality upgrade**
-   - Add filters (nearby, has map coordinates, has iNaturalist match).
-   - Add stronger map interactions and popups.
-   - Add lightweight ranking (recency + proximity).
-   - Outcome: better browsing experience for exploration.
+3. **Quality + testing**
+   - Add browser tests for submit/filter/map toggle paths.
+   - Add API tests for sanitize/insert/import/update endpoints.
 
-4. **Option D: Privacy + trust hardening**
-   - Add upload sanitization and image size limits.
-   - Add public payload guardrails to prevent identity leaks.
-   - Add contributor token rotation policy and docs.
-   - Outcome: stronger anonymity posture before wider sharing.
-
-## Suggested order
-
-- First: Option A (stability with low complexity)
-- Second: Option D (privacy hardening)
-- Third: Option B (multi-user durability)
-- Fourth: Option C (experience polish)
+4. **Deployment path**
+   - Containerize service.
+   - Deploy to a small VM or PaaS with managed domain and TLS.
