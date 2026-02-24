@@ -1,5 +1,11 @@
 # iNaturalist Enrichment Spike
 
+## Pause checkpoint (2026-02-24)
+
+Project is currently paused pending validation of persistence behavior.
+Next mandatory step before advancing this spike work:
+- Confirm latest entries/photos persist and reload correctly across refresh/reopen sessions.
+
 ## Spike date
 
 - 2026-02-24

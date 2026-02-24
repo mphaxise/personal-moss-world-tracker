@@ -1,5 +1,12 @@
 # Idea Strategy
 
+## Pause checkpoint (2026-02-24)
+
+Project is paused for validation.
+
+Mandatory next step before further implementation:
+- Execute manual testing for the latest persistence feature (cached entries/photos load on open and remain after refresh/reopen).
+
 ## Project context
 
 - Title: Personal Moss World Tracker

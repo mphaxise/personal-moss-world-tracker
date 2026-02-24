@@ -1,5 +1,16 @@
 # Status and Next Steps
 
+## Pause checkpoint (2026-02-24)
+
+Current mode: paused until persistence testing is completed.
+
+Pre-commit / pre-push gate for the next iteration:
+1. Verify entries and photos remain after page refresh.
+2. Verify entries and photos remain after closing/reopening browser.
+3. Verify cached entries sync to SQLite/API when server is running.
+4. Verify no data loss when switching between offline (cache) and online (API) modes.
+5. Only after these pass, continue with new implementation and additional GitHub pushes.
+
 ## Project status (as of 2026-02-24)
 
 MVP is shipped with both frontend and backend paths.

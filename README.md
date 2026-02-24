@@ -2,6 +2,17 @@
 
 Turns everyday moss sightings into a lightweight community discovery product with visual browsing and location context.
 
+## Pause checkpoint (2026-02-24)
+
+Project is intentionally paused pending validation.
+
+Required next step before any new feature work or additional GitHub pushes:
+- Test the latest persistence behavior end-to-end:
+  - Add entries with uploaded photos and URL photos.
+  - Refresh and reopen the page.
+  - Confirm prior entries/photos are still present.
+  - Confirm cached entries sync into SQLite/API when server is online.
+
 ## Current status (2026-02-24)
 
 - MVP is implemented and runnable locally.

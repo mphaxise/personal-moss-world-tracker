@@ -1,5 +1,15 @@
 # Product Strategy
 
+## Pause checkpoint (2026-02-24)
+
+Project is paused and gated on testing.
+
+Next required step before new scope:
+- Validate persistence behavior in real browser sessions:
+  - Existing entries/photos load on page open.
+  - Entries survive refresh and browser restart.
+  - Offline cache and online API sync both preserve prior data.
+
 ## Product vision
 
 A personal/community moss discovery tracker where everyday sightings become browsable micro-landmarks through photos and location-aware views.
