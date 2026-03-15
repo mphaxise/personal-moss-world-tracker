@@ -173,7 +173,7 @@ Avoid:
 ## Immediate next field tasks
 
 1. Pick the exact walk start and end points.
-2. Validate the 10 candidate stop clusters in one or two Bernal scouting passes.
+2. Use `docs/bernal-field-worksheet.md` during one or two Bernal scouting passes.
 3. Drop weak candidates and keep the best 8 to 12.
 4. Capture a first image set with consistent framing.
 5. Convert verified stops into the canonical atlas JSON.

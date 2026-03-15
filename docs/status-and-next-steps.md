@@ -14,6 +14,7 @@ Completed in this planning phase:
 - runtime boundary selected as `static-first`
 - Bernal implementation spec written
 - Bernal content pack drafted
+- Bernal field worksheet written
 
 Current reality of the codebase:
 - a legacy community-tracker prototype still exists in the app code

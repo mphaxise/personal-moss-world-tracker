@@ -28,6 +28,7 @@ Current planning spine:
 - [docs/founder-mvp-decision-memo.md](/Users/praneet/personal-moss-world-tracker/docs/founder-mvp-decision-memo.md)
 - [docs/bernal-atlas-implementation-spec.md](/Users/praneet/personal-moss-world-tracker/docs/bernal-atlas-implementation-spec.md)
 - [docs/bernal-content-pack.md](/Users/praneet/personal-moss-world-tracker/docs/bernal-content-pack.md)
+- [docs/bernal-field-worksheet.md](/Users/praneet/personal-moss-world-tracker/docs/bernal-field-worksheet.md)
 
 Supporting strategy docs:
 - [docs/product-strategy.md](/Users/praneet/personal-moss-world-tracker/docs/product-strategy.md)
@@ -94,6 +95,7 @@ Then open [http://127.0.0.1:8080](http://127.0.0.1:8080).
 ## Immediate next execution steps
 
 1. Field-verify the Bernal candidate stop list.
+   Use [docs/bernal-field-worksheet.md](/Users/praneet/personal-moss-world-tracker/docs/bernal-field-worksheet.md) during the walk.
 2. Gather the first image set and field notes.
 3. Implement the static-first atlas shell against the Bernal spec.
 4. Run `review` once the first real implementation branch exists.
