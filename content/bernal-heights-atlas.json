@@ -1,0 +1,292 @@
+{
+  "meta": {
+    "title": "Bernal Heights Moss Atlas",
+    "season": "post-rain",
+    "version": 1,
+    "updated_at": "2026-03-15",
+    "content_status": "candidate-scaffold"
+  },
+  "neighborhood": {
+    "name": "Bernal Heights",
+    "slug": "bernal-heights",
+    "summary": "A neighborhood-scale guide to Bernal's hidden fog-fed texture: walls, bark, slopes, stairs, and wet edges where mosses, liverworts, and lichens become legible through place-based stories.",
+    "why_here": "Bernal is a strong first chapter because it is walkable, visually varied, and rich in microhabitats that can turn an ordinary neighborhood walk into an atlas of urban texture.",
+    "cover_image": "images/bernal/bernal-cover.jpg",
+    "cover_image_status": "needed"
+  },
+  "walk": {
+    "id": "bernal-post-rain-loop",
+    "title": "Post-Rain Bernal Loop",
+    "duration_minutes": 75,
+    "distance_miles": 2.2,
+    "terrain": "hilly sidewalks, stairs, and park paths",
+    "start_label": "To be field-chosen in Bernal Heights Park area",
+    "end_label": "To be field-chosen near a Cortland-adjacent finish",
+    "status": "candidate"
+  },
+  "stops": [
+    {
+      "id": "bernal-stop-01",
+      "slug": "north-slope-wall-start",
+      "title": "North Slope Wall Start",
+      "walk_order": 1,
+      "location_hint": "Lower north side of Bernal Heights Park",
+      "latitude": null,
+      "longitude": null,
+      "coordinate_status": "needs-field-verification",
+      "hero_image": "images/bernal/bernal-stop-01-north-slope-wall.jpg",
+      "asset_status": "needed",
+      "short_summary": "A candidate opening stop focused on the easiest-to-read urban moss texture near the base of the hill.",
+      "why_here": "This stop is meant to teach the atlas lens quickly: seams, shade, and retained moisture can make moss legible almost immediately in Bernal.",
+      "habitat_type": "wall / concrete",
+      "seasonality": "Best after rain; likely visible year-round in shaded conditions.",
+      "species_notes": "Candidate wall mosses and lichens; do not name taxa until field-verified.",
+      "source_ids": [
+        "field-bernal-2026-01",
+        "inat-bernal-spring-window"
+      ],
+      "status": "candidate"
+    },
+    {
+      "id": "bernal-stop-02",
+      "slug": "stair-edge-moisture-band",
+      "title": "Stair Edge Moisture Band",
+      "walk_order": 2,
+      "location_hint": "Public stair corridor near the hill approach",
+      "latitude": null,
+      "longitude": null,
+      "coordinate_status": "needs-field-verification",
+      "hero_image": "images/bernal/bernal-stop-02-stair-edge.jpg",
+      "asset_status": "needed",
+      "short_summary": "A candidate stop for showing how runoff, seams, and shade create miniature growth lanes in everyday infrastructure.",
+      "why_here": "Stairs and retaining edges can make water movement visible, which turns this stop into a strong lesson about how moss worlds assemble in plain sight.",
+      "habitat_type": "stairs / retaining wall",
+      "seasonality": "Strongest after rain or morning moisture; verify persistence across drier periods.",
+      "species_notes": "Candidate wall mosses and moisture-tolerant associates; exact taxa unknown.",
+      "source_ids": [
+        "field-bernal-2026-01",
+        "inat-bernal-spring-window"
+      ],
+      "status": "candidate"
+    },
+    {
+      "id": "bernal-stop-03",
+      "slug": "street-tree-bark-strip",
+      "title": "Street Tree Bark Strip",
+      "walk_order": 3,
+      "location_hint": "Cortland-adjacent street tree zone",
+      "latitude": null,
+      "longitude": null,
+      "coordinate_status": "needs-field-verification",
+      "hero_image": "images/bernal/bernal-stop-03-street-tree-bark.jpg",
+      "asset_status": "needed",
+      "short_summary": "A candidate bark stop that expands the atlas from walls into the neighborhood's second texture layer on living trunks.",
+      "why_here": "Street trees can carry subtle but persistent moss and lichen patterns that make Bernal feel richer than its streetscape suggests at first glance.",
+      "habitat_type": "bark / trunk base",
+      "seasonality": "Likely useful year-round; strongest after rain or on shaded bark.",
+      "species_notes": "Candidate bark mosses and lichens; possible Alsia, Homalothecium, Ramalina, or related groups.",
+      "source_ids": [
+        "field-bernal-2026-01",
+        "inat-sf-species-counts"
+      ],
+      "status": "candidate"
+    },
+    {
+      "id": "bernal-stop-04",
+      "slug": "garden-edge-liverwort-pocket",
+      "title": "Garden Edge Liverwort Pocket",
+      "walk_order": 4,
+      "location_hint": "Irrigated or seep-adjacent public edge",
+      "latitude": null,
+      "longitude": null,
+      "coordinate_status": "needs-field-verification",
+      "hero_image": "images/bernal/bernal-stop-04-garden-edge-liverwort.jpg",
+      "asset_status": "needed",
+      "short_summary": "A candidate wet-edge stop where Bernal may briefly behave like a tiny urban wetland.",
+      "why_here": "This stop matters if it proves that small irrigation or seep patterns can produce liverwort-friendly habitat inside an otherwise dry urban neighborhood.",
+      "habitat_type": "wet soil / garden edge",
+      "seasonality": "Most promising after rain or sustained irrigation; may disappear visually in drier periods.",
+      "species_notes": "Candidate liverworts such as Lunularia or Marchantia; field confirmation required.",
+      "source_ids": [
+        "field-bernal-2026-01",
+        "inat-sf-species-counts"
+      ],
+      "status": "candidate"
+    },
+    {
+      "id": "bernal-stop-05",
+      "slug": "retaining-wall-gradient",
+      "title": "Retaining Wall Gradient",
+      "walk_order": 5,
+      "location_hint": "Sloped residential edge with visible aspect change",
+      "latitude": null,
+      "longitude": null,
+      "coordinate_status": "needs-field-verification",
+      "hero_image": "images/bernal/bernal-stop-05-retaining-wall-gradient.jpg",
+      "asset_status": "needed",
+      "short_summary": "A candidate comparison stop showing how aspect and runoff can change the texture of the same block.",
+      "why_here": "This is one of the most useful atlas-style stories if it can show two moisture realities only a few steps apart.",
+      "habitat_type": "wall / aspect contrast",
+      "seasonality": "Best after rain when the contrast between wet and dry faces is clearest.",
+      "species_notes": "Candidate wall mosses, lichens, and dry-tolerant associates; names deferred until fieldwork.",
+      "source_ids": [
+        "field-bernal-2026-01",
+        "fog-meep-lab"
+      ],
+      "status": "candidate"
+    },
+    {
+      "id": "bernal-stop-06",
+      "slug": "bernal-summit-exposure-stop",
+      "title": "Bernal Summit Exposure Stop",
+      "walk_order": 6,
+      "location_hint": "Park upper slope or exposed edge",
+      "latitude": null,
+      "longitude": null,
+      "coordinate_status": "needs-field-verification",
+      "hero_image": "images/bernal/bernal-stop-06-summit-exposure.jpg",
+      "asset_status": "needed",
+      "short_summary": "A candidate high-exposure stop focused on lichen, wind, fog, and sun pressure rather than lush green abundance.",
+      "why_here": "This stop expands the product beyond a simple 'more moss is better' story by showing how exposed Bernal edges create a different texture language.",
+      "habitat_type": "exposed slope / lichen",
+      "seasonality": "Potentially strong year-round; verify whether post-rain conditions improve readability.",
+      "species_notes": "Candidate lichens and hardy exposed-site taxa; Niebla, Xanthoria, or related groups are possible but unconfirmed.",
+      "source_ids": [
+        "field-bernal-2026-02",
+        "cnps-niebla-note",
+        "san-bruno-natural-features"
+      ],
+      "status": "candidate"
+    },
+    {
+      "id": "bernal-stop-07",
+      "slug": "rock-and-crack-colony",
+      "title": "Rock and Crack Colony",
+      "walk_order": 7,
+      "location_hint": "Stone or cracked hardscape segment",
+      "latitude": null,
+      "longitude": null,
+      "coordinate_status": "needs-field-verification",
+      "hero_image": "images/bernal/bernal-stop-07-rock-and-crack.jpg",
+      "asset_status": "needed",
+      "short_summary": "A candidate stop for showing how tiny fractures and rough surfaces create habitat in the city.",
+      "why_here": "If strong enough, this stop helps explain how Bernal's built environment acts like a patchwork of microclimates rather than inert hardscape.",
+      "habitat_type": "rock / fissure",
+      "seasonality": "Most readable after rain; may still work year-round if the texture contrast is strong.",
+      "species_notes": "Candidate rock mosses, lichens, or mixed crust communities; precise identification deferred.",
+      "source_ids": [
+        "field-bernal-2026-02",
+        "inat-bernal-spring-window"
+      ],
+      "status": "candidate"
+    },
+    {
+      "id": "bernal-stop-08",
+      "slug": "tree-base-shadow-ring",
+      "title": "Tree Base Shadow Ring",
+      "walk_order": 8,
+      "location_hint": "Mature tree base in public right-of-way or park",
+      "latitude": null,
+      "longitude": null,
+      "coordinate_status": "needs-field-verification",
+      "hero_image": "images/bernal/bernal-stop-08-tree-base-shadow-ring.jpg",
+      "asset_status": "needed",
+      "short_summary": "A candidate stop centered on the damp shadow ring that can form around tree bases and root flares.",
+      "why_here": "This stop matters if it helps walkers notice how drip lines, bark, and shade persistence create a small recurring habitat pattern around street trees.",
+      "habitat_type": "bark / root flare",
+      "seasonality": "Likely best after rain or in long-shaded conditions.",
+      "species_notes": "Candidate bark and root-flare mosses or lichens; field notes needed before making taxon claims.",
+      "source_ids": [
+        "field-bernal-2026-02",
+        "inat-sf-species-counts"
+      ],
+      "status": "candidate"
+    },
+    {
+      "id": "bernal-stop-09",
+      "slug": "fence-line-texture-shift",
+      "title": "Fence Line Texture Shift",
+      "walk_order": 9,
+      "location_hint": "Edge condition between maintained and rough ground",
+      "latitude": null,
+      "longitude": null,
+      "coordinate_status": "needs-field-verification",
+      "hero_image": "images/bernal/bernal-stop-09-fence-line-texture-shift.jpg",
+      "asset_status": "needed",
+      "short_summary": "A candidate edge-habitat stop about what maintenance preserves or erases small urban moss worlds.",
+      "why_here": "This stop can connect ecology to neighborhood care patterns by showing how trimming, sweeping, and disturbance affect what survives.",
+      "habitat_type": "edge habitat",
+      "seasonality": "Needs field verification; may depend heavily on recent moisture and maintenance timing.",
+      "species_notes": "Candidate mixed moss and lichen assemblage; exact groups unknown.",
+      "source_ids": [
+        "field-bernal-2026-02"
+      ],
+      "status": "candidate"
+    },
+    {
+      "id": "bernal-stop-10",
+      "slug": "neighborhood-finish-stop",
+      "title": "Neighborhood Finish Stop",
+      "walk_order": 10,
+      "location_hint": "Walk endpoint near everyday foot traffic",
+      "latitude": null,
+      "longitude": null,
+      "coordinate_status": "needs-field-verification",
+      "hero_image": "images/bernal/bernal-stop-10-neighborhood-finish.jpg",
+      "asset_status": "needed",
+      "short_summary": "A candidate closing stop that returns the story to ordinary Bernal life and repeat noticing.",
+      "why_here": "The walk should end in a place that makes the atlas feel portable, so walkers leave seeing the neighborhood differently rather than finishing at a purely scenic endpoint.",
+      "habitat_type": "mixed urban texture",
+      "seasonality": "Flexible; verify whether the site works both after rain and in drier conditions.",
+      "species_notes": "Mixed candidate moss, lichen, or texture-layer story; exact taxa secondary to the closing narrative.",
+      "source_ids": [
+        "field-bernal-2026-02"
+      ],
+      "status": "candidate"
+    }
+  ],
+  "sources": [
+    {
+      "id": "field-bernal-2026-01",
+      "type": "field-note",
+      "title": "Bernal first scouting pass",
+      "status": "planned"
+    },
+    {
+      "id": "field-bernal-2026-02",
+      "type": "field-note",
+      "title": "Bernal follow-up scouting pass",
+      "status": "planned"
+    },
+    {
+      "id": "inat-bernal-spring-window",
+      "type": "research",
+      "title": "Bernal-centered iNaturalist spring scouting window",
+      "status": "summarized-in-docs"
+    },
+    {
+      "id": "inat-sf-species-counts",
+      "type": "research",
+      "title": "San Francisco county moss, liverwort, and lichen species counts",
+      "status": "summarized-in-docs"
+    },
+    {
+      "id": "fog-meep-lab",
+      "type": "research",
+      "title": "SFSU MEEP Lab fog and cryptogam context",
+      "status": "summarized-in-docs"
+    },
+    {
+      "id": "san-bruno-natural-features",
+      "type": "research",
+      "title": "San Bruno Mountain natural-features fog-belt analog",
+      "status": "summarized-in-docs"
+    },
+    {
+      "id": "cnps-niebla-note",
+      "type": "research",
+      "title": "CNPS coastal fog-belt lichen note",
+      "status": "summarized-in-docs"
+    }
+  ]
+}

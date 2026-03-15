@@ -174,6 +174,7 @@ Avoid:
 
 1. Pick the exact walk start and end points.
 2. Use `docs/bernal-field-worksheet.md` during one or two Bernal scouting passes.
+   Use `docs/bernal-field-checklist.md` if you want the compact phone version.
 3. Drop weak candidates and keep the best 8 to 12.
 4. Capture a first image set with consistent framing.
-5. Convert verified stops into the canonical atlas JSON.
+5. Update `content/bernal-heights-atlas.json` as stops move from `candidate` to `field-verified`.

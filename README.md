@@ -29,12 +29,16 @@ Current planning spine:
 - [docs/bernal-atlas-implementation-spec.md](/Users/praneet/personal-moss-world-tracker/docs/bernal-atlas-implementation-spec.md)
 - [docs/bernal-content-pack.md](/Users/praneet/personal-moss-world-tracker/docs/bernal-content-pack.md)
 - [docs/bernal-field-worksheet.md](/Users/praneet/personal-moss-world-tracker/docs/bernal-field-worksheet.md)
+- [docs/bernal-field-checklist.md](/Users/praneet/personal-moss-world-tracker/docs/bernal-field-checklist.md)
 
 Supporting strategy docs:
 - [docs/product-strategy.md](/Users/praneet/personal-moss-world-tracker/docs/product-strategy.md)
 - [docs/idea-strategy.md](/Users/praneet/personal-moss-world-tracker/docs/idea-strategy.md)
 - [docs/inaturalist-spike.md](/Users/praneet/personal-moss-world-tracker/docs/inaturalist-spike.md)
 - [docs/status-and-next-steps.md](/Users/praneet/personal-moss-world-tracker/docs/status-and-next-steps.md)
+
+Execution scaffold:
+- [content/bernal-heights-atlas.json](/Users/praneet/personal-moss-world-tracker/content/bernal-heights-atlas.json)
 
 ## Selected MVP
 
@@ -96,6 +100,7 @@ Then open [http://127.0.0.1:8080](http://127.0.0.1:8080).
 
 1. Field-verify the Bernal candidate stop list.
    Use [docs/bernal-field-worksheet.md](/Users/praneet/personal-moss-world-tracker/docs/bernal-field-worksheet.md) during the walk.
+   Use [docs/bernal-field-checklist.md](/Users/praneet/personal-moss-world-tracker/docs/bernal-field-checklist.md) if you want the compact phone version.
 2. Gather the first image set and field notes.
 3. Implement the static-first atlas shell against the Bernal spec.
 4. Run `review` once the first real implementation branch exists.

@@ -117,6 +117,7 @@ Field notes:
 - `location_hint` should be public-safe and readable. It does not need to be a precise street address.
 - `species_notes` can be broad and honest. It is acceptable to say `candidate wall mosses and lichens` before exact field confirmation.
 - `status` should be one of `candidate`, `field-verified`, or `published`.
+- For `candidate` stops, `latitude`, `longitude`, and `hero_image` may be placeholder values while fieldwork is still pending. The keys should still exist in the content file.
 
 ## Asset model
 

@@ -15,6 +15,8 @@ Completed in this planning phase:
 - Bernal implementation spec written
 - Bernal content pack drafted
 - Bernal field worksheet written
+- Bernal field checklist written
+- Bernal atlas candidate content scaffold written
 
 Current reality of the codebase:
 - a legacy community-tracker prototype still exists in the app code
