@@ -8,6 +8,7 @@ const state = {
   atlas: null,
   forms: new Map(),
   storage: { stops: {} },
+  kidImport: { stops: {}, importedAt: "", exportedAt: "" },
   selectedStopId: null,
   map: null,
   routeLayer: null,
@@ -26,6 +27,10 @@ const dom = {
   trackBtn: document.querySelector("#trackBtn"),
   nextBtn: document.querySelector("#nextBtn"),
   exportBtn: document.querySelector("#exportBtn"),
+  uploadBtn: document.querySelector("#uploadBtn"),
+  importKidBtn: document.querySelector("#importKidBtn"),
+  kidImportInput: document.querySelector("#kidImportInput"),
+  offlineBtn: document.querySelector("#offlineBtn"),
   routeBtn: document.querySelector("#routeBtn"),
   routeTitle: document.querySelector("#routeTitle"),
   routeMeta: document.querySelector("#routeMeta"),
@@ -40,6 +45,10 @@ async function boot() {
   dom.trackBtn.addEventListener("click", toggleTracking);
   dom.nextBtn.addEventListener("click", selectNextStop);
   dom.exportBtn.addEventListener("click", exportNotes);
+  dom.uploadBtn.addEventListener("click", uploadCurrentBundle);
+  dom.importKidBtn.addEventListener("click", () => dom.kidImportInput.click());
+  dom.kidImportInput.addEventListener("change", handleKidImport);
+  dom.offlineBtn.addEventListener("click", prepareOffline);
 
   try {
     state.atlas = await fetchAtlas();
@@ -102,6 +111,11 @@ function renderRouteMeta() {
     `auto-open radius ${collection.auto_expand_radius_meters} m`,
     collection.route_note,
   ];
+
+  const importedCount = Object.keys(state.kidImport.stops || {}).length;
+  if (importedCount > 0) {
+    chips.push(`kid import loaded for ${importedCount} stops`);
+  }
 
   dom.routeMeta.replaceChildren(...chips.map((text) => createChip(text)));
 }
@@ -241,6 +255,10 @@ function createStopAccordion(stop) {
   `;
 
   hydrateForm(form, merged);
+  const kidScoutBlock = createKidScoutBlock(merged);
+  if (kidScoutBlock) {
+    form.append(kidScoutBlock);
+  }
   form.append(createPhotoBlock(merged));
   form.append(createBottomNav(stop.id));
   wireForm(form, stop.id);
@@ -301,6 +319,7 @@ function saveForm(stopId, form) {
   const previousBase = getBaseStop(stopId);
   const previousSaved = state.storage.stops[stopId] || {};
   const next = {
+    ...previousSaved,
     decision: form.elements.decision.value,
     status: form.elements.status.value,
     arrived_at: form.elements.arrived_at.value,
@@ -406,6 +425,58 @@ function createPhotoBlock(stop) {
   }
 
   wrap.append(title, notes, grid);
+  return wrap;
+}
+
+function createKidScoutBlock(stop) {
+  const scout = stop?.kid_scout;
+  if (!scout) {
+    return null;
+  }
+
+  const wrap = document.createElement("section");
+  wrap.className = "kid-scout-block";
+
+  const title = document.createElement("h3");
+  title.textContent = "Kid scout handoff";
+
+  const note = document.createElement("p");
+  note.className = "field-note";
+  note.textContent = scout.imported_at
+    ? `Imported from the kid device ${formatShortDateTime(scout.imported_at)}.`
+    : "Imported from the kid device.";
+
+  const meta = document.createElement("div");
+  meta.className = "kid-scout-meta";
+  const labels = [
+    scout.found_state || "pending",
+    scout.favorite ? "favorite" : "",
+    ...(Array.isArray(scout.habitat_tags) ? scout.habitat_tags : []),
+    ...(Array.isArray(scout.texture_tags) ? scout.texture_tags : []),
+  ].filter(Boolean);
+  meta.append(...labels.map((label) => createChip(`kid: ${label}`)));
+
+  wrap.append(title, note, meta);
+
+  if (scout.photo_data_url) {
+    const photo = document.createElement("div");
+    photo.className = "kid-scout-photo";
+
+    const image = document.createElement("img");
+    image.loading = "lazy";
+    image.src = scout.photo_data_url;
+    image.alt = `Kid scout photo for ${stop.title}`;
+
+    const caption = document.createElement("span");
+    caption.className = "field-note";
+    caption.textContent = scout.photo_updated_at
+      ? `Kid photo captured ${formatShortDateTime(scout.photo_updated_at)}${scout.photo_name ? ` • ${scout.photo_name}` : ""}`
+      : "Kid photo imported from the iPad.";
+
+    photo.append(image, caption);
+    wrap.append(photo);
+  }
+
   return wrap;
 }
 
@@ -665,11 +736,7 @@ function selectNextStopFrom(stopId) {
 }
 
 function exportNotes() {
-  const exported = {
-    exported_at: new Date().toISOString(),
-    start_point: state.atlas.collection.start_point,
-    stops: getStops().map((stop) => getMergedStop(stop)),
-  };
+  const exported = buildAdultExportPayload();
 
   const blob = new Blob([JSON.stringify(exported, null, 2)], { type: "application/json" });
   const url = URL.createObjectURL(blob);
@@ -679,6 +746,133 @@ function exportNotes() {
   anchor.click();
   URL.revokeObjectURL(url);
   showToast("Exported current walk notes.");
+}
+
+function buildAdultExportPayload() {
+  return {
+    exported_at: new Date().toISOString(),
+    mode: "adult-capture",
+    device_label: "adult-phone",
+    start_point: state.atlas.collection.start_point,
+    stops: getStops().map((stop) => getMergedStop(stop)),
+  };
+}
+
+async function uploadCurrentBundle() {
+  try {
+    const payload = buildAdultExportPayload();
+    const response = await fetch("/api/walk-bundles", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      throw new Error(result.error || `Upload failed (${response.status})`);
+    }
+
+    showToast(`Uploaded to laptop as ${result.filename}.`);
+  } catch (error) {
+    console.error(error);
+    showToast(`Could not upload to the laptop: ${error.message}`);
+  }
+}
+
+async function handleKidImport(event) {
+  const file = event.target.files?.[0];
+  if (!file) {
+    return;
+  }
+
+  try {
+    const payload = JSON.parse(await file.text());
+    const imported = normalizeKidImportPayload(payload);
+    state.kidImport = imported;
+    renderPage();
+    showToast(`Imported kid handoff for ${Object.keys(imported.stops).length} stops. Use Export notes to save the merged pack.`);
+  } catch (error) {
+    console.error(error);
+    showToast(`Could not import the kid export: ${error.message}`);
+  } finally {
+    event.target.value = "";
+  }
+}
+
+function normalizeKidImportPayload(payload) {
+  if (!payload || typeof payload !== "object" || !Array.isArray(payload.stops)) {
+    throw new Error("Kid export must be a JSON object with a stops array.");
+  }
+
+  const importedStops = {};
+  for (const item of payload.stops) {
+    const stopId = String(item?.id || "");
+    if (!getBaseStop(stopId)) {
+      continue;
+    }
+
+    const notes = normalizeKidScoutNotes(item.kid_notes || {});
+    if (!hasKidScoutData(notes)) {
+      continue;
+    }
+
+    importedStops[stopId] = {
+      ...notes,
+      imported_at: new Date().toISOString(),
+      source_exported_at: String(payload.exported_at || ""),
+    };
+  }
+
+  return {
+    stops: importedStops,
+    importedAt: new Date().toISOString(),
+    exportedAt: String(payload.exported_at || ""),
+  };
+}
+
+function normalizeKidScoutNotes(notes) {
+  return {
+    found_state: sanitizeShortText(notes.found_state),
+    favorite: Boolean(notes.favorite),
+    habitat_tags: sanitizeStringArray(notes.habitat_tags),
+    texture_tags: sanitizeStringArray(notes.texture_tags),
+    visited_at: sanitizeShortText(notes.visited_at),
+    has_photo: Boolean(notes.has_photo),
+    photo_name: sanitizeShortText(notes.photo_name),
+    photo_updated_at: sanitizeShortText(notes.photo_updated_at),
+    photo_data_url: typeof notes.photo_export_data_url === "string" && notes.photo_export_data_url.startsWith("data:image/")
+      ? notes.photo_export_data_url
+      : "",
+  };
+}
+
+function hasKidScoutData(notes) {
+  return Boolean(
+    notes.found_state ||
+      notes.favorite ||
+      notes.habitat_tags.length ||
+      notes.texture_tags.length ||
+      notes.photo_data_url
+  );
+}
+
+async function prepareOffline() {
+  const photoUrls = getStops()
+    .flatMap((stop) => stop.inat_recent_photos || [])
+    .map((photo) => photo.photo_url)
+    .filter(Boolean);
+
+  try {
+    const result = await window.mossOffline?.prepare(photoUrls);
+    if (!result?.ok) {
+      showToast(result?.reason || "Offline prep is not available here.");
+      return;
+    }
+    showToast("Offline prep started. On HTTPS or localhost, this warms the app for field use.");
+  } catch (error) {
+    console.error(error);
+    showToast(`Offline prep failed: ${error.message}`);
+  }
 }
 
 function updateDistanceLabels() {
@@ -751,9 +945,11 @@ function getMergedStop(stop) {
   if (!stop) {
     return null;
   }
+  const saved = state.storage.stops[stop.id] || {};
   return {
     ...stop,
-    ...(state.storage.stops[stop.id] || {}),
+    ...saved,
+    kid_scout: state.kidImport.stops[stop.id] || saved.kid_scout || null,
   };
 }
 
@@ -821,6 +1017,36 @@ function escapeHtml(value) {
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#39;");
+}
+
+function sanitizeShortText(value) {
+  return String(value || "").trim().slice(0, 120);
+}
+
+function sanitizeStringArray(value) {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+  return value
+    .map((item) => sanitizeShortText(item))
+    .filter(Boolean)
+    .slice(0, 12);
+}
+
+function formatShortDateTime(value) {
+  if (!value) {
+    return "date unknown";
+  }
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    return value;
+  }
+  return date.toLocaleString(undefined, {
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  });
 }
 
 function showToast(message) {

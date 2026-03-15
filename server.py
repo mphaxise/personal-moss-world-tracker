@@ -18,6 +18,7 @@ ROOT_DIR = Path(__file__).resolve().parent
 DATA_DIR = ROOT_DIR / "data"
 DB_PATH = DATA_DIR / "moss_tracker.db"
 SEED_PATH = DATA_DIR / "seed-entries.json"
+UPLOADS_DIR = ROOT_DIR / "uploads"
 
 EMAIL_PATTERN = re.compile(r"\b[\w.+-]+@[\w.-]+\.[A-Za-z]{2,}\b")
 PHONE_PATTERN = re.compile(r"(?:\+?\d[\d\s().-]{6,}\d)")
@@ -78,6 +79,10 @@ def ensure_data_dir() -> None:
     DATA_DIR.mkdir(parents=True, exist_ok=True)
 
 
+def ensure_upload_dir() -> None:
+    UPLOADS_DIR.mkdir(parents=True, exist_ok=True)
+
+
 def db_connect() -> sqlite3.Connection:
     connection = sqlite3.connect(DB_PATH)
     connection.row_factory = sqlite3.Row
@@ -86,6 +91,7 @@ def db_connect() -> sqlite3.Connection:
 
 def init_db() -> None:
     ensure_data_dir()
+    ensure_upload_dir()
     with db_connect() as conn:
         conn.execute(
             """
@@ -192,6 +198,32 @@ def sanitize_datetime(value: object) -> str:
         return ""
 
     return parsed.astimezone(timezone.utc).isoformat().replace("+00:00", "Z")
+
+
+def save_walk_bundle(payload: dict) -> dict:
+    stops = payload.get("stops")
+    if not isinstance(stops, list):
+        raise ValueError("stops must be an array")
+
+    mode = sanitize_text(payload.get("mode", ""), 40).lower() or "walk-bundle"
+    device_label = sanitize_text(payload.get("device_label", ""), 40).lower()
+    safe_mode = re.sub(r"[^a-z0-9_-]+", "-", mode).strip("-") or "walk-bundle"
+    safe_device = re.sub(r"[^a-z0-9_-]+", "-", device_label).strip("-")
+    timestamp = datetime.now(tz=timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    suffix = f"-{safe_device}" if safe_device else ""
+    filename = f"{timestamp}-{safe_mode}{suffix}.json"
+    path = UPLOADS_DIR / filename
+
+    with path.open("w", encoding="utf-8") as handle:
+      json.dump(payload, handle, indent=2)
+
+    return {
+        "filename": filename,
+        "stored_at": utc_now_iso(),
+        "path": str(path.relative_to(ROOT_DIR)),
+        "stop_count": len(stops),
+        "mode": safe_mode,
+    }
 
 
 def fetch_entries() -> list[dict]:
@@ -327,11 +359,29 @@ class MossHandler(SimpleHTTPRequestHandler):
         path = urlparse(self.path).path
 
         if path == "/api/health":
-            self.send_json(HTTPStatus.OK, {"status": "ok", "db": str(DB_PATH)})
+            self.send_json(
+                HTTPStatus.OK,
+                {"status": "ok", "db": str(DB_PATH), "uploads": str(UPLOADS_DIR)},
+            )
             return
 
         if path == "/api/entries":
             self.send_json(HTTPStatus.OK, {"entries": fetch_entries()})
+            return
+
+        if path == "/api/walk-bundles":
+            files = sorted(UPLOADS_DIR.glob("*.json"), reverse=True)
+            bundles = [
+                {
+                    "filename": item.name,
+                    "path": str(item.relative_to(ROOT_DIR)),
+                    "modified_at": datetime.fromtimestamp(item.stat().st_mtime, tz=timezone.utc)
+                    .isoformat()
+                    .replace("+00:00", "Z"),
+                }
+                for item in files[:20]
+            ]
+            self.send_json(HTTPStatus.OK, {"bundles": bundles})
             return
 
         self.send_json(HTTPStatus.NOT_FOUND, {"error": "Not found"})
@@ -362,6 +412,16 @@ class MossHandler(SimpleHTTPRequestHandler):
 
             summary = import_entries(entries)
             self.send_json(HTTPStatus.OK, summary)
+            return
+
+        if path == "/api/walk-bundles":
+            try:
+                summary = save_walk_bundle(payload)
+            except ValueError as exc:
+                self.send_json(HTTPStatus.BAD_REQUEST, {"error": str(exc)})
+                return
+
+            self.send_json(HTTPStatus.CREATED, summary)
             return
 
         self.send_json(HTTPStatus.NOT_FOUND, {"error": "Not found"})

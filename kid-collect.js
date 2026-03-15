@@ -6,6 +6,7 @@ const DEFAULT_CENTER = [37.7398, -122.4139];
 const DEFAULT_ZOOM = 15;
 const TOAST_MS = 3000;
 const MAX_IMAGE_DIMENSION = 1600;
+const EXPORT_IMAGE_DIMENSION = 960;
 
 const HABITAT_TAGS = [
   { value: "wall", label: "Wall" },
@@ -69,6 +70,8 @@ const dom = {
   trackBtn: document.querySelector("#trackBtn"),
   nextBtn: document.querySelector("#nextBtn"),
   exportBtn: document.querySelector("#exportBtn"),
+  uploadBtn: document.querySelector("#uploadBtn"),
+  offlineBtn: document.querySelector("#offlineBtn"),
   routeBtn: document.querySelector("#routeBtn"),
   routeTitle: document.querySelector("#routeTitle"),
   progressRow: document.querySelector("#progressRow"),
@@ -85,6 +88,8 @@ async function boot() {
   dom.trackBtn.addEventListener("click", toggleTracking);
   dom.nextBtn.addEventListener("click", selectNextStop);
   dom.exportBtn.addEventListener("click", exportNotes);
+  dom.uploadBtn.addEventListener("click", uploadCurrentBundle);
+  dom.offlineBtn.addEventListener("click", prepareOffline);
   window.addEventListener("beforeunload", revokePhotoUrls);
 
   try {
@@ -850,31 +855,98 @@ function selectNextStopFrom(stopId) {
   selectStop(next.id, { focusMap: true });
 }
 
-function exportNotes() {
-  const exported = {
-    exported_at: new Date().toISOString(),
-    mode: "kid-scout",
-    start_point: state.atlas.collection.start_point,
-    note: "Photos stay on the device. This export includes photo metadata, not image blobs.",
-    stops: getStops().map((stop) => ({
+async function exportNotes() {
+  try {
+    showToast("Preparing the kid export...");
+    const exported = await buildKidExportPayload();
+    const blob = new Blob([JSON.stringify(exported, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = `bernal-kid-notes-${new Date().toISOString().slice(0, 10)}.json`;
+    anchor.click();
+    URL.revokeObjectURL(url);
+    showToast("Exported the kid notes with portable photo data.");
+  } catch (error) {
+    console.error(error);
+    showToast(`Could not export the kid notes: ${error.message}`);
+  }
+}
+
+async function buildKidExportPayload() {
+  const exportedStops = [];
+  for (const stop of getStops()) {
+    const saved = state.storage.stops[stop.id] || {};
+    const kidNotes = {
+      ...saved,
+      photo_export_data_url: "",
+    };
+
+    if (saved.has_photo) {
+      const photoRecord = await readPhotoRecord(stop.id);
+      if (photoRecord?.blob) {
+        kidNotes.photo_export_data_url = await createExportPhotoDataUrl(photoRecord.blob);
+      }
+    }
+
+    exportedStops.push({
       id: stop.id,
       title: stop.title,
       walk_order: stop.walk_order,
       google_maps_address: stop.google_maps_address || "",
-      kid_notes: {
-        ...(state.storage.stops[stop.id] || {}),
-      },
-    })),
-  };
+      kid_notes: kidNotes,
+    });
+  }
 
-  const blob = new Blob([JSON.stringify(exported, null, 2)], { type: "application/json" });
-  const url = URL.createObjectURL(blob);
-  const anchor = document.createElement("a");
-  anchor.href = url;
-  anchor.download = `bernal-kid-notes-${new Date().toISOString().slice(0, 10)}.json`;
-  anchor.click();
-  URL.revokeObjectURL(url);
-  showToast("Exported the kid notes. Photos stay on this device.");
+  return {
+    exported_at: new Date().toISOString(),
+    mode: "kid-scout",
+    device_label: "kid-ipad",
+    start_point: state.atlas.collection.start_point,
+    note: "This export includes reduced-size photo data URLs so it can be uploaded or merged later.",
+    stops: exportedStops,
+  };
+}
+
+async function uploadCurrentBundle() {
+  try {
+    showToast("Preparing the upload bundle...");
+    const payload = await buildKidExportPayload();
+    const response = await fetch("/api/walk-bundles", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      throw new Error(result.error || `Upload failed (${response.status})`);
+    }
+
+    showToast(`Uploaded to laptop as ${result.filename}.`);
+  } catch (error) {
+    console.error(error);
+    showToast(`Could not upload to the laptop: ${error.message}`);
+  }
+}
+
+async function prepareOffline() {
+  const photoUrls = getStops()
+    .flatMap((stop) => stop.inat_recent_photos || [])
+    .map((photo) => photo.photo_url)
+    .filter(Boolean);
+
+  try {
+    const result = await window.mossOffline?.prepare(photoUrls);
+    if (!result?.ok) {
+      showToast(result?.reason || "Offline prep is not available here.");
+      return;
+    }
+    showToast("Offline prep started. On HTTPS or localhost, this warms the app for field use.");
+  } catch (error) {
+    console.error(error);
+    showToast(`Offline prep failed: ${error.message}`);
+  }
 }
 
 function saveStop(stopId, patch) {
@@ -1103,6 +1175,33 @@ async function normalizeImageBlob(file) {
   } catch (error) {
     console.error("Image normalization failed", error);
     return file;
+  }
+}
+
+async function createExportPhotoDataUrl(blob) {
+  if (!(blob instanceof Blob) || !String(blob.type || "").startsWith("image/")) {
+    return "";
+  }
+
+  try {
+    const image = await loadImage(blob);
+    const width = image.naturalWidth || image.width;
+    const height = image.naturalHeight || image.height;
+    const scale = Math.min(1, EXPORT_IMAGE_DIMENSION / Math.max(width, height));
+
+    const canvas = document.createElement("canvas");
+    canvas.width = Math.max(1, Math.round(width * scale));
+    canvas.height = Math.max(1, Math.round(height * scale));
+    const context = canvas.getContext("2d");
+    if (!context) {
+      return "";
+    }
+
+    context.drawImage(image, 0, 0, canvas.width, canvas.height);
+    return canvas.toDataURL("image/jpeg", 0.74);
+  } catch (error) {
+    console.error("Export photo conversion failed", error);
+    return "";
   }
 }
 

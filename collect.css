@@ -369,6 +369,40 @@ summary:focus-visible {
   gap: 0.75rem;
 }
 
+.kid-scout-block {
+  display: grid;
+  gap: 0.7rem;
+  padding: 0.85rem 0.95rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(72, 104, 63, 0.14);
+  background: rgba(237, 244, 228, 0.72);
+}
+
+.kid-scout-block h3 {
+  margin: 0;
+}
+
+.kid-scout-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.kid-scout-photo {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.kid-scout-photo img {
+  display: block;
+  width: min(220px, 100%);
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 0.85rem;
+  border: 1px solid rgba(72, 104, 63, 0.14);
+  background: rgba(255, 255, 255, 0.7);
+}
+
 .form-footer {
   justify-content: flex-end;
   padding-top: 0.1rem;

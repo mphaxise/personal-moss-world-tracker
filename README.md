@@ -115,6 +115,7 @@ The walk collection page now supports:
 - reverse-geocoded stop addresses
 - two recent nearby iNaturalist photos per stop
 - a linked companion `kid mode` for a second device
+- direct `Upload to laptop` handoff back to this repo's local server
 
 The kid scout page supports:
 - the same 10-stop Bernal route
@@ -122,6 +123,18 @@ The kid scout page supports:
 - simple habitat and texture tags
 - one-photo capture with on-device persistence
 - separate local save from the adult page so phone and iPad notes do not overwrite each other
+- export with reduced-size photo data for later merge or upload
+
+Recommended real-world flow:
+1. At home, open the adult and kid pages once on the two devices.
+2. Collect locally during the walk.
+3. Back at home on the same Wi-Fi, use `Upload to laptop` from each device.
+4. The laptop server stores each uploaded bundle under `uploads/`.
+5. If direct upload is unavailable, use `Export kid notes` on the iPad and `Import kid export` on the adult page as the fallback.
+
+Offline note:
+- true service-worker offline install only works on `localhost` or HTTPS
+- on a plain laptop LAN URL like `http://10.0.0.50:8090`, the safe assumption is still: load the page at home and keep the tab open during the walk
 
 If you want the earlier tracker prototype, open [http://127.0.0.1:8080/legacy-tracker.html](http://127.0.0.1:8080/legacy-tracker.html).
 
