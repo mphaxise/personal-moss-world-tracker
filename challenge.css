@@ -96,8 +96,6 @@ select {
   color: var(--muted);
 }
 
-.hero-actions,
-.action-row,
 .meta-row,
 .progress-row,
 .card-rail {
@@ -106,28 +104,57 @@ select {
   gap: 10px;
 }
 
+.hero-actions,
+.action-row {
+  display: grid;
+  gap: 12px;
+}
+
+.hero-actions {
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.action-row {
+  grid-template-columns: repeat(auto-fit, minmax(148px, 1fr));
+}
+
 .primary-btn,
 .ghost-btn,
 .ghost-link,
 .choice-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 999px;
   border: 1px solid var(--line);
-  padding: 12px 18px;
+  min-height: 54px;
+  padding: 14px 20px;
   text-decoration: none;
   cursor: pointer;
-  transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+  text-align: center;
+  font-weight: 700;
+  line-height: 1.15;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition:
+    transform 0.18s ease,
+    background 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
 }
 
 .primary-btn {
-  background: var(--accent);
+  background: linear-gradient(180deg, #3b624f 0%, var(--accent) 100%);
   color: white;
   border-color: var(--accent);
+  box-shadow: 0 10px 20px rgba(48, 82, 65, 0.18);
 }
 
 .primary-btn:hover,
 .ghost-btn:hover,
 .ghost-link:hover,
 .choice-pill:hover,
+.card-pill:hover,
 .pack-card:hover {
   transform: translateY(-1px);
 }
@@ -137,6 +164,29 @@ select {
 .choice-pill {
   background: rgba(255, 255, 255, 0.76);
   color: var(--text);
+  box-shadow: 0 6px 16px rgba(29, 44, 34, 0.08);
+}
+
+.ghost-btn,
+.ghost-link {
+  border-color: rgba(48, 82, 65, 0.16);
+}
+
+.primary-btn:active,
+.ghost-btn:active,
+.ghost-link:active,
+.choice-pill:active,
+.card-pill:active {
+  transform: translateY(1px);
+}
+
+.primary-btn:focus-visible,
+.ghost-btn:focus-visible,
+.ghost-link:focus-visible,
+.choice-pill:focus-visible,
+.card-pill:focus-visible {
+  outline: 3px solid rgba(48, 82, 65, 0.28);
+  outline-offset: 3px;
 }
 
 .primary-btn:disabled,
@@ -398,14 +448,20 @@ textarea {
 
 .choice-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-  gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(116px, 1fr));
+  gap: 12px;
+}
+
+.choice-pill {
+  min-height: 62px;
+  font-size: 1rem;
 }
 
 .choice-pill.is-selected,
 .card-pill.is-selected {
   background: var(--accent-soft);
   border-color: #93af8f;
+  box-shadow: 0 10px 18px rgba(109, 139, 107, 0.18);
 }
 
 .card-rail {
@@ -416,11 +472,13 @@ textarea {
   border: 1px solid var(--line);
   background: rgba(255, 255, 255, 0.72);
   border-radius: 999px;
-  padding: 10px 14px;
+  min-height: 58px;
+  padding: 12px 16px;
   display: inline-flex;
   gap: 10px;
   align-items: center;
   cursor: pointer;
+  box-shadow: 0 6px 16px rgba(29, 44, 34, 0.08);
 }
 
 .card-pill.is-complete {
@@ -490,5 +548,33 @@ textarea {
   .selector-shell {
     width: min(100% - 20px, 100%);
     padding: 16px 0 36px;
+  }
+
+  .hero-actions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .action-row {
+    grid-template-columns: 1fr;
+  }
+
+  .card-rail {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .card-pill {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 560px) {
+  .hero-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .choice-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
