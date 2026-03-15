@@ -214,6 +214,7 @@ function createChoiceButtons(card, own) {
     const button = document.createElement("button");
     button.type = "button";
     button.className = ["choice-pill", own.choice === option ? "is-selected" : ""].filter(Boolean).join(" ");
+    button.dataset.color = String(option).toLowerCase();
     button.textContent = option;
     button.addEventListener("click", () => {
       saveOwnState(card.id, {
@@ -250,12 +251,12 @@ function createKidPhotoBlock(card, own) {
   const addButton = document.createElement("label");
   addButton.className = "primary-btn kid-primary";
   addButton.htmlFor = input.id;
-  addButton.textContent = own.has_photo ? "Replace photo" : "Take photo";
+  addButton.textContent = own.has_photo ? "Retake photo" : "Snap photo";
 
   const removeButton = document.createElement("button");
   removeButton.type = "button";
   removeButton.className = "ghost-btn";
-  removeButton.textContent = "Remove photo";
+  removeButton.textContent = "Clear photo";
   removeButton.disabled = !own.has_photo;
   removeButton.addEventListener("click", async () => {
     try {
@@ -329,7 +330,7 @@ function createKidActions(card) {
   const skipButton = document.createElement("button");
   skipButton.type = "button";
   skipButton.className = "ghost-btn";
-  skipButton.textContent = "Skip for now";
+  skipButton.textContent = "Maybe later";
   skipButton.addEventListener("click", () => {
     saveOwnState(card.id, { status: "skipped" });
     renderPage();
@@ -339,7 +340,7 @@ function createKidActions(card) {
   const resetButton = document.createElement("button");
   resetButton.type = "button";
   resetButton.className = "ghost-btn";
-  resetButton.textContent = "Reset card";
+  resetButton.textContent = "Start over";
   resetButton.addEventListener("click", async () => {
     try {
       await deletePhotoRecord(state.photoDb, makePhotoKey(state.pack.meta.id, ROLE, card.id));
@@ -355,7 +356,7 @@ function createKidActions(card) {
   const nextButton = document.createElement("button");
   nextButton.type = "button";
   nextButton.className = "primary-btn";
-  nextButton.textContent = "Next card";
+  nextButton.textContent = "Show next card";
   nextButton.addEventListener("click", () => selectNextCardFrom(card.id));
 
   row.append(skipButton, resetButton, nextButton);

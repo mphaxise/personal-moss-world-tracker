@@ -6,7 +6,7 @@
     <title>Adult Challenge Mode</title>
     <link rel="stylesheet" href="challenge.css" />
   </head>
-  <body>
+  <body class="adult-mode">
     <div class="challenge-shell">
       <header class="hero">
         <div>
@@ -14,15 +14,22 @@
           <h1 id="pageTitle">Loading challenge</h1>
           <p class="hero-text" id="heroText">Loading the selected challenge pack.</p>
         </div>
-        <div class="hero-actions">
-          <button type="button" id="nextBtn" class="primary-btn">Next card</button>
-          <button type="button" id="exportBtn" class="ghost-btn">Export notes</button>
-          <button type="button" id="uploadBtn" class="ghost-btn">Upload to laptop</button>
-          <button type="button" id="importKidBtn" class="ghost-btn">Import kid export</button>
-          <button type="button" id="offlineBtn" class="ghost-btn">Prepare offline</button>
-          <a id="kidLink" class="ghost-link" href="kid-collect.html">Open kid mode</a>
-          <a id="pickerLink" class="ghost-link" href="index.html">Open challenge picker</a>
-          <a id="atlasLink" class="ghost-link" href="atlas.html">Open legacy atlas</a>
+        <div class="hero-toolbar">
+          <div class="hero-primary-actions">
+            <button type="button" id="nextBtn" class="primary-btn">Next card</button>
+            <button type="button" id="importKidBtn" class="ghost-btn">Import kid export</button>
+            <button type="button" id="uploadBtn" class="ghost-btn">Upload to laptop</button>
+          </div>
+          <details class="more-tools">
+            <summary class="ghost-btn">More tools</summary>
+            <div class="tool-menu">
+              <button type="button" id="exportBtn" class="ghost-btn">Export notes</button>
+              <button type="button" id="offlineBtn" class="ghost-btn">Prepare offline</button>
+              <a id="kidLink" class="ghost-link" href="kid-collect.html">Open kid mode</a>
+              <a id="pickerLink" class="ghost-link" href="index.html">Open challenge picker</a>
+              <a id="atlasLink" class="ghost-link" href="atlas.html">Open legacy atlas</a>
+            </div>
+          </details>
         </div>
         <input id="kidImportInput" type="file" accept="application/json,.json" hidden />
       </header>
