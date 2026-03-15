@@ -245,7 +245,7 @@ function createStopAccordion(stop) {
     </label>
     <div class="form-actions">
       <div class="inline-actions">
-        <button type="button" class="inline-btn" data-action="use-location">Use my current location</button>
+        <button type="button" class="inline-btn" data-action="use-location">Arrive now</button>
         <button type="button" class="inline-btn" data-action="focus-map">Focus on map</button>
       </div>
       <div class="inline-actions">
@@ -290,20 +290,18 @@ function wireForm(form, stopId) {
   form.addEventListener("input", () => saveForm(stopId, form));
   form.addEventListener("change", () => saveForm(stopId, form));
 
-  form.querySelector('[data-action="use-location"]').addEventListener("click", () => {
-    if (!state.currentPosition) {
-      showToast("Enable location tracking first, then use your current location here.");
-      return;
+  form.querySelector('[data-action="use-location"]').addEventListener("click", async () => {
+    try {
+      await ensureCurrentPosition();
+      stampArrivalFromCurrentPosition(stopId, form, {
+        overwriteExisting: true,
+        announce: true,
+        focusMap: true,
+      });
+    } catch (error) {
+      console.error(error);
+      showToast(error.message || "Could not get your device location.");
     }
-
-    form.elements.latitude.value = state.currentPosition.latitude.toFixed(6);
-    form.elements.longitude.value = state.currentPosition.longitude.toFixed(6);
-    if (!form.elements.arrived_at.value) {
-      form.elements.arrived_at.value = currentDateTimeLocal();
-    }
-    saveForm(stopId, form);
-    renderRouteMap();
-    showToast("Current location copied into this stop.");
   });
 
   form.querySelector('[data-action="focus-map"]').addEventListener("click", () => {
@@ -370,6 +368,71 @@ function updateSummary(stopId, baseStop, saved, options = {}) {
   if (options.refreshMap) {
     renderRouteMap({ fitBounds: false });
   }
+}
+
+function stampArrivalFromCurrentPosition(stopId, form, options = {}) {
+  const overwriteExisting = Boolean(options.overwriteExisting);
+  const announce = options.announce !== false;
+  const focusMap = Boolean(options.focusMap);
+
+  if (!state.currentPosition) {
+    if (announce) {
+      showToast("Enable location tracking first, then use Arrive now.");
+    }
+    return false;
+  }
+
+  const hasArrival = Boolean(form.elements.arrived_at.value);
+  const hasCoords = Boolean(String(form.elements.latitude.value).trim() && String(form.elements.longitude.value).trim());
+  if (!overwriteExisting && hasArrival && hasCoords) {
+    return false;
+  }
+
+  form.elements.latitude.value = state.currentPosition.latitude.toFixed(6);
+  form.elements.longitude.value = state.currentPosition.longitude.toFixed(6);
+  form.elements.arrived_at.value = currentDateTimeLocal();
+
+  saveForm(stopId, form);
+  renderRouteMap({ fitBounds: false });
+
+  if (focusMap) {
+    selectStop(stopId, { focusMap: true, fromToggle: false });
+  }
+
+  if (announce) {
+    showToast("Arrival time and device coordinates recorded for this stop.");
+  }
+
+  return true;
+}
+
+async function ensureCurrentPosition() {
+  if (state.currentPosition) {
+    return state.currentPosition;
+  }
+
+  if (!navigator.geolocation) {
+    throw new Error("This browser does not support location access.");
+  }
+
+  const position = await new Promise((resolve, reject) => {
+    navigator.geolocation.getCurrentPosition(resolve, reject, {
+      enableHighAccuracy: true,
+      timeout: 10000,
+      maximumAge: 5000,
+    });
+  }).catch((error) => {
+    throw new Error(`Location error: ${error.message}`);
+  });
+
+  state.currentPosition = {
+    latitude: position.coords.latitude,
+    longitude: position.coords.longitude,
+    accuracy: position.coords.accuracy,
+  };
+
+  renderRouteMap({ fitBounds: false });
+  return state.currentPosition;
 }
 
 function createPhotoBlock(stop) {
@@ -667,18 +730,28 @@ function maybeAutoSelectNearestStop() {
   }
 
   const stop = nearest.stop;
-  const merged = getMergedStop(stop);
-  if (!merged.arrived_at) {
-    const form = state.forms.get(stop.id)?.form;
-    if (form) {
-      form.elements.arrived_at.value = currentDateTimeLocal();
-      saveForm(stop.id, form);
-    }
+  let autoStamped = false;
+  const form = state.forms.get(stop.id)?.form;
+  if (form) {
+    autoStamped = stampArrivalFromCurrentPosition(stop.id, form, {
+      overwriteExisting: false,
+      announce: false,
+      focusMap: false,
+    });
   }
 
   if (state.selectedStopId !== stop.id) {
     selectStop(stop.id, { focusMap: true, fromToggle: false });
-    showToast(`Near stop ${stop.walk_order}: ${stop.title}`);
+    showToast(
+      autoStamped
+        ? `Near stop ${stop.walk_order}: ${stop.title}. Arrival and device coordinates were auto-recorded.`
+        : `Near stop ${stop.walk_order}: ${stop.title}`
+    );
+    return;
+  }
+
+  if (autoStamped) {
+    showToast(`Arrival and device coordinates were auto-recorded for stop ${stop.walk_order}.`);
   }
 }
 
