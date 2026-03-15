@@ -1,0 +1,154 @@
+{
+  "meta": {
+    "id": "pick-your-color-v1",
+    "slug": "pick-your-color",
+    "title": "Pick Your Color",
+    "version": 1,
+    "updated_at": "2026-03-15",
+    "status": "active"
+  },
+  "pack": {
+    "title": "Pick Your Color",
+    "tagline": "Each player chooses a color and tries to build the best set of nature photos.",
+    "summary": "Parent and kid each choose a color, then race gently to collect three strong nature photos in that color.",
+    "estimated_minutes": 25,
+    "difficulty": "easy",
+    "age_band": "6-10",
+    "play_style": "parallel",
+    "theme_tags": ["color", "nature", "family", "photo-walk", "replayable"]
+  },
+  "participants": {
+    "adult_label": "Parent",
+    "kid_label": "Kid explorer",
+    "device_mode": "two-device-preferred",
+    "adult_role": "guide and collector",
+    "kid_role": "collector and comparer"
+  },
+  "rules": {
+    "completion_target": "complete-three-per-player",
+    "photo_required": true,
+    "scoring_mode": "count-based",
+    "allow_shared_completion": false,
+    "allow_duplicate_subjects": true,
+    "bonus_rules": [
+      "Get a bonus if all three photos for one player are clearly different subjects.",
+      "Get a bonus if the parent and kid choose different colors."
+    ],
+    "safety_note": "Stay on public paths and sidewalks. Do not enter yards or private gardens.",
+    "weather_note": "Works best in neighborhoods with flowers, leaves, bark, painted curbs, or varied street trees nearby."
+  },
+  "cards": [
+    {
+      "id": "adult-color-choice",
+      "order": 1,
+      "title": "Parent picks a color",
+      "prompt": "Choose one color before the walk starts.",
+      "kid_prompt": "Grown-up chooses a color.",
+      "adult_prompt": "Pick from red, orange, yellow, green, blue, purple, white, or pink.",
+      "capture_type": "choice",
+      "assigned_to": "adult",
+      "completion_rule": "one-choice",
+      "points": 0,
+      "tags": ["setup", "adult"]
+    },
+    {
+      "id": "kid-color-choice",
+      "order": 2,
+      "title": "Kid picks a color",
+      "prompt": "Choose one color before the walk starts.",
+      "kid_prompt": "Pick your color.",
+      "adult_prompt": "Help the child choose from the preset colors.",
+      "capture_type": "choice",
+      "assigned_to": "kid",
+      "completion_rule": "one-choice",
+      "points": 0,
+      "tags": ["setup", "kid"]
+    },
+    {
+      "id": "adult-color-shot-1",
+      "order": 3,
+      "title": "Parent photo 1",
+      "prompt": "Take your first photo in your chosen color.",
+      "capture_type": "photo",
+      "assigned_to": "adult",
+      "completion_rule": "one-photo",
+      "points": 10,
+      "photo_required": true,
+      "tags": ["adult", "photo"]
+    },
+    {
+      "id": "adult-color-shot-2",
+      "order": 4,
+      "title": "Parent photo 2",
+      "prompt": "Take another photo in your chosen color.",
+      "capture_type": "photo",
+      "assigned_to": "adult",
+      "completion_rule": "one-photo",
+      "points": 10,
+      "photo_required": true,
+      "tags": ["adult", "photo"]
+    },
+    {
+      "id": "adult-color-shot-3",
+      "order": 5,
+      "title": "Parent photo 3",
+      "prompt": "Take a third photo in your chosen color.",
+      "capture_type": "photo",
+      "assigned_to": "adult",
+      "completion_rule": "one-photo",
+      "points": 10,
+      "photo_required": true,
+      "tags": ["adult", "photo"]
+    },
+    {
+      "id": "kid-color-shot-1",
+      "order": 6,
+      "title": "Kid photo 1",
+      "prompt": "Take your first photo in your chosen color.",
+      "kid_prompt": "Find your color.",
+      "capture_type": "photo",
+      "assigned_to": "kid",
+      "completion_rule": "one-photo",
+      "points": 10,
+      "photo_required": true,
+      "tags": ["kid", "photo"]
+    },
+    {
+      "id": "kid-color-shot-2",
+      "order": 7,
+      "title": "Kid photo 2",
+      "prompt": "Take another photo in your chosen color.",
+      "kid_prompt": "Find your color again.",
+      "capture_type": "photo",
+      "assigned_to": "kid",
+      "completion_rule": "one-photo",
+      "points": 10,
+      "photo_required": true,
+      "tags": ["kid", "photo"]
+    },
+    {
+      "id": "kid-color-shot-3",
+      "order": 8,
+      "title": "Kid photo 3",
+      "prompt": "Take a third photo in your chosen color.",
+      "kid_prompt": "One more for your color.",
+      "capture_type": "photo",
+      "assigned_to": "kid",
+      "completion_rule": "one-photo",
+      "points": 10,
+      "photo_required": true,
+      "tags": ["kid", "photo"]
+    }
+  ],
+  "recap": {
+    "title": "Your color-vs-color recap",
+    "success_message": "Both players finished their color sets.",
+    "partial_message": "One color set is done. The other is close.",
+    "empty_message": "No color photos were saved this time.",
+    "group_by": "participant",
+    "highlight_rules": [
+      "Show the parent color set side by side with the kid color set.",
+      "Call out whether the players chose the same or different colors."
+    ]
+  }
+}

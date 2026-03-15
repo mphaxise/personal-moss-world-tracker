@@ -5,70 +5,68 @@ Status: current strategy
 
 ## Current product direction
 
-The active product direction is `Bernal Heights Moss Atlas`.
+The active product direction is `parent-child neighborhood nature challenges`.
 
-This supersedes the earlier tracker-first interpretation for MVP scope.
+This supersedes the earlier `Bernal Heights Moss Atlas` interpretation for MVP scope.
 
 The product is now defined as:
-- a founder-led editorial atlas of one San Francisco neighborhood
-- one curated Bernal walk
-- 8 to 12 stops
-- a simple public-facing `moss atlas` brand backed by research across mosses, liverworts, and lichens
+- one adult mode and one kid mode used together on a walk
+- lightweight challenge packs chosen before the walk
+- photo-first collection during the walk
+- a shared recap at the end
+- a product that teaches noticing nature without depending on fragile waypoint truth
 
 ## Product vision
 
-Build a neighborhood-scale guide to the hidden fog-fed texture of San Francisco.
+Build a simple, beautiful way for a parent and child to turn an everyday neighborhood walk into a nature discovery game.
 
 The core experience is not `upload and browse`.
-The core experience is `walk, notice, and understand why this patch exists here`.
+The core experience is `choose a challenge, walk, notice, capture, recap`.
 
 ## Wedge
 
-Start with Bernal Heights because it is:
-- walkable
-- geographically legible
-- rich in walls, slopes, stairs, bark, and edge habitats
-- a strong test of whether the atlas format is compelling enough to scale
+Start with one parent and one child on a local walk because it is:
+- emotionally strong
+- easy to test repeatedly
+- resilient across neighborhoods
+- already validated by the strongest signal from the first real field test
 
 ## Primary users and jobs
 
 Primary users:
-- curious neighborhood walkers
-- design-minded local naturalists
-- people who like place-based stories and urban texture
+- one parent or caregiver
+- one elementary-school-age child
+- families who want a simple, repeatable outdoor activity
 
 Core jobs:
-- `show me a good Bernal walk`
-- `teach me what to notice`
-- `make this neighborhood feel more legible and interesting`
+- `give us an easy nature challenge for this walk`
+- `help my child stay engaged`
+- `make our walk feel shared and memorable`
 
 ## MVP experience
 
 Required MVP surfaces:
-1. home narrative
-2. walk overview with route summary and map
-3. stop detail for each published stop
+1. challenge select
+2. adult challenge page
+3. kid challenge page
+4. end-of-walk recap
 
-Each stop should provide:
-- image
-- location hint
-- habitat type
-- short summary
-- `why this spot matters`
-- seasonality note
-- source note
+Each challenge should provide:
+- title
+- one-line goal
+- estimated time
+- a small set of photo-first cards
+- simple progress
+- recap output
 
 ## Editorial model
 
-Public brand:
-- moss atlas
+Public-facing challenge styles for v1:
+- rainbow hunt
+- pick your color
+- tiny worlds
 
-Internal research model:
-- mosses
-- liverworts
-- lichens
-
-This keeps the product simple in public while preserving ecological richness in the content.
+The original moss sensibility remains valuable inside `tiny worlds` and later nature-specific challenge packs.
 
 ## Runtime and architecture choice
 
@@ -76,24 +74,25 @@ Selected runtime boundary:
 - static-first
 
 Reasoning:
-- curated editorial content does not need a write path
-- static delivery matches the product size and reduces maintenance burden
-- public submissions are intentionally deferred
+- challenge-pack content does not need a write path
+- static delivery keeps the family walk flow light and robust
+- public submissions and sync are intentionally deferred
 
 ## Success criteria
 
 The MVP is working if:
-- Bernal can support 8 to 12 distinct, worth-walking stops
-- the walk feels coherent without explanation from the founder
-- the stop pages read like place-based stories rather than taxonomy blurbs
-- the UI feels like an atlas instead of a generic map database
+- a parent and child can start a challenge in under one minute
+- the child can complete tasks without needing long reading
+- the two-device flow feels fun instead of burdensome
+- the family wants to do a second challenge on another walk
 
 ## Scale path
 
-If Bernal works, scale in this order:
-1. more San Francisco neighborhood chapters
-2. seasonal city walks
-3. fog-belt trail guides within roughly one hour of San Francisco
+If the challenge format works, scale in this order:
+1. more challenge packs
+2. neighborhood-specific themed packs
+3. founder-led atlas or guide layers on top of the challenge engine
+4. wider family and education use cases
 
 ## Out of scope
 
@@ -101,13 +100,13 @@ Not in scope for this MVP:
 - public submissions
 - contributor identity systems
 - moderation workflows
+- live sync
 - route generation
-- citywide coverage at launch
-- regional trails directory at launch
-- full citizen-science workflow
+- citywide content marketplace
+- full species-identification workflow
 
 ## Legacy prototype note
 
-The repository still contains the earlier community tracker prototype.
+The repository still contains earlier atlas and tracker prototypes.
 
-That implementation remains useful as a reference, but it is no longer the product definition for MVP.
+Those implementations remain useful as references, but they are no longer the product definition for MVP.

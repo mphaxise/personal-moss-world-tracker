@@ -1,40 +1,43 @@
-# Bernal Heights Moss Atlas
+# Neighborhood Nature Challenges Prototype
 
 Planning note:
 - after the first Bernal field walk on `2026-03-15`, the repo now includes a founder pivot memo exploring a simpler product direction around `parent-child neighborhood nature challenges`
-- the Bernal atlas work remains in the repo and is still useful, but it is no longer the only active framing under consideration
+- the Bernal atlas work remains in the repo and is still useful, but the current implementation planning direction is now `challenge-first`
 
-This repo started as `Personal Moss World Tracker` and now has a narrower product direction:
+This repo started as `Personal Moss World Tracker`, moved through `Bernal Heights Moss Atlas`, and now has a clearer near-term product direction:
 
-- current MVP target: `Bernal Heights Moss Atlas`
-- current product shape: one curated neighborhood walk with 8 to 12 editorial stops
-- current runtime choice: static-first, with no public write path in MVP
+- current MVP target: `parent-child neighborhood nature challenges`
+- current product shape: one adult mode, one kid mode, lightweight challenge packs, and end-of-walk recap
+- current runtime choice: static-first, with no required backend state in MVP
 
 ## Current status
 
 Planning direction is now set.
 
 What exists today:
-- a static Bernal atlas shell now loads the candidate content scaffold at the repo root
-- a dedicated walk collection page now lives at `collect.html`
-- a companion kid scout page now lives at `kid-collect.html`
-- the walk collection page now includes a Google Maps route handoff, reverse-geocoded stop addresses, and two recent nearby iNaturalist photos per stop
-- a legacy community-tracker prototype is still present in the codebase
+- a static Bernal atlas shell still exists as legacy product exploration
+- a dedicated adult collection page lives at `collect.html`
+- a companion kid scout page lives at `kid-collect.html`
+- the two-device collection flow, photo capture, local save, and local upload already work
 - founder review is complete
-- engineering review is complete
-- Bernal implementation spec is written
-- Bernal content pack is drafted
+- engineering review for the atlas is complete
+- founder pivot memo is written
+- challenge-first implementation spec is now written
+- challenge-pack schema is now written
+- the first three challenge packs are now scaffolded
 
 What this means:
 - the current app code is useful as a prototype reference
 - the current app code is now split into atlas mode, walk-capture mode, and the preserved legacy tracker
-- the atlas planning docs are the source of truth for the next implementation phase
+- the challenge planning docs are the source of truth for the next implementation phase
 
 ## Source-of-truth docs
 
 Current planning spine:
 - [docs/founder-mvp-decision-memo.md](/Users/praneet/personal-moss-world-tracker/docs/founder-mvp-decision-memo.md)
 - [docs/founder-mvp-pivot-memo.md](/Users/praneet/personal-moss-world-tracker/docs/founder-mvp-pivot-memo.md)
+- [docs/challenge-first-implementation-spec.md](/Users/praneet/personal-moss-world-tracker/docs/challenge-first-implementation-spec.md)
+- [docs/challenge-pack-schema.md](/Users/praneet/personal-moss-world-tracker/docs/challenge-pack-schema.md)
 - [docs/bernal-atlas-implementation-spec.md](/Users/praneet/personal-moss-world-tracker/docs/bernal-atlas-implementation-spec.md)
 - [docs/bernal-content-pack.md](/Users/praneet/personal-moss-world-tracker/docs/bernal-content-pack.md)
 - [docs/bernal-field-worksheet.md](/Users/praneet/personal-moss-world-tracker/docs/bernal-field-worksheet.md)
@@ -49,57 +52,62 @@ Supporting strategy docs:
 
 Execution scaffold:
 - [content/bernal-heights-atlas.json](/Users/praneet/personal-moss-world-tracker/content/bernal-heights-atlas.json)
+- [rainbow-hunt-v1.json](/Users/praneet/personal-moss-world-tracker/content/challenges/rainbow-hunt-v1.json)
+- [pick-your-color-v1.json](/Users/praneet/personal-moss-world-tracker/content/challenges/pick-your-color-v1.json)
+- [tiny-worlds-v1.json](/Users/praneet/personal-moss-world-tracker/content/challenges/tiny-worlds-v1.json)
 - [collect.html](/Users/praneet/personal-moss-world-tracker/collect.html)
 - [kid-collect.html](/Users/praneet/personal-moss-world-tracker/kid-collect.html)
 
 ## Selected MVP
 
 Build:
-- one Bernal Heights chapter
-- one curated walk
-- 8 to 12 stops
-- one home narrative
-- one map-supported walk overview
-- one reusable stop-detail template
+- one adult page
+- one kid page
+- three lightweight challenge packs
+- photo-first collection on neighborhood walks
+- one end-of-walk recap
+- simple bundle upload or merge
 
 Do not build yet:
 - public submissions
 - contributor accounts
 - moderation tooling
-- citywide neighborhood expansion
-- one-hour regional trail directory
+- live sync
+- citywide challenge marketplace
 - route generation
-- taxonomy-heavy browsing UI
+- taxonomy-heavy identification workflow
 
 ## Runtime decision
 
 Selected runtime boundary: `static-first`.
 
 For the next implementation phase, this means:
-- curated content lives in repo files
+- challenge pack content lives in repo files
 - no public `POST` or `PATCH` path is required
 - no SQLite dependency is required for MVP
-- no runtime iNaturalist enrichment is required for MVP
+- no runtime third-party enrichment is required in the walk flow
 
 ## Legacy prototype note
 
-The earlier moss-tracker prototype is still preserved in the repo as:
+The earlier product exploration layers are still preserved in the repo as:
 - `legacy-tracker.html`
 - `legacy-tracker.css`
 - `app.js`
 - `server.py`
+- `index.html`
+- `atlas.js`
 
-That prototype remains useful as a reference for:
+These remain useful as references for:
 - single-page layout patterns
 - map integration
 - anonymous-public copy patterns
 - local development serving
 
-It should be treated as legacy product surface while the Bernal atlas implementation begins.
+They should be treated as reference material while the challenge-first implementation begins.
 
 ## Existing local run command
 
-To inspect the current Bernal atlas shell locally:
+To inspect the current prototype locally:
 
 ```bash
 cd /Users/praneet/personal-moss-world-tracker
@@ -115,18 +123,16 @@ For the lighter companion iPad page, open [http://127.0.0.1:8080/kid-collect.htm
 If the iPad will be offline on the walk, load `kid-collect.html` at home and keep the tab open during the walk.
 After the walk, use `Export kid notes` to pull the data back out of the device.
 
-The walk collection page now supports:
-- start point at `418 Nevada Street`
-- a single `Open full route in Google Maps` handoff
-- reverse-geocoded stop addresses
-- two recent nearby iNaturalist photos per stop
+The current adult and kid prototype still support:
+- two-device collection
+- photo capture on both devices
+- local save
+- export and upload back to the laptop server
 - a linked companion `kid mode` for a second device
-- direct `Upload to laptop` handoff back to this repo's local server
 
 The kid scout page supports:
-- the same 10-stop Bernal route
-- large-touch stop selection and quick `found / maybe / skip` decisions
-- simple habitat and texture tags
+- large-touch selection and quick `found / maybe / skip` decisions
+- simple tags and one-photo capture
 - one-photo capture with on-device persistence
 - separate local save from the adult page so phone and iPad notes do not overwrite each other
 - export with reduced-size photo data for later merge or upload
@@ -146,7 +152,7 @@ If you want the earlier tracker prototype, open [http://127.0.0.1:8080/legacy-tr
 
 ## Immediate next execution steps
 
-1. Use [docs/founder-mvp-pivot-memo.md](/Users/praneet/personal-moss-world-tracker/docs/founder-mvp-pivot-memo.md) to decide whether the product should pivot from `atlas-first` to `challenge-first`.
-2. Use [docs/family-nature-challenges-landscape-research.md](/Users/praneet/personal-moss-world-tracker/docs/family-nature-challenges-landscape-research.md) to compare the new challenge idea against what already exists.
-3. If the pivot is accepted, define the first three challenge templates and a challenge-pack JSON schema.
-4. If the pivot is rejected, resume Bernal field verification with the existing worksheet and checklist.
+1. Use [docs/challenge-pack-schema.md](/Users/praneet/personal-moss-world-tracker/docs/challenge-pack-schema.md) as the new content contract.
+2. Use [docs/challenge-first-implementation-spec.md](/Users/praneet/personal-moss-world-tracker/docs/challenge-first-implementation-spec.md) as the execution plan.
+3. Refactor the current adult and kid pages from route-first to challenge-first.
+4. Run `review` on the first implementation branch before polishing.

@@ -1,0 +1,137 @@
+{
+  "meta": {
+    "id": "rainbow-hunt-v1",
+    "slug": "rainbow-hunt",
+    "title": "Rainbow Hunt",
+    "version": 1,
+    "updated_at": "2026-03-15",
+    "status": "active"
+  },
+  "pack": {
+    "title": "Rainbow Hunt",
+    "tagline": "Find nature in every color of the rainbow.",
+    "summary": "Walk together and collect six nature photos that build a rainbow from red to purple.",
+    "estimated_minutes": 30,
+    "difficulty": "easy",
+    "age_band": "5-10",
+    "play_style": "shared",
+    "theme_tags": ["color", "nature", "family", "photo-walk"]
+  },
+  "participants": {
+    "adult_label": "Parent",
+    "kid_label": "Kid explorer",
+    "device_mode": "two-device-preferred",
+    "adult_role": "guide and recorder",
+    "kid_role": "scout and photographer"
+  },
+  "rules": {
+    "completion_target": "complete-all-cards",
+    "photo_required": true,
+    "scoring_mode": "fixed-points-plus-bonus",
+    "allow_shared_completion": true,
+    "allow_duplicate_subjects": false,
+    "bonus_rules": [
+      "Complete all six colors for a rainbow bonus.",
+      "Get a bonus if four or more colors come from living things."
+    ],
+    "safety_note": "Stay on public paths and sidewalks. Do not enter yards or private gardens.",
+    "weather_note": "This challenge works in sun, fog, or light cloud because color is the core mechanic."
+  },
+  "cards": [
+    {
+      "id": "rainbow-red",
+      "order": 1,
+      "title": "Find red",
+      "prompt": "Take a photo of something red in nature.",
+      "kid_prompt": "Find a red nature thing.",
+      "adult_prompt": "Look for flowers, berries, leaves, bark, seed pods, or insects.",
+      "capture_type": "photo",
+      "assigned_to": "either",
+      "completion_rule": "one-photo",
+      "points": 10,
+      "photo_required": true,
+      "tags": ["color", "red"]
+    },
+    {
+      "id": "rainbow-orange",
+      "order": 2,
+      "title": "Find orange",
+      "prompt": "Take a photo of something orange in nature.",
+      "kid_prompt": "Find an orange nature thing.",
+      "adult_prompt": "Look for petals, rust-colored leaves, bark, or tiny fungi.",
+      "capture_type": "photo",
+      "assigned_to": "either",
+      "completion_rule": "one-photo",
+      "points": 10,
+      "photo_required": true,
+      "tags": ["color", "orange"]
+    },
+    {
+      "id": "rainbow-yellow",
+      "order": 3,
+      "title": "Find yellow",
+      "prompt": "Take a photo of something yellow in nature.",
+      "kid_prompt": "Find a yellow nature thing.",
+      "adult_prompt": "Flowers and lichen are especially strong yellow targets.",
+      "capture_type": "photo",
+      "assigned_to": "either",
+      "completion_rule": "one-photo",
+      "points": 10,
+      "photo_required": true,
+      "tags": ["color", "yellow"]
+    },
+    {
+      "id": "rainbow-green",
+      "order": 4,
+      "title": "Find green",
+      "prompt": "Take a photo of something green in nature.",
+      "kid_prompt": "Find a green nature thing.",
+      "adult_prompt": "This can be moss, leaves, grass, bark growth, or algae-like texture.",
+      "capture_type": "photo",
+      "assigned_to": "either",
+      "completion_rule": "one-photo",
+      "points": 10,
+      "photo_required": true,
+      "tags": ["color", "green"]
+    },
+    {
+      "id": "rainbow-blue",
+      "order": 5,
+      "title": "Find blue",
+      "prompt": "Take a photo of something blue in nature.",
+      "kid_prompt": "Find a blue nature thing.",
+      "adult_prompt": "Blue is hard. Look carefully for petals, berries, sky reflected in water, or blue-green plant tones.",
+      "capture_type": "photo",
+      "assigned_to": "either",
+      "completion_rule": "one-photo",
+      "points": 10,
+      "photo_required": true,
+      "tags": ["color", "blue"]
+    },
+    {
+      "id": "rainbow-purple",
+      "order": 6,
+      "title": "Find purple",
+      "prompt": "Take a photo of something purple in nature.",
+      "kid_prompt": "Find a purple nature thing.",
+      "adult_prompt": "Flowers are the easiest target, but shadows and foliage sometimes work too.",
+      "capture_type": "photo",
+      "assigned_to": "either",
+      "completion_rule": "one-photo",
+      "points": 10,
+      "photo_required": true,
+      "tags": ["color", "purple"]
+    }
+  ],
+  "recap": {
+    "title": "Your rainbow recap",
+    "success_message": "You found a full rainbow in nature.",
+    "partial_message": "You found part of the rainbow. Next walk can finish it.",
+    "empty_message": "No colors were saved this time.",
+    "group_by": "card",
+    "highlight_rules": [
+      "Show one best photo per color.",
+      "Call out whether the parent or kid found each color first."
+    ]
+  }
+}

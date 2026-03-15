@@ -1,15 +1,17 @@
 # Status and Next Steps
 
 Date: 2026-03-15
-Status: Bernal atlas field-tested; product pivot now under review
+Status: challenge-first pivot accepted; implementation planning complete
 
 ## Current state
 
-The repo has moved from broad idea exploration into a defined Bernal implementation plan, and then through a real-world field test that challenged the current MVP wedge.
+The repo has moved from broad idea exploration into a Bernal atlas plan, through a real-world field test, and now into a clearer challenge-first product direction.
 
 Completed in this planning phase:
 - founder MVP decision memo written
 - founder MVP pivot memo written
+- challenge-pack schema written
+- challenge-first implementation spec written
 - Bernal wedge selected
 - engineering review completed
 - runtime boundary selected as `static-first`
@@ -23,6 +25,7 @@ Completed in this planning phase:
 - Bernal walk capture enriched with Google Maps route handoff and iNaturalist photo previews
 - Legacy tracker prototype preserved at `legacy-tracker.html`
 - landscape research added for parent-child nature challenge products and adjacent offerings
+- first three challenge-pack scaffolds added under `content/challenges/`
 
 Current reality of the codebase:
 - a legacy community-tracker prototype still exists in the app code
@@ -31,25 +34,23 @@ Current reality of the codebase:
 
 ## Current blockers
 
-The main blockers are no longer just content and field truth.
-The larger blocker is product framing.
+The product framing blocker is now resolved.
+The next blockers are implementation and cleanup.
 
 Blocking items:
-- the first Bernal field walk invalidated the current stop-generation confidence
-- candidate Bernal stops are still provisional scouting leads, not trustworthy public walk stops
-- the team now needs to choose between `atlas-first` and `challenge-first`
-- if the pivot is accepted, the content model needs to move from stop-oriented atlas JSON toward challenge-pack JSON
+- the current app still thinks in terms of route stops instead of challenge cards
+- recap and merged-results rendering still need to be implemented
+- legacy route-specific UI needs to be removed or isolated during the pivot
 
 ## Recommended execution order
 
 1. Product decision pass
-   - review the founder pivot memo
-   - review the landscape research
-   - choose whether the MVP is `challenge-first`
+   - completed
+   - MVP is `challenge-first`
 2. Challenge definition pass
-   - define the first three challenge templates
-   - define progress, scoring, and recap rules
-   - define a challenge-pack content schema
+   - challenge-pack schema is written
+   - first challenge templates are defined
+   - first three sample packs are scaffolded
 3. Implementation pass
    - reuse the adult and kid capture flows
    - replace stop-route logic with challenge logic
@@ -58,16 +59,13 @@ Blocking items:
 
 ## What is no longer the active gate
 
-The earlier Bernal atlas field-verification sequence is no longer the only active gate.
+The earlier Bernal atlas field-verification sequence is no longer the active gate.
 
-That work is still useful, but the next true gate is product choice:
-
-- keep pushing the Bernal atlas
-- or pivot to a neighborhood nature challenge product that uses the same interaction foundation
+That work remains useful as product history and future content inspiration, but it is not the current implementation path.
 
 ## Next decisions to make during implementation
 
-If the challenge pivot is accepted, these can be decided while building:
+These can be decided while building:
 - whether the adult and kid pages stay separate or become two modes of one page
 - whether points appear in v1 or remain hidden behind simple progress
 - whether challenge packs are neighborhood-specific or place-agnostic by default

@@ -1,0 +1,125 @@
+{
+  "meta": {
+    "id": "tiny-worlds-v1",
+    "slug": "tiny-worlds",
+    "title": "Tiny Worlds",
+    "version": 1,
+    "updated_at": "2026-03-15",
+    "status": "active"
+  },
+  "pack": {
+    "title": "Tiny Worlds",
+    "tagline": "Look closely and find the small textures that most people walk past.",
+    "summary": "Collect close-up photos of bark, leaves, stones, seeds, or tiny green patches that feel like hidden miniature worlds.",
+    "estimated_minutes": 30,
+    "difficulty": "medium",
+    "age_band": "6-11",
+    "play_style": "shared",
+    "theme_tags": ["texture", "close-up", "nature", "family", "observation"]
+  },
+  "participants": {
+    "adult_label": "Parent",
+    "kid_label": "Kid explorer",
+    "device_mode": "two-device-preferred",
+    "adult_role": "guide and comparer",
+    "kid_role": "finder and photographer"
+  },
+  "rules": {
+    "completion_target": "complete-any-three",
+    "photo_required": true,
+    "scoring_mode": "milestone",
+    "allow_shared_completion": true,
+    "allow_duplicate_subjects": false,
+    "bonus_rules": [
+      "Get a bonus for three different substrate types.",
+      "Get a bonus if one card is a tiny green world."
+    ],
+    "safety_note": "Stay on public paths and sidewalks. Do not climb, reach into private yards, or step into planted areas.",
+    "weather_note": "Works best after fog, shade, or moisture, but still works year-round if texture is the main lens."
+  },
+  "cards": [
+    {
+      "id": "tiny-bark",
+      "order": 1,
+      "title": "Bark texture",
+      "prompt": "Take a close-up photo of bark that looks detailed or surprising.",
+      "kid_prompt": "Find cool bark.",
+      "adult_prompt": "Look for cracks, color shifts, peeling layers, or lichen patches.",
+      "capture_type": "photo",
+      "assigned_to": "either",
+      "completion_rule": "one-photo",
+      "points": 15,
+      "photo_required": true,
+      "texture": "bark",
+      "tags": ["texture", "bark"]
+    },
+    {
+      "id": "tiny-leaf",
+      "order": 2,
+      "title": "Leaf detail",
+      "prompt": "Take a close-up photo of a leaf with strong veins, patterns, or edges.",
+      "kid_prompt": "Find a leaf with cool lines.",
+      "capture_type": "photo",
+      "assigned_to": "either",
+      "completion_rule": "one-photo",
+      "points": 15,
+      "photo_required": true,
+      "texture": "leaf",
+      "tags": ["texture", "leaf"]
+    },
+    {
+      "id": "tiny-stone",
+      "order": 3,
+      "title": "Stone pattern",
+      "prompt": "Take a close-up photo of a rock, wall, or stone surface with pattern or texture.",
+      "kid_prompt": "Find a cool rock pattern.",
+      "capture_type": "photo",
+      "assigned_to": "either",
+      "completion_rule": "one-photo",
+      "points": 15,
+      "photo_required": true,
+      "texture": "stone",
+      "tags": ["texture", "stone"]
+    },
+    {
+      "id": "tiny-green-world",
+      "order": 4,
+      "title": "Tiny green world",
+      "prompt": "Take a close-up photo of something that feels like a tiny green world.",
+      "kid_prompt": "Find a tiny green world.",
+      "adult_prompt": "Moss, lichen, liverwort, algae-like texture, or any micro-scale green patch counts.",
+      "capture_type": "photo",
+      "assigned_to": "either",
+      "completion_rule": "one-photo",
+      "points": 15,
+      "photo_required": true,
+      "texture": "micro-green",
+      "tags": ["texture", "green", "micro"]
+    },
+    {
+      "id": "tiny-seed-or-flower",
+      "order": 5,
+      "title": "Seed, flower, or pod detail",
+      "prompt": "Take a close-up photo of a seed head, flower detail, or pod pattern.",
+      "kid_prompt": "Find a tiny flower or seed detail.",
+      "capture_type": "photo",
+      "assigned_to": "either",
+      "completion_rule": "one-photo",
+      "points": 15,
+      "photo_required": true,
+      "texture": "seed-or-flower",
+      "tags": ["texture", "flower", "seed"]
+    }
+  ],
+  "recap": {
+    "title": "Your tiny worlds recap",
+    "success_message": "You found three or more tiny worlds.",
+    "partial_message": "You found some tiny worlds. Another walk can fill the rest.",
+    "empty_message": "No tiny worlds were saved this time.",
+    "group_by": "card",
+    "highlight_rules": [
+      "Show each completed texture card with one best photo.",
+      "Call out how many different substrate types were found."
+    ]
+  }
+}
