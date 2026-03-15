@@ -614,10 +614,16 @@ async function loadSelectedPhotoPreview(stopId) {
     return;
   }
 
-  const url = rememberPhotoUrl(stopId, saved.blob);
   preview.replaceChildren();
   const image = document.createElement("img");
-  image.src = url;
+  if (typeof saved.dataUrl === "string" && saved.dataUrl.startsWith("data:image/")) {
+    image.src = saved.dataUrl;
+  } else if (saved.blob instanceof Blob) {
+    image.src = rememberPhotoUrl(stopId, saved.blob);
+  } else {
+    preview.innerHTML = `<div class="photo-empty">The saved photo could not be displayed. You can add it again.</div>`;
+    return;
+  }
   image.alt = `Saved scout photo for ${getBaseStop(stopId)?.title || "selected stop"}`;
   preview.append(image);
   meta.textContent = `Saved ${formatShortDate(saved.updatedAt)}${saved.name ? ` • ${saved.name}` : ""}`;
@@ -884,7 +890,9 @@ async function buildKidExportPayload() {
 
     if (saved.has_photo) {
       const photoRecord = await readPhotoRecord(stop.id);
-      if (photoRecord?.blob) {
+      if (typeof photoRecord?.dataUrl === "string" && photoRecord.dataUrl.startsWith("data:image/")) {
+        kidNotes.photo_export_data_url = photoRecord.dataUrl;
+      } else if (photoRecord?.blob) {
         kidNotes.photo_export_data_url = await createExportPhotoDataUrl(photoRecord.blob);
       }
     }
@@ -1098,10 +1106,11 @@ async function savePhotoForStop(stopId, file) {
     throw new Error("Photo persistence is not available in this browser.");
   }
 
-  const blob = await normalizeImageBlob(file);
+  const normalized = await normalizeImageRecord(file);
   const record = {
     stopId,
-    blob,
+    dataUrl: normalized.dataUrl,
+    mimeType: normalized.mimeType,
     name: file.name || "",
     updatedAt: new Date().toISOString(),
   };
@@ -1178,6 +1187,49 @@ async function normalizeImageBlob(file) {
   }
 }
 
+async function normalizeImageRecord(file) {
+  if (!(file instanceof Blob) || !String(file.type || "").startsWith("image/")) {
+    throw new Error("The selected file is not an image.");
+  }
+
+  try {
+    const image = await loadImage(file);
+    const width = image.naturalWidth || image.width;
+    const height = image.naturalHeight || image.height;
+    const scale = Math.min(1, MAX_IMAGE_DIMENSION / Math.max(width, height));
+
+    if (scale >= 1 && file.size <= 1_800_000) {
+      return {
+        dataUrl: await blobToDataUrl(file),
+        mimeType: file.type || "image/jpeg",
+      };
+    }
+
+    const canvas = document.createElement("canvas");
+    canvas.width = Math.max(1, Math.round(width * scale));
+    canvas.height = Math.max(1, Math.round(height * scale));
+    const context = canvas.getContext("2d");
+    if (!context) {
+      return {
+        dataUrl: await blobToDataUrl(file),
+        mimeType: file.type || "image/jpeg",
+      };
+    }
+
+    context.drawImage(image, 0, 0, canvas.width, canvas.height);
+    return {
+      dataUrl: canvas.toDataURL("image/jpeg", 0.82),
+      mimeType: "image/jpeg",
+    };
+  } catch (error) {
+    console.error("Image normalization failed", error);
+    return {
+      dataUrl: await blobToDataUrl(file),
+      mimeType: file.type || "image/jpeg",
+    };
+  }
+}
+
 async function createExportPhotoDataUrl(blob) {
   if (!(blob instanceof Blob) || !String(blob.type || "").startsWith("image/")) {
     return "";
@@ -1203,6 +1255,15 @@ async function createExportPhotoDataUrl(blob) {
     console.error("Export photo conversion failed", error);
     return "";
   }
+}
+
+function blobToDataUrl(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = () => reject(reader.error || new Error("Could not read the photo file."));
+    reader.onload = () => resolve(typeof reader.result === "string" ? reader.result : "");
+    reader.readAsDataURL(file);
+  });
 }
 
 function loadImage(file) {
