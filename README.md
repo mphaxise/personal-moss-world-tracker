@@ -11,6 +11,7 @@ This repo started as `Personal Moss World Tracker` and now has a narrower produc
 Planning direction is now set.
 
 What exists today:
+- a static Bernal atlas shell now loads the candidate content scaffold at the repo root
 - a legacy community-tracker prototype is still present in the codebase
 - founder review is complete
 - engineering review is complete
@@ -71,9 +72,9 @@ For the next implementation phase, this means:
 
 ## Legacy prototype note
 
-The current codebase still contains the earlier moss-tracker prototype:
-- `index.html`
-- `styles.css`
+The earlier moss-tracker prototype is still preserved in the repo as:
+- `legacy-tracker.html`
+- `legacy-tracker.css`
 - `app.js`
 - `server.py`
 
@@ -87,7 +88,7 @@ It should be treated as legacy product surface while the Bernal atlas implementa
 
 ## Existing local run command
 
-If you want to inspect the legacy prototype locally:
+To inspect the current Bernal atlas shell locally:
 
 ```bash
 cd /Users/praneet/personal-moss-world-tracker
@@ -96,11 +97,13 @@ python3 server.py --host 127.0.0.1 --port 8080
 
 Then open [http://127.0.0.1:8080](http://127.0.0.1:8080).
 
+If you want the earlier tracker prototype, open [http://127.0.0.1:8080/legacy-tracker.html](http://127.0.0.1:8080/legacy-tracker.html).
+
 ## Immediate next execution steps
 
 1. Field-verify the Bernal candidate stop list.
    Use [docs/bernal-field-worksheet.md](/Users/praneet/personal-moss-world-tracker/docs/bernal-field-worksheet.md) during the walk.
    Use [docs/bernal-field-checklist.md](/Users/praneet/personal-moss-world-tracker/docs/bernal-field-checklist.md) if you want the compact phone version.
 2. Gather the first image set and field notes.
-3. Implement the static-first atlas shell against the Bernal spec.
+3. Upgrade [content/bernal-heights-atlas.json](/Users/praneet/personal-moss-world-tracker/content/bernal-heights-atlas.json) from `candidate` to `field-verified` stop by stop.
 4. Run `review` once the first real implementation branch exists.

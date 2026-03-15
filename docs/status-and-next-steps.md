@@ -1,7 +1,7 @@
 # Status and Next Steps
 
 Date: 2026-03-15
-Status: planning complete, implementation not yet started for atlas pivot
+Status: atlas shell started, field verification still pending
 
 ## Current state
 
@@ -17,6 +17,8 @@ Completed in this planning phase:
 - Bernal field worksheet written
 - Bernal field checklist written
 - Bernal atlas candidate content scaffold written
+- Bernal atlas shell implemented at repo root
+- Legacy tracker prototype preserved at `legacy-tracker.html`
 
 Current reality of the codebase:
 - a legacy community-tracker prototype still exists in the app code
@@ -30,7 +32,7 @@ Blocking items:
 - candidate Bernal stops still need field verification
 - first image set still needs to be gathered
 - exact walk start/end still needs to be chosen
-- implementation has not yet been aligned to the new static-first atlas shape
+- stop coordinates and hero images are still placeholders in the atlas JSON
 
 ## Recommended execution order
 
@@ -43,8 +45,8 @@ Blocking items:
    - capture stop hero images
    - create concise field notes for each verified stop
 3. Implementation pass
-   - build the static-first atlas shell against the Bernal spec
-   - load one canonical content file
+   - tighten the atlas shell against real field-verified stop data
+   - keep one canonical content file
 4. Review pass
    - run `review` on the first implementation branch
 

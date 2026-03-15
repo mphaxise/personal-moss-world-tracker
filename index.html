@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Personal Moss World Tracker</title>
+    <title>Bernal Heights Moss Atlas</title>
     <link
       rel="stylesheet"
       href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -13,178 +13,119 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <div class="app-shell">
+    <div class="page-shell">
       <header class="hero">
-        <p class="eyebrow">community moss discoveries</p>
-        <h1>Personal Moss World Tracker</h1>
-        <p class="hero-copy">
-          Share everyday moss sightings in under a minute, then explore them as
-          visual cards or map markers.
-        </p>
-        <div class="hero-meta">
-          <span id="entryCount">0 entries</span>
-          <span id="dataModeBadge">Data mode: checking...</span>
-          <span>public contributor policy: anonymous only</span>
+        <div class="hero-copy">
+          <p class="eyebrow" id="heroEyebrow">San Francisco neighborhood atlas</p>
+          <h1 id="atlasTitle">Bernal Heights Moss Atlas</h1>
+          <p class="hero-deck" id="atlasDeck">
+            Loading the first Bernal chapter.
+          </p>
+          <div class="hero-actions">
+            <a class="primary-link" href="#walkSection">Open the walk</a>
+            <a class="secondary-link" href="docs/bernal-field-checklist.md">Field checklist</a>
+          </div>
         </div>
+        <div class="hero-facts" id="heroFacts"></div>
       </header>
 
-      <main>
-        <section class="panel" aria-labelledby="submitHeading">
-          <div class="panel-head">
-            <h2 id="submitHeading">Submit a Moss Sighting</h2>
-            <p>
-              Public display always hides identity. Contact details are
-              automatically redacted from public text.
-            </p>
+      <main class="main-grid">
+        <section class="panel narrative-panel">
+          <div class="section-head">
+            <p class="section-label">Why Bernal</p>
+            <h2>Hidden texture, neighborhood scale</h2>
           </div>
-
-          <form id="entryForm" class="entry-form" novalidate>
-            <label>
-              Title
-              <input name="title" type="text" required maxlength="90" placeholder="Moss at the corner mailbox" />
-            </label>
-
-            <label>
-              Short note
-              <textarea
-                name="description"
-                rows="3"
-                maxlength="240"
-                placeholder="What makes this moss world interesting?"
-              ></textarea>
-            </label>
-
-            <div class="field-row">
-              <label>
-                Photo URL (optional if uploading a file)
-                <input name="photoUrl" type="url" placeholder="https://..." />
-              </label>
-              <label>
-                Upload photo (optional if URL provided)
-                <input name="photoFile" type="file" accept="image/*" />
-              </label>
+          <div class="narrative-grid">
+            <div>
+              <p id="neighborhoodSummary" class="lede"></p>
+              <p id="neighborhoodWhyHere" class="body-copy"></p>
             </div>
-
-            <div class="field-row">
-              <label>
-                Location label
-                <input name="locationLabel" type="text" maxlength="120" placeholder="Valli Street, San Francisco" />
-              </label>
-              <label>
-                Captured date
-                <input name="capturedAt" type="date" />
-              </label>
-            </div>
-
-            <div class="field-row">
-              <label>
-                Latitude
-                <input name="latitude" type="number" step="any" placeholder="37.7749" />
-              </label>
-              <label>
-                Longitude
-                <input name="longitude" type="number" step="any" placeholder="-122.4194" />
-              </label>
-            </div>
-
-            <div class="privacy-note">
-              Privacy guardrails: no names/emails/phone numbers in public entry
-              text, image uploads are re-encoded client-side to reduce metadata
-              leakage.
-            </div>
-
-            <div class="form-actions">
-              <button type="submit" id="submitBtn">Add anonymous sighting</button>
-              <p id="formStatus" role="status" aria-live="polite"></p>
-            </div>
-          </form>
+            <div class="cover-card" id="coverCard"></div>
+          </div>
         </section>
 
-        <section class="panel" aria-label="Moss worlds browse area">
-          <div class="toolbar">
-            <div class="toolbar-row">
-              <div class="view-toggle" role="tablist" aria-label="Toggle between card and map views">
-                <button id="cardsBtn" class="is-active" data-view="cards" role="tab" aria-selected="true">
-                  Card view
-                </button>
-                <button id="mapBtn" data-view="map" role="tab" aria-selected="false">
-                  Map view
-                </button>
+        <section class="panel walk-panel" id="walkSection">
+          <div class="section-head">
+            <p class="section-label">Curated walk</p>
+            <h2 id="walkTitle">Post-Rain Bernal Loop</h2>
+          </div>
+          <div class="walk-grid">
+            <div class="walk-summary">
+              <div class="stat-grid" id="walkStats"></div>
+              <p class="body-copy" id="walkNarrative">
+                One neighborhood, one loop, and a set of stops that make Bernal's fog-fed microhabitats easier to notice.
+              </p>
+              <div class="callout-strip">
+                <span id="walkStatusBadge" class="status-badge">candidate route</span>
+                <span>Current shell is wired to fieldwork-ready placeholder data.</span>
               </div>
-              <p class="toolbar-note">Entries are publicly shown with anonymous contributor labels.</p>
             </div>
-
-            <div class="toolbar-row controls-row">
-              <label class="compact-field">
-                Search
-                <input id="searchInput" type="search" placeholder="Title, note, location" />
-              </label>
-
-              <label class="compact-field">
-                Sort
-                <select id="sortSelect">
-                  <option value="ranked">Ranked (recency + proximity)</option>
-                  <option value="newest">Newest</option>
-                  <option value="nearest">Nearest to me</option>
-                </select>
-              </label>
-
-              <label class="check-field">
-                <input id="coordsOnly" type="checkbox" />
-                Has map coordinates
-              </label>
-
-              <label class="check-field">
-                <input id="inatOnly" type="checkbox" />
-                Has iNaturalist match
-              </label>
-
-              <label class="check-field">
-                <input id="nearbyOnly" type="checkbox" />
-                Nearby only
-              </label>
-
-              <label class="compact-field">
-                Nearby radius
-                <select id="radiusSelect">
-                  <option value="1">1 km</option>
-                  <option value="3" selected>3 km</option>
-                  <option value="5">5 km</option>
-                  <option value="10">10 km</option>
-                </select>
-              </label>
-            </div>
-
-            <div class="toolbar-row actions-row">
-              <button id="centerMeBtn" type="button" class="ghost-btn">Center on me</button>
-              <button id="fitBoundsBtn" type="button" class="ghost-btn">Fit map to filtered</button>
-              <button id="exportBtn" type="button" class="ghost-btn">Export JSON</button>
-              <button id="importBtn" type="button" class="ghost-btn">Import JSON</button>
-              <input id="importFileInput" type="file" accept="application/json" class="is-hidden" />
-              <span id="browseStatus" class="toolbar-note" role="status" aria-live="polite"></span>
+            <div class="map-card">
+              <div id="walkMap" aria-label="Bernal walk map"></div>
+              <p id="mapNote" class="map-note"></p>
             </div>
           </div>
+        </section>
 
-          <div id="cardsView" class="view view-cards" role="tabpanel">
-            <div id="cardsGrid" class="cards-grid"></div>
+        <section class="panel stops-panel">
+          <div class="section-head">
+            <p class="section-label">Stops</p>
+            <h2>Candidate atlas cards</h2>
           </div>
+          <div class="stops-grid">
+            <div class="stop-list-wrap">
+              <ol class="stop-list" id="stopList"></ol>
+            </div>
+            <aside class="stop-detail" id="stopDetail" aria-live="polite"></aside>
+          </div>
+        </section>
 
-          <div id="mapView" class="view view-map is-hidden" role="tabpanel" aria-hidden="true">
-            <div id="mapCanvas" aria-label="Moss entries map"></div>
-            <div class="missing-location">
-              <h3>Filtered entries without coordinates</h3>
-              <ul id="missingLocationList"></ul>
+        <section class="panel field-panel">
+          <div class="section-head">
+            <p class="section-label">Field workflow</p>
+            <h2>Use the shell and the walk together</h2>
+          </div>
+          <div class="field-grid">
+            <div>
+              <p class="body-copy">
+                This build is intentionally honest: the UI is real, but the stop data is still in
+                <code>candidate</code> status until Bernal fieldwork upgrades it.
+              </p>
+              <ul class="checklist-list">
+                <li>Use the compact <a href="docs/bernal-field-checklist.md">phone checklist</a> during the walk.</li>
+                <li>Use the <a href="docs/bernal-field-worksheet.md">full worksheet</a> for the synthesis pass.</li>
+                <li>Update <a href="content/bernal-heights-atlas.json">the atlas JSON</a> after each scouting round.</li>
+              </ul>
+            </div>
+            <div class="resource-stack">
+              <a class="resource-card" href="docs/bernal-field-checklist.md">
+                <span class="resource-eyebrow">Phone</span>
+                <strong>Bernal field checklist</strong>
+                <span>Fast scoring and publish / hold / drop decisions</span>
+              </a>
+              <a class="resource-card" href="docs/bernal-field-worksheet.md">
+                <span class="resource-eyebrow">Full notes</span>
+                <strong>Bernal field worksheet</strong>
+                <span>Detailed stop evaluation and route synthesis</span>
+              </a>
+              <a class="resource-card" href="content/bernal-heights-atlas.json">
+                <span class="resource-eyebrow">Scaffold</span>
+                <strong>Atlas content JSON</strong>
+                <span>Candidate stops, source IDs, and status fields</span>
+              </a>
             </div>
           </div>
         </section>
       </main>
     </div>
 
+    <div class="status-toast" id="loadStatus" role="status" aria-live="polite"></div>
+
     <script
       src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
       integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
       crossorigin=""
     ></script>
-    <script type="module" src="app.js"></script>
+    <script type="module" src="atlas.js"></script>
   </body>
 </html>
