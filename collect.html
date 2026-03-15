@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bernal Walk Capture</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+    <link rel="stylesheet" href="collect.css" />
+  </head>
+  <body>
+    <div class="capture-shell">
+      <header class="capture-hero">
+        <div>
+          <p class="eyebrow">Field collection mode</p>
+          <h1>Bernal Walk Capture</h1>
+          <p class="hero-text" id="heroText">
+            Loading the route from 418 Nevada Street.
+          </p>
+        </div>
+        <div class="hero-actions">
+          <button type="button" id="trackBtn" class="primary-btn">Enable location tracking</button>
+          <button type="button" id="nextBtn" class="ghost-btn">Next stop</button>
+          <button type="button" id="exportBtn" class="ghost-btn">Export notes</button>
+          <a class="ghost-link" href="/">Open atlas</a>
+        </div>
+      </header>
+
+      <main class="capture-grid">
+        <section class="panel map-panel">
+          <div class="section-head">
+            <p class="section-label">Walking route</p>
+            <h2 id="routeTitle">418 Nevada Street to 10 provisional scouting stops</h2>
+          </div>
+          <div id="captureMap" aria-label="Walking collection map"></div>
+          <div class="route-meta" id="routeMeta"></div>
+        </section>
+
+        <section class="panel sidebar-panel">
+          <div class="section-head compact-head">
+            <p class="section-label">Stop forms</p>
+            <h2>Editable, pre-filled, auto-saved</h2>
+          </div>
+          <p class="sidebar-note">
+            As you move through the route, the nearest stop can auto-open when location tracking is enabled.
+            All edits save locally on this device.
+          </p>
+          <div class="stop-forms" id="stopForms"></div>
+        </section>
+      </main>
+    </div>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
+    <script type="module" src="collect.js"></script>
+  </body>
+</html>

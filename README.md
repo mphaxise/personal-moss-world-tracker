@@ -12,6 +12,7 @@ Planning direction is now set.
 
 What exists today:
 - a static Bernal atlas shell now loads the candidate content scaffold at the repo root
+- a dedicated walk collection page now lives at `collect.html`
 - a legacy community-tracker prototype is still present in the codebase
 - founder review is complete
 - engineering review is complete
@@ -20,7 +21,7 @@ What exists today:
 
 What this means:
 - the current app code is useful as a prototype reference
-- the current app code is not the final product definition
+- the current app code is now split into atlas mode, walk-capture mode, and the preserved legacy tracker
 - the atlas planning docs are the source of truth for the next implementation phase
 
 ## Source-of-truth docs
@@ -40,6 +41,7 @@ Supporting strategy docs:
 
 Execution scaffold:
 - [content/bernal-heights-atlas.json](/Users/praneet/personal-moss-world-tracker/content/bernal-heights-atlas.json)
+- [collect.html](/Users/praneet/personal-moss-world-tracker/collect.html)
 
 ## Selected MVP
 
@@ -96,6 +98,8 @@ python3 server.py --host 127.0.0.1 --port 8080
 ```
 
 Then open [http://127.0.0.1:8080](http://127.0.0.1:8080).
+
+For the map-first field collection page, open [http://127.0.0.1:8080/collect.html](http://127.0.0.1:8080/collect.html).
 
 If you want the earlier tracker prototype, open [http://127.0.0.1:8080/legacy-tracker.html](http://127.0.0.1:8080/legacy-tracker.html).
 

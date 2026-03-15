@@ -18,6 +18,7 @@ Completed in this planning phase:
 - Bernal field checklist written
 - Bernal atlas candidate content scaffold written
 - Bernal atlas shell implemented at repo root
+- Bernal walk capture page implemented at `collect.html`
 - Legacy tracker prototype preserved at `legacy-tracker.html`
 
 Current reality of the codebase:
@@ -32,7 +33,7 @@ Blocking items:
 - candidate Bernal stops still need field verification
 - first image set still needs to be gathered
 - exact walk start/end still needs to be chosen
-- stop coordinates and hero images are still placeholders in the atlas JSON
+- stop coordinates are provisional scouting anchors and hero images are still placeholders in the atlas JSON
 
 ## Recommended execution order
 
