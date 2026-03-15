@@ -107,15 +107,18 @@ adult page      kid page
 
 ```text
 personal-moss-world-tracker/
-  challenge-select.html
-  challenge-adult.html
-  challenge-kid.html
+  index.html
+  collect.html
+  kid-collect.html
   challenge-core.js
+  challenge-select.js
   challenge-adult.js
   challenge-kid.js
   challenge.css
+  atlas.html
   content/
     challenges/
+      manifest.json
       rainbow-hunt-v1.json
       pick-your-color-v1.json
       tiny-worlds-v1.json
@@ -247,8 +250,8 @@ Reason:
 
 Keep:
 
-- `challenge-adult.html`
-- `challenge-kid.html`
+- `collect.html`
+- `kid-collect.html`
 
 ## Performance
 

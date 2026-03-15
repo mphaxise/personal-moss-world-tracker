@@ -15,10 +15,11 @@ This repo started as `Personal Moss World Tracker`, moved through `Bernal Height
 Planning direction is now set.
 
 What exists today:
-- a static Bernal atlas shell still exists as legacy product exploration
-- a dedicated adult collection page lives at `collect.html`
-- a companion kid scout page lives at `kid-collect.html`
-- the two-device collection flow, photo capture, local save, and local upload already work
+- the root page is now a challenge picker at `index.html`
+- a challenge-first adult page lives at `collect.html`
+- a challenge-first kid page lives at `kid-collect.html`
+- the earlier Bernal atlas is preserved at `atlas.html`
+- the two-device collection flow, photo capture, local save, and local upload now work in the challenge-first prototype
 - founder review is complete
 - engineering review for the atlas is complete
 - founder pivot memo is written
@@ -52,9 +53,15 @@ Supporting strategy docs:
 
 Execution scaffold:
 - [content/bernal-heights-atlas.json](/Users/praneet/personal-moss-world-tracker/content/bernal-heights-atlas.json)
+- [manifest.json](/Users/praneet/personal-moss-world-tracker/content/challenges/manifest.json)
 - [rainbow-hunt-v1.json](/Users/praneet/personal-moss-world-tracker/content/challenges/rainbow-hunt-v1.json)
 - [pick-your-color-v1.json](/Users/praneet/personal-moss-world-tracker/content/challenges/pick-your-color-v1.json)
 - [tiny-worlds-v1.json](/Users/praneet/personal-moss-world-tracker/content/challenges/tiny-worlds-v1.json)
+- [challenge-core.js](/Users/praneet/personal-moss-world-tracker/challenge-core.js)
+- [challenge-select.js](/Users/praneet/personal-moss-world-tracker/challenge-select.js)
+- [challenge-adult.js](/Users/praneet/personal-moss-world-tracker/challenge-adult.js)
+- [challenge-kid.js](/Users/praneet/personal-moss-world-tracker/challenge-kid.js)
+- [challenge.css](/Users/praneet/personal-moss-world-tracker/challenge.css)
 - [collect.html](/Users/praneet/personal-moss-world-tracker/collect.html)
 - [kid-collect.html](/Users/praneet/personal-moss-world-tracker/kid-collect.html)
 
@@ -94,7 +101,7 @@ The earlier product exploration layers are still preserved in the repo as:
 - `legacy-tracker.css`
 - `app.js`
 - `server.py`
-- `index.html`
+- `atlas.html`
 - `atlas.js`
 
 These remain useful as references for:
@@ -116,23 +123,27 @@ python3 server.py --host 127.0.0.1 --port 8080
 
 Then open [http://127.0.0.1:8080](http://127.0.0.1:8080).
 
-For the map-first field collection page, open [http://127.0.0.1:8080/collect.html](http://127.0.0.1:8080/collect.html).
-
-For the lighter companion iPad page, open [http://127.0.0.1:8080/kid-collect.html](http://127.0.0.1:8080/kid-collect.html).
+The current prototype pages are:
+- challenge picker: [http://127.0.0.1:8080](http://127.0.0.1:8080)
+- adult page: [http://127.0.0.1:8080/collect.html](http://127.0.0.1:8080/collect.html)
+- kid page: [http://127.0.0.1:8080/kid-collect.html](http://127.0.0.1:8080/kid-collect.html)
+- legacy atlas: [http://127.0.0.1:8080/atlas.html](http://127.0.0.1:8080/atlas.html)
 
 If the iPad will be offline on the walk, load `kid-collect.html` at home and keep the tab open during the walk.
 After the walk, use `Export kid notes` to pull the data back out of the device.
 
-The current adult and kid prototype still support:
+The current adult and kid prototype support:
 - two-device collection
 - photo capture on both devices
 - local save
 - export and upload back to the laptop server
 - a linked companion `kid mode` for a second device
+- challenge selection by pack via query string or last-used pack memory
+- a shared adult recap view after the walk
 
-The kid scout page supports:
-- large-touch selection and quick `found / maybe / skip` decisions
-- simple tags and one-photo capture
+The kid page supports:
+- large-touch challenge cards
+- simple choice selection for setup cards
 - one-photo capture with on-device persistence
 - separate local save from the adult page so phone and iPad notes do not overwrite each other
 - export with reduced-size photo data for later merge or upload
@@ -154,5 +165,5 @@ If you want the earlier tracker prototype, open [http://127.0.0.1:8080/legacy-tr
 
 1. Use [docs/challenge-pack-schema.md](/Users/praneet/personal-moss-world-tracker/docs/challenge-pack-schema.md) as the new content contract.
 2. Use [docs/challenge-first-implementation-spec.md](/Users/praneet/personal-moss-world-tracker/docs/challenge-first-implementation-spec.md) as the execution plan.
-3. Refactor the current adult and kid pages from route-first to challenge-first.
-4. Run `review` on the first implementation branch before polishing.
+3. Dogfood the three challenge packs on a real walk and capture friction in the adult and kid flow.
+4. Run `review` or browser QA on the first implementation branch before polishing.

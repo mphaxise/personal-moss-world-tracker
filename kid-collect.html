@@ -3,72 +3,51 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Bernal Kid Scout Mode</title>
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-      crossorigin=""
-    />
-    <link rel="stylesheet" href="kid-collect.css" />
+    <title>Kid Challenge Mode</title>
+    <link rel="stylesheet" href="challenge.css" />
   </head>
   <body>
-    <div class="kid-shell">
-      <header class="kid-hero">
-        <div class="hero-copy">
-          <p class="eyebrow">Companion kid mode</p>
-          <h1>Bernal Kid Scout Mode</h1>
-          <p class="hero-text" id="heroText">
-            Loading the same 10-stop Bernal walk in a lighter scout flow.
-          </p>
+    <div class="challenge-shell">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">Kid mode</p>
+          <h1 id="pageTitle">Loading challenge</h1>
+          <p class="hero-text" id="heroText">Loading the selected challenge pack.</p>
         </div>
         <div class="hero-actions">
-          <button type="button" id="trackBtn" class="primary-btn">Enable location tracking</button>
-          <button type="button" id="nextBtn" class="ghost-btn">Next stop</button>
+          <button type="button" id="nextBtn" class="primary-btn">Next card</button>
           <button type="button" id="exportBtn" class="ghost-btn">Export kid notes</button>
           <button type="button" id="uploadBtn" class="ghost-btn">Upload to laptop</button>
           <button type="button" id="offlineBtn" class="ghost-btn">Prepare offline</button>
-          <a id="routeBtn" class="ghost-link" target="_blank" rel="noreferrer">Open full route in Google Maps</a>
-          <a class="ghost-link" href="collect.html">Open adult page</a>
-          <a class="ghost-link" href="/">Open atlas</a>
+          <a id="adultLink" class="ghost-link" href="collect.html">Open adult mode</a>
+          <a id="pickerLink" class="ghost-link" href="index.html">Open challenge picker</a>
+          <a id="atlasLink" class="ghost-link" href="atlas.html">Open legacy atlas</a>
         </div>
       </header>
 
-      <main class="kid-grid">
-        <section class="panel route-panel">
+      <main class="layout-grid kid-layout">
+        <section class="panel">
           <div class="section-head">
-            <p class="section-label">Walk map</p>
-            <h2 id="routeTitle">418 Nevada Street to 10 moss stops</h2>
+            <p class="section-label">Challenge track</p>
+            <h2>Card progress</h2>
           </div>
-          <div id="kidMap" aria-label="Kid scout walk map"></div>
           <div class="progress-row" id="progressRow"></div>
-          <div class="route-meta" id="routeMeta"></div>
-          <div class="stop-rail" id="stopRail"></div>
+          <div class="meta-row" id="packMeta"></div>
+          <div class="card-rail" id="cardRail"></div>
         </section>
 
-        <section class="panel scout-panel">
+        <section class="panel">
           <div class="section-head">
-            <p class="section-label">Current stop</p>
-            <h2>Quick scout form</h2>
-            <p class="section-copy">
-              One photo and a few taps are enough. Adult notes stay on the phone. Kid notes and
-              photos save on this device. If the iPad will be offline on the walk, load this page
-              at home and keep the tab open.
-            </p>
+            <p class="section-label">Current card</p>
+            <h2>One card at a time</h2>
           </div>
-          <div id="activeStop" class="active-stop" aria-live="polite"></div>
+          <div id="activeCard" aria-live="polite"></div>
         </section>
       </main>
     </div>
 
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
-
-    <script
-      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-      crossorigin=""
-    ></script>
     <script src="register-offline.js"></script>
-    <script type="module" src="kid-collect.js"></script>
+    <script type="module" src="challenge-kid.js"></script>
   </body>
 </html>

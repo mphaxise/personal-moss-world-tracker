@@ -1,7 +1,7 @@
 # Status and Next Steps
 
 Date: 2026-03-15
-Status: challenge-first pivot accepted; implementation planning complete
+Status: challenge-first prototype implemented; walk QA is next
 
 ## Current state
 
@@ -12,6 +12,9 @@ Completed in this planning phase:
 - founder MVP pivot memo written
 - challenge-pack schema written
 - challenge-first implementation spec written
+- challenge picker implemented at `index.html`
+- challenge-first adult page implemented at `collect.html`
+- challenge-first kid page implemented at `kid-collect.html`
 - Bernal wedge selected
 - engineering review completed
 - runtime boundary selected as `static-first`
@@ -26,6 +29,8 @@ Completed in this planning phase:
 - Legacy tracker prototype preserved at `legacy-tracker.html`
 - landscape research added for parent-child nature challenge products and adjacent offerings
 - first three challenge-pack scaffolds added under `content/challenges/`
+- challenge manifest added under `content/challenges/`
+- legacy atlas preserved at `atlas.html`
 
 Current reality of the codebase:
 - a legacy community-tracker prototype still exists in the app code
@@ -34,13 +39,13 @@ Current reality of the codebase:
 
 ## Current blockers
 
-The product framing blocker is now resolved.
-The next blockers are implementation and cleanup.
+The product framing blocker is resolved.
+The next blockers are QA, dogfooding, and simplification based on real use.
 
 Blocking items:
-- the current app still thinks in terms of route stops instead of challenge cards
-- recap and merged-results rendering still need to be implemented
-- legacy route-specific UI needs to be removed or isolated during the pivot
+- real-world walk testing across all three challenge packs still needs to happen
+- recap quality and scoring may still need simplification after testing
+- challenge selection on two devices should be checked for confusion before more feature work
 
 ## Recommended execution order
 
@@ -52,10 +57,11 @@ Blocking items:
    - first challenge templates are defined
    - first three sample packs are scaffolded
 3. Implementation pass
-   - reuse the adult and kid capture flows
-   - replace stop-route logic with challenge logic
+   - completed for first prototype pass
+   - adult and kid flows now use challenge-pack logic
 4. Review pass
-   - run `review` on the first implementation branch
+   - next active gate
+   - run `review` or QA on the first implementation branch
 
 ## What is no longer the active gate
 

@@ -3,77 +3,47 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Bernal Walk Capture</title>
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-      crossorigin=""
-    />
-    <link rel="stylesheet" href="collect.css" />
+    <title>Adult Challenge Mode</title>
+    <link rel="stylesheet" href="challenge.css" />
   </head>
   <body>
-    <div class="capture-shell">
-      <header class="capture-hero">
+    <div class="challenge-shell">
+      <header class="hero">
         <div>
-          <p class="eyebrow">Field collection mode</p>
-          <h1>Bernal Walk Capture</h1>
-          <p class="hero-text" id="heroText">
-            Loading the route from 418 Nevada Street.
-          </p>
+          <p class="eyebrow">Adult mode</p>
+          <h1 id="pageTitle">Loading challenge</h1>
+          <p class="hero-text" id="heroText">Loading the selected challenge pack.</p>
         </div>
         <div class="hero-actions">
-          <button type="button" id="trackBtn" class="primary-btn">Enable location tracking</button>
-          <button type="button" id="nextBtn" class="ghost-btn">Next stop</button>
+          <button type="button" id="nextBtn" class="primary-btn">Next card</button>
           <button type="button" id="exportBtn" class="ghost-btn">Export notes</button>
           <button type="button" id="uploadBtn" class="ghost-btn">Upload to laptop</button>
           <button type="button" id="importKidBtn" class="ghost-btn">Import kid export</button>
           <button type="button" id="offlineBtn" class="ghost-btn">Prepare offline</button>
-          <a id="routeBtn" class="ghost-link" target="_blank" rel="noreferrer">Open full route in Google Maps</a>
-          <a class="ghost-link" href="kid-collect.html">Open kid mode</a>
-          <a class="ghost-link" href="/">Open atlas</a>
+          <a id="kidLink" class="ghost-link" href="kid-collect.html">Open kid mode</a>
+          <a id="pickerLink" class="ghost-link" href="index.html">Open challenge picker</a>
+          <a id="atlasLink" class="ghost-link" href="atlas.html">Open legacy atlas</a>
         </div>
         <input id="kidImportInput" type="file" accept="application/json,.json" hidden />
       </header>
 
-      <main class="capture-grid">
-        <section class="panel map-panel">
+      <main class="layout-grid adult-layout">
+        <section class="panel">
           <div class="section-head">
-            <p class="section-label">Walking route</p>
-            <h2 id="routeTitle">418 Nevada Street to 10 provisional scouting stops</h2>
+            <p class="section-label">Progress</p>
+            <h2>Shared walk progress</h2>
           </div>
-          <div id="captureMap" aria-label="Walking collection map"></div>
-          <div class="route-meta" id="routeMeta"></div>
+          <div class="progress-row" id="progressRow"></div>
+          <div class="meta-row" id="packMeta"></div>
+          <div class="challenge-list" id="cardList"></div>
         </section>
 
-        <section class="panel sidebar-panel">
-          <div class="section-head compact-head">
-            <p class="section-label">Stop forms</p>
-            <h2>Editable, pre-filled, auto-saved</h2>
-          </div>
-          <p class="sidebar-note">
-            As you move through the route, the nearest stop can auto-open when location tracking is enabled.
-            All edits save locally on this device. If your daughter is using the iPad in companion mode,
-            her notes and photos will save separately in <a href="kid-collect.html">kid mode</a>. If the iPad
-            will be offline on the walk, load that page at home and keep the tab open. On this adult page,
-            <strong>Arrive now</strong> always records the current time. When the browser allows device location,
-            it also stamps your live coordinates; otherwise it keeps the stop coordinates so you can keep moving.
-            Nearby stops can still auto-stamp live location when tracking is enabled on a supported origin. The
-            adult page can also save one walk photo per stop and include it in export or upload.
-          </p>
-          <div class="stop-forms" id="stopForms"></div>
-        </section>
+        <aside class="panel" id="recapPanel"></aside>
       </main>
     </div>
 
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
-
-    <script
-      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-      crossorigin=""
-    ></script>
     <script src="register-offline.js"></script>
-    <script type="module" src="collect.js"></script>
+    <script type="module" src="challenge-adult.js"></script>
   </body>
 </html>

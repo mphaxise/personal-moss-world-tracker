@@ -49,6 +49,7 @@
       "assigned_to": "adult",
       "completion_rule": "one-choice",
       "points": 0,
+      "options": ["red", "orange", "yellow", "green", "blue", "purple", "white", "pink"],
       "tags": ["setup", "adult"]
     },
     {
@@ -62,6 +63,7 @@
       "assigned_to": "kid",
       "completion_rule": "one-choice",
       "points": 0,
+      "options": ["red", "orange", "yellow", "green", "blue", "purple", "white", "pink"],
       "tags": ["setup", "kid"]
     },
     {

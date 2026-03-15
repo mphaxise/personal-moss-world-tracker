@@ -201,9 +201,14 @@ def sanitize_datetime(value: object) -> str:
 
 
 def save_walk_bundle(payload: dict) -> dict:
-    stops = payload.get("stops")
-    if not isinstance(stops, list):
-        raise ValueError("stops must be an array")
+    items = payload.get("stops")
+    item_label = "stops"
+    if not isinstance(items, list):
+        items = payload.get("cards")
+        item_label = "cards"
+
+    if not isinstance(items, list):
+        raise ValueError("stops or cards must be an array")
 
     mode = sanitize_text(payload.get("mode", ""), 40).lower() or "walk-bundle"
     device_label = sanitize_text(payload.get("device_label", ""), 40).lower()
@@ -221,7 +226,8 @@ def save_walk_bundle(payload: dict) -> dict:
         "filename": filename,
         "stored_at": utc_now_iso(),
         "path": str(path.relative_to(ROOT_DIR)),
-        "stop_count": len(stops),
+        "item_count": len(items),
+        "item_label": item_label,
         "mode": safe_mode,
     }
 

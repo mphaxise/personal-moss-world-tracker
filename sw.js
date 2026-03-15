@@ -5,14 +5,20 @@ const RUNTIME_CACHE = `moss-runtime-${VERSION}`;
 const CORE_ASSETS = [
   "/",
   "/index.html",
+  "/challenge.css",
+  "/challenge-core.js",
+  "/challenge-select.js",
+  "/challenge-adult.js",
+  "/challenge-kid.js",
+  "/collect.html",
+  "/kid-collect.html",
+  "/atlas.html",
   "/styles.css",
   "/atlas.js",
-  "/collect.html",
-  "/collect.css",
-  "/collect.js",
-  "/kid-collect.html",
-  "/kid-collect.css",
-  "/kid-collect.js",
+  "/content/challenges/manifest.json",
+  "/content/challenges/rainbow-hunt-v1.json",
+  "/content/challenges/pick-your-color-v1.json",
+  "/content/challenges/tiny-worlds-v1.json",
   "/content/bernal-heights-atlas.json",
   "/register-offline.js",
 ];
@@ -116,8 +122,9 @@ function isRuntimeOrigin(url) {
 }
 
 async function warmCache(additionalUrls) {
+  const packUrls = await loadChallengePackUrls();
   const atlasPhotoUrls = await loadAtlasPhotoUrls();
-  const targets = [...RUNTIME_ASSETS, ...atlasPhotoUrls, ...additionalUrls];
+  const targets = [...RUNTIME_ASSETS, ...packUrls, ...atlasPhotoUrls, ...additionalUrls];
   const cache = await caches.open(RUNTIME_CACHE);
 
   await Promise.all(targets.map((url) => fetchAndCache(cache, url)));
@@ -138,6 +145,19 @@ async function loadAtlasPhotoUrls() {
       .flatMap((stop) => stop.inat_recent_photos || [])
       .map((photo) => photo.photo_url)
       .filter(Boolean);
+  } catch (_error) {
+    return [];
+  }
+}
+
+async function loadChallengePackUrls() {
+  try {
+    const response = await fetch("/content/challenges/manifest.json");
+    if (!response.ok) {
+      return [];
+    }
+    const manifest = await response.json();
+    return (manifest.packs || []).map((pack) => pack.path).filter(Boolean);
   } catch (_error) {
     return [];
   }

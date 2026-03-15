@@ -1,0 +1,45 @@
+{
+  "updated_at": "2026-03-15",
+  "default_pack_id": "rainbow-hunt-v1",
+  "packs": [
+    {
+      "id": "rainbow-hunt-v1",
+      "slug": "rainbow-hunt",
+      "title": "Rainbow Hunt",
+      "tagline": "Find nature in every color of the rainbow.",
+      "summary": "Collect six nature photos that build a rainbow from red to purple.",
+      "estimated_minutes": 30,
+      "difficulty": "easy",
+      "age_band": "5-10",
+      "play_style": "shared",
+      "path": "/content/challenges/rainbow-hunt-v1.json",
+      "theme_tags": ["color", "nature", "family", "photo-walk"]
+    },
+    {
+      "id": "pick-your-color-v1",
+      "slug": "pick-your-color",
+      "title": "Pick Your Color",
+      "tagline": "Each player chooses a color and builds a nature photo set.",
+      "summary": "Parent and kid each choose a color, then collect three strong nature photos in that color.",
+      "estimated_minutes": 25,
+      "difficulty": "easy",
+      "age_band": "6-10",
+      "play_style": "parallel",
+      "path": "/content/challenges/pick-your-color-v1.json",
+      "theme_tags": ["color", "family", "replayable", "photo-walk"]
+    },
+    {
+      "id": "tiny-worlds-v1",
+      "slug": "tiny-worlds",
+      "title": "Tiny Worlds",
+      "tagline": "Look closely at textures, patterns, and miniature green worlds.",
+      "summary": "Find close-up details in bark, leaves, stones, seeds, and tiny green textures that most people walk past.",
+      "estimated_minutes": 30,
+      "difficulty": "medium",
+      "age_band": "6-11",
+      "play_style": "shared",
+      "path": "/content/challenges/tiny-worlds-v1.json",
+      "theme_tags": ["texture", "close-up", "observation", "nature"]
+    }
+  ]
+}

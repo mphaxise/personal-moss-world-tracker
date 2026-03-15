@@ -168,6 +168,7 @@ Recommended:
 - `examples`
 - `kid_prompt`
 - `adult_prompt`
+- `options`
 - `photo_required`
 - `min_count`
 - `max_count`
@@ -178,6 +179,7 @@ Allowed values:
 
 - `capture_type`: `photo`, `photo-or-mark`, `count`, `choice`
 - `assigned_to`: `either`, `adult`, `kid`, `both`, `shared`
+- `options`: required when `capture_type` is `choice`
 
 ### `recap`
 

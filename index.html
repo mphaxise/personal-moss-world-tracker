@@ -3,141 +3,39 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Bernal Heights Moss Atlas</title>
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-      crossorigin=""
-    />
-    <link rel="stylesheet" href="styles.css" />
+    <title>Neighborhood Nature Challenges</title>
+    <link rel="stylesheet" href="challenge.css" />
   </head>
   <body>
-    <div class="page-shell">
-      <header class="hero">
-        <div class="hero-copy">
-          <p class="eyebrow" id="heroEyebrow">San Francisco neighborhood atlas</p>
-          <h1 id="atlasTitle">Bernal Heights Moss Atlas</h1>
-          <p class="hero-deck" id="atlasDeck">
-            Loading the first Bernal chapter.
-          </p>
-          <div class="hero-actions">
-            <a class="primary-link" href="#walkSection">Open the walk</a>
-            <a class="secondary-link" href="collect.html">Walk capture</a>
-            <a class="secondary-link" href="kid-collect.html">Kid scout mode</a>
-            <a class="secondary-link" href="docs/bernal-field-checklist.md">Field checklist</a>
-          </div>
+    <div class="selector-shell">
+      <header class="selector-hero">
+        <div>
+          <p class="eyebrow">Parent and kid prototype</p>
+          <h1>Neighborhood Nature Challenges</h1>
+          <p class="selector-copy" id="statusText">Loading challenge packs.</p>
         </div>
-        <div class="hero-facts" id="heroFacts"></div>
+        <div class="hero-actions">
+          <a class="ghost-link" href="collect.html">Open adult mode</a>
+          <a class="ghost-link" href="kid-collect.html">Open kid mode</a>
+          <a class="ghost-link" href="atlas.html">Open legacy atlas</a>
+        </div>
+        <p class="selector-status" id="lastPack"></p>
       </header>
 
-      <main class="main-grid">
-        <section class="panel narrative-panel">
-          <div class="section-head">
-            <p class="section-label">Why Bernal</p>
-            <h2>Hidden texture, neighborhood scale</h2>
-          </div>
-          <div class="narrative-grid">
-            <div>
-              <p id="neighborhoodSummary" class="lede"></p>
-              <p id="neighborhoodWhyHere" class="body-copy"></p>
-            </div>
-            <div class="cover-card" id="coverCard"></div>
-          </div>
-        </section>
-
-        <section class="panel walk-panel" id="walkSection">
-          <div class="section-head">
-            <p class="section-label">Curated walk</p>
-            <h2 id="walkTitle">Post-Rain Bernal Loop</h2>
-          </div>
-          <div class="walk-grid">
-            <div class="walk-summary">
-              <div class="stat-grid" id="walkStats"></div>
-              <p class="body-copy" id="walkNarrative">
-                One neighborhood, one loop, and a set of stops that make Bernal's fog-fed microhabitats easier to notice.
-              </p>
-              <div class="callout-strip">
-                <span id="walkStatusBadge" class="status-badge">candidate route</span>
-                <span>Current shell is wired to fieldwork-ready placeholder data.</span>
-              </div>
-            </div>
-            <div class="map-card">
-              <div id="walkMap" aria-label="Bernal walk map"></div>
-              <p id="mapNote" class="map-note"></p>
-            </div>
-          </div>
-        </section>
-
-        <section class="panel stops-panel">
-          <div class="section-head">
-            <p class="section-label">Stops</p>
-            <h2>Candidate atlas cards</h2>
-          </div>
-          <div class="stops-grid">
-            <div class="stop-list-wrap">
-              <ol class="stop-list" id="stopList"></ol>
-            </div>
-            <aside class="stop-detail" id="stopDetail" aria-live="polite"></aside>
-          </div>
-        </section>
-
-        <section class="panel field-panel">
-          <div class="section-head">
-            <p class="section-label">Field workflow</p>
-            <h2>Use the shell and the walk together</h2>
-          </div>
-          <div class="field-grid">
-            <div>
-              <p class="body-copy">
-                This build is intentionally honest: the UI is real, but the stop data is still in
-                <code>candidate</code> status until Bernal fieldwork upgrades it.
-              </p>
-              <ul class="checklist-list">
-                <li>Use the compact <a href="docs/bernal-field-checklist.md">phone checklist</a> during the walk.</li>
-                <li>Use the <a href="docs/bernal-field-worksheet.md">full worksheet</a> for the synthesis pass.</li>
-                <li>Update <a href="content/bernal-heights-atlas.json">the atlas JSON</a> after each scouting round.</li>
-              </ul>
-            </div>
-            <div class="resource-stack">
-              <a class="resource-card" href="docs/bernal-field-checklist.md">
-                <span class="resource-eyebrow">Phone</span>
-                <strong>Bernal field checklist</strong>
-                <span>Fast scoring and publish / hold / drop decisions</span>
-              </a>
-              <a class="resource-card" href="collect.html">
-                <span class="resource-eyebrow">On walk</span>
-                <strong>Walk capture page</strong>
-                <span>Map-first route plus editable pre-filled stop forms</span>
-              </a>
-              <a class="resource-card" href="kid-collect.html">
-                <span class="resource-eyebrow">Companion</span>
-                <strong>Kid scout mode</strong>
-                <span>Large-tap stop flow with simple tags, one-photo capture, and separate device save</span>
-              </a>
-              <a class="resource-card" href="docs/bernal-field-worksheet.md">
-                <span class="resource-eyebrow">Full notes</span>
-                <strong>Bernal field worksheet</strong>
-                <span>Detailed stop evaluation and route synthesis</span>
-              </a>
-              <a class="resource-card" href="content/bernal-heights-atlas.json">
-                <span class="resource-eyebrow">Scaffold</span>
-                <strong>Atlas content JSON</strong>
-                <span>Candidate stops, source IDs, and status fields</span>
-              </a>
-            </div>
-          </div>
-        </section>
+      <main>
+        <section class="pack-grid" id="packGrid" aria-label="Challenge packs"></section>
       </main>
+
+      <footer class="selector-footer">
+        <p>
+          Use the same challenge on both devices before the walk. Adult mode is for progress, merge, and upload.
+          Kid mode stays lighter and photo-first.
+        </p>
+      </footer>
     </div>
 
-    <div class="status-toast" id="loadStatus" role="status" aria-live="polite"></div>
-
-    <script
-      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-      crossorigin=""
-    ></script>
-    <script type="module" src="atlas.js"></script>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <script src="register-offline.js"></script>
+    <script type="module" src="challenge-select.js"></script>
   </body>
 </html>
