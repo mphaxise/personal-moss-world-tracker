@@ -1,5 +1,9 @@
 # Bernal Heights Moss Atlas
 
+Planning note:
+- after the first Bernal field walk on `2026-03-15`, the repo now includes a founder pivot memo exploring a simpler product direction around `parent-child neighborhood nature challenges`
+- the Bernal atlas work remains in the repo and is still useful, but it is no longer the only active framing under consideration
+
 This repo started as `Personal Moss World Tracker` and now has a narrower product direction:
 
 - current MVP target: `Bernal Heights Moss Atlas`
@@ -30,10 +34,12 @@ What this means:
 
 Current planning spine:
 - [docs/founder-mvp-decision-memo.md](/Users/praneet/personal-moss-world-tracker/docs/founder-mvp-decision-memo.md)
+- [docs/founder-mvp-pivot-memo.md](/Users/praneet/personal-moss-world-tracker/docs/founder-mvp-pivot-memo.md)
 - [docs/bernal-atlas-implementation-spec.md](/Users/praneet/personal-moss-world-tracker/docs/bernal-atlas-implementation-spec.md)
 - [docs/bernal-content-pack.md](/Users/praneet/personal-moss-world-tracker/docs/bernal-content-pack.md)
 - [docs/bernal-field-worksheet.md](/Users/praneet/personal-moss-world-tracker/docs/bernal-field-worksheet.md)
 - [docs/bernal-field-checklist.md](/Users/praneet/personal-moss-world-tracker/docs/bernal-field-checklist.md)
+- [docs/family-nature-challenges-landscape-research.md](/Users/praneet/personal-moss-world-tracker/docs/family-nature-challenges-landscape-research.md)
 
 Supporting strategy docs:
 - [docs/product-strategy.md](/Users/praneet/personal-moss-world-tracker/docs/product-strategy.md)
@@ -140,9 +146,7 @@ If you want the earlier tracker prototype, open [http://127.0.0.1:8080/legacy-tr
 
 ## Immediate next execution steps
 
-1. Field-verify the Bernal candidate stop list.
-   Use [docs/bernal-field-worksheet.md](/Users/praneet/personal-moss-world-tracker/docs/bernal-field-worksheet.md) during the walk.
-   Use [docs/bernal-field-checklist.md](/Users/praneet/personal-moss-world-tracker/docs/bernal-field-checklist.md) if you want the compact phone version.
-2. Gather the first image set and field notes.
-3. Upgrade [content/bernal-heights-atlas.json](/Users/praneet/personal-moss-world-tracker/content/bernal-heights-atlas.json) from `candidate` to `field-verified` stop by stop.
-4. Run `review` once the first real implementation branch exists.
+1. Use [docs/founder-mvp-pivot-memo.md](/Users/praneet/personal-moss-world-tracker/docs/founder-mvp-pivot-memo.md) to decide whether the product should pivot from `atlas-first` to `challenge-first`.
+2. Use [docs/family-nature-challenges-landscape-research.md](/Users/praneet/personal-moss-world-tracker/docs/family-nature-challenges-landscape-research.md) to compare the new challenge idea against what already exists.
+3. If the pivot is accepted, define the first three challenge templates and a challenge-pack JSON schema.
+4. If the pivot is rejected, resume Bernal field verification with the existing worksheet and checklist.
