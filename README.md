@@ -56,6 +56,7 @@ personal-moss-world-tracker/
     seed-entries.json
     moss_tracker.db (runtime, gitignored)
   docs/
+    founder-mvp-decision-memo.md
     idea-strategy.md
     product-strategy.md
     inaturalist-spike.md
@@ -74,6 +75,7 @@ personal-moss-world-tracker/
 
 - `docs/idea-strategy.md`
 - `docs/product-strategy.md`
+- `docs/founder-mvp-decision-memo.md`
 - `docs/inaturalist-spike.md`
 - `docs/status-and-next-steps.md`
 
