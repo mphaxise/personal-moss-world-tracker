@@ -1,90 +1,99 @@
-# Personal Moss World Tracker
+# Bernal Heights Moss Atlas
 
-Turns everyday moss sightings into a lightweight community discovery product with visual browsing and location context.
+This repo started as `Personal Moss World Tracker` and now has a narrower product direction:
 
-## Pause checkpoint (2026-02-24)
+- current MVP target: `Bernal Heights Moss Atlas`
+- current product shape: one curated neighborhood walk with 8 to 12 editorial stops
+- current runtime choice: static-first, with no public write path in MVP
 
-Project is intentionally paused pending validation.
+## Current status
 
-Required next step before any new feature work or additional GitHub pushes:
-- Test the latest persistence behavior end-to-end:
-  - Add entries with uploaded photos and URL photos.
-  - Refresh and reopen the page.
-  - Confirm prior entries/photos are still present.
-  - Confirm cached entries sync into SQLite/API when server is online.
+Planning direction is now set.
 
-## Current status (2026-02-24)
+What exists today:
+- a legacy community-tracker prototype is still present in the codebase
+- founder review is complete
+- engineering review is complete
+- Bernal implementation spec is written
+- Bernal content pack is drafted
 
-- MVP is implemented and runnable locally.
-- One photo submission flow is live (URL or upload).
-- Card and map view toggle is functional.
-- Seeded entries load at startup.
-- Optional iNaturalist enrichment is wired per entry.
-- Public contributor display is anonymous-only.
-- Local JSON import/export is implemented.
-- Local persistence via `localStorage` is implemented.
-- Minimal API + SQLite persistence backend is implemented.
-- Discovery upgrades shipped: search, filters, nearby mode, ranked sort, map actions.
-- Startup behavior: cached entries/photos load first, then sync to SQLite API when available.
+What this means:
+- the current app code is useful as a prototype reference
+- the current app code is not the final product definition
+- the atlas planning docs are the source of truth for the next implementation phase
 
-## Contributor anonymity (public view)
+## Source-of-truth docs
 
-- Public cards and map popups always show: `Anonymous contributor`.
-- Contact details in text are redacted (`[redacted-email]`, `[redacted-phone]`).
-- Internal records use non-identifying contributor tokens only.
-- Uploaded images are re-encoded client-side to reduce metadata leakage.
+Current planning spine:
+- [docs/founder-mvp-decision-memo.md](/Users/praneet/personal-moss-world-tracker/docs/founder-mvp-decision-memo.md)
+- [docs/bernal-atlas-implementation-spec.md](/Users/praneet/personal-moss-world-tracker/docs/bernal-atlas-implementation-spec.md)
+- [docs/bernal-content-pack.md](/Users/praneet/personal-moss-world-tracker/docs/bernal-content-pack.md)
 
-## Run locally
+Supporting strategy docs:
+- [docs/product-strategy.md](/Users/praneet/personal-moss-world-tracker/docs/product-strategy.md)
+- [docs/idea-strategy.md](/Users/praneet/personal-moss-world-tracker/docs/idea-strategy.md)
+- [docs/inaturalist-spike.md](/Users/praneet/personal-moss-world-tracker/docs/inaturalist-spike.md)
+- [docs/status-and-next-steps.md](/Users/praneet/personal-moss-world-tracker/docs/status-and-next-steps.md)
 
-From `/Users/praneet/personal-moss-world-tracker`:
+## Selected MVP
+
+Build:
+- one Bernal Heights chapter
+- one curated walk
+- 8 to 12 stops
+- one home narrative
+- one map-supported walk overview
+- one reusable stop-detail template
+
+Do not build yet:
+- public submissions
+- contributor accounts
+- moderation tooling
+- citywide neighborhood expansion
+- one-hour regional trail directory
+- route generation
+- taxonomy-heavy browsing UI
+
+## Runtime decision
+
+Selected runtime boundary: `static-first`.
+
+For the next implementation phase, this means:
+- curated content lives in repo files
+- no public `POST` or `PATCH` path is required
+- no SQLite dependency is required for MVP
+- no runtime iNaturalist enrichment is required for MVP
+
+## Legacy prototype note
+
+The current codebase still contains the earlier moss-tracker prototype:
+- `index.html`
+- `styles.css`
+- `app.js`
+- `server.py`
+
+That prototype remains useful as a reference for:
+- single-page layout patterns
+- map integration
+- anonymous-public copy patterns
+- local development serving
+
+It should be treated as legacy product surface while the Bernal atlas implementation begins.
+
+## Existing local run command
+
+If you want to inspect the legacy prototype locally:
 
 ```bash
+cd /Users/praneet/personal-moss-world-tracker
 python3 server.py --host 127.0.0.1 --port 8080
 ```
 
 Then open [http://127.0.0.1:8080](http://127.0.0.1:8080).
 
-## Project structure
+## Immediate next execution steps
 
-```text
-personal-moss-world-tracker/
-  index.html
-  styles.css
-  app.js
-  server.py
-  data/
-    seed-entries.json
-    moss_tracker.db (runtime, gitignored)
-  docs/
-    founder-mvp-decision-memo.md
-    idea-strategy.md
-    product-strategy.md
-    inaturalist-spike.md
-    status-and-next-steps.md
-```
-
-## API endpoints
-
-- `GET /api/health`
-- `GET /api/entries`
-- `POST /api/entries`
-- `POST /api/entries/import`
-- `PATCH /api/entries/{id}/enrichment`
-
-## Strategy and planning docs
-
-- `docs/idea-strategy.md`
-- `docs/product-strategy.md`
-- `docs/founder-mvp-decision-memo.md`
-- `docs/inaturalist-spike.md`
-- `docs/status-and-next-steps.md`
-
-## Planning context
-
-- Title: Personal Moss World Tracker
-- Rank: 3
-- Priority: 5
-- Source: Manual backlog (user idea)
-- Source files: `/Users/praneet/PraneetIdeas/manual_ideas.json`, `/Users/praneet/PraneetIdeas/memory.md`
-- Idea link: https://github.com/manual/manual
-- Review date: 2026-02-24
+1. Field-verify the Bernal candidate stop list.
+2. Gather the first image set and field notes.
+3. Implement the static-first atlas shell against the Bernal spec.
+4. Run `review` once the first real implementation branch exists.

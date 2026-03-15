@@ -1,60 +1,59 @@
 # Status and Next Steps
 
-## Pause checkpoint (2026-02-24)
+Date: 2026-03-15
+Status: planning complete, implementation not yet started for atlas pivot
 
-Current mode: paused until persistence testing is completed.
+## Current state
 
-Pre-commit / pre-push gate for the next iteration:
-1. Verify entries and photos remain after page refresh.
-2. Verify entries and photos remain after closing/reopening browser.
-3. Verify cached entries sync to SQLite/API when server is running.
-4. Verify no data loss when switching between offline (cache) and online (API) modes.
-5. Only after these pass, continue with new implementation and additional GitHub pushes.
+The repo has moved from broad idea exploration into a defined Bernal implementation plan.
 
-## Project status (as of 2026-02-24)
+Completed in this planning phase:
+- founder MVP decision memo written
+- Bernal wedge selected
+- engineering review completed
+- runtime boundary selected as `static-first`
+- Bernal implementation spec written
+- Bernal content pack drafted
 
-MVP is shipped with both frontend and backend paths.
+Current reality of the codebase:
+- a legacy community-tracker prototype still exists in the app code
+- the next implementation pass should treat that tracker surface as reference material, not as the MVP contract
 
-Completed in this iteration:
-- Option 1 complete: local persistence (`localStorage`) + JSON import/export.
-- Option 2 complete: privacy hardening (text redaction, image re-encoding, payload sanitization).
-- Option 3 complete: backend API + SQLite durable storage.
-- Option 4 complete: discovery upgrades (search, filters, nearby mode, ranked sorting, map fit/center actions).
-- Option 5 complete: remote setup + push to GitHub target.
+## Current blockers
 
-Current architecture:
-- `index.html`: page structure and control surface.
-- `styles.css`: responsive styling and layout.
-- `app.js`: client state, filters, ranking, import/export, API/local persistence, privacy safeguards.
-- `server.py`: static hosting + API layer + SQLite persistence.
-- `data/seed-entries.json`: initial seed dataset.
+The main blockers are content and field truth, not backend infrastructure.
 
-## Reflection
+Blocking items:
+- candidate Bernal stops still need field verification
+- first image set still needs to be gathered
+- exact walk start/end still needs to be chosen
+- implementation has not yet been aligned to the new static-first atlas shape
 
-What worked well:
-- Frontend remained single-page and fast while gaining significant capability.
-- Anonymous-by-default policy is explicit in UI and enforced in rendering.
-- API and offline/local modes coexist without blocking usability.
+## Recommended execution order
 
-Known constraints:
-- No auth/admin flows yet for abuse handling.
-- iNaturalist lookup remains client-side with no cache/proxy.
-- No automated test suite yet.
+1. Field pass
+   - verify candidate stop clusters
+   - drop weak stops
+   - keep the best 8 to 12
+2. Asset pass
+   - capture neighborhood cover image
+   - capture stop hero images
+   - create concise field notes for each verified stop
+3. Implementation pass
+   - build the static-first atlas shell against the Bernal spec
+   - load one canonical content file
+4. Review pass
+   - run `review` on the first implementation branch
 
-## Recommended next options
+## What is no longer the active gate
 
-1. **Operational hardening**
-   - Add basic request logging, per-IP rate limits, and payload size caps in API.
-   - Add backup/restore script for SQLite data.
+The earlier persistence-testing gate applied to the legacy tracker MVP.
 
-2. **Moderation layer**
-   - Add server-side flagged-content queue and hide/unhide workflow.
-   - Add simple profanity and duplicate-photo heuristics.
+That work is still useful historical context, but it is no longer the main gating item for the current Bernal atlas direction.
 
-3. **Quality + testing**
-   - Add browser tests for submit/filter/map toggle paths.
-   - Add API tests for sanitize/insert/import/update endpoints.
+## Next decisions to make during implementation
 
-4. **Deployment path**
-   - Containerize service.
-   - Deploy to a small VM or PaaS with managed domain and TLS.
+These can be decided while building:
+- stop detail as modal or side panel
+- whether to keep a read-only helper in `server.py`
+- whether approximate coordinates are better than exact coordinates for certain stops

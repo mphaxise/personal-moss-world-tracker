@@ -1,104 +1,113 @@
 # Product Strategy
 
-## Pause checkpoint (2026-02-24)
+Date: 2026-03-15
+Status: current strategy
 
-Project is paused and gated on testing.
+## Current product direction
 
-Next required step before new scope:
-- Validate persistence behavior in real browser sessions:
-  - Existing entries/photos load on page open.
-  - Entries survive refresh and browser restart.
-  - Offline cache and online API sync both preserve prior data.
+The active product direction is `Bernal Heights Moss Atlas`.
+
+This supersedes the earlier tracker-first interpretation for MVP scope.
+
+The product is now defined as:
+- a founder-led editorial atlas of one San Francisco neighborhood
+- one curated Bernal walk
+- 8 to 12 stops
+- a simple public-facing `moss atlas` brand backed by research across mosses, liverworts, and lichens
 
 ## Product vision
 
-A personal/community moss discovery tracker where everyday sightings become browsable micro-landmarks through photos and location-aware views.
+Build a neighborhood-scale guide to the hidden fog-fed texture of San Francisco.
 
-## MVP scope (milestone 1)
+The core experience is not `upload and browse`.
+The core experience is `walk, notice, and understand why this patch exists here`.
 
-In scope:
-- Single-page application shell.
-- One photo submission flow (capture metadata + optional location).
-- Toggleable card view and map view.
-- Seeded sample entries for immediate browsing.
-- iNaturalist enrichment spike documented in notes.
-- Public anonymity for human contributors.
+## Wedge
 
-Out of scope:
-- Authentication and multi-role access control.
-- Full moderation tooling.
-- Advanced recommendation/personalization systems.
+Start with Bernal Heights because it is:
+- walkable
+- geographically legible
+- rich in walls, slopes, stairs, bark, and edge habitats
+- a strong test of whether the atlas format is compelling enough to scale
 
-## Public identity and privacy policy (MVP)
+## Primary users and jobs
 
-- Public feed never exposes contributor name, handle, email, or contact info.
-- Every public entry displays the same label: `Anonymous contributor`.
-- Internal entry records use non-identifying contributor tokens (`anon-xxxx`).
-- Contact details in entry text are redacted.
-- Uploaded images are re-encoded client-side to reduce metadata leakage.
+Primary users:
+- curious neighborhood walkers
+- design-minded local naturalists
+- people who like place-based stories and urban texture
 
-## Target users and jobs
+Core jobs:
+- `show me a good Bernal walk`
+- `teach me what to notice`
+- `make this neighborhood feel more legible and interesting`
 
-- Casual spotters: "I found a cool moss patch and want to share it quickly."
-- Local explorers: "Show me nearby moss worlds to visit or follow."
-- Curious learners: "Give me context on species or similar observations when available."
+## MVP experience
 
-## Primary user flow
+Required MVP surfaces:
+1. home narrative
+2. walk overview with route summary and map
+3. stop detail for each published stop
 
-1. Open tracker landing page.
-2. Browse seeded entries in card view.
-3. Toggle to map view to explore location context.
-4. Submit a new moss photo with title, short note, and location.
-5. Save and immediately see the entry in both views.
-6. Optionally inspect iNaturalist enrichment hints.
+Each stop should provide:
+- image
+- location hint
+- habitat type
+- short summary
+- `why this spot matters`
+- seasonality note
+- source note
 
-## Experience principles
+## Editorial model
 
-- Friction-light: submission takes under one minute.
-- Visual-first: photos are the first-class object.
-- Spatially legible: every entry has map intent, even if approximate.
-- Graceful fallback: missing metadata never blocks contribution.
-- Anonymous-by-default: contributor identity is hidden in public views.
+Public brand:
+- moss atlas
 
-## Data model (implemented)
+Internal research model:
+- mosses
+- liverworts
+- lichens
 
-Entity: `moss_entry`
-- `id` (string)
-- `title` (string)
-- `description` (string)
-- `photo_url` (string)
-- `captured_at` (ISO date, optional)
-- `latitude` (number, optional)
-- `longitude` (number, optional)
-- `location_label` (string, optional)
-- `created_at` (ISO datetime)
-- `contributor_token` (string, non-identifying)
-- `inat_observation_id` (string, optional)
-- `inat_summary` (string, optional)
+This keeps the product simple in public while preserving ecological richness in the content.
 
-Public rendering fields (subset):
-- `title`, `description`, `photo_url`, `captured_at`, `latitude`, `longitude`, `location_label`, `inat_summary`
-- `public_contributor_label` (constant): `Anonymous contributor`
+## Runtime and architecture choice
 
-## Technical architecture (implemented)
+Selected runtime boundary:
+- static-first
 
-- Frontend: static SPA (`index.html`, `styles.css`, `app.js`).
-- API backend: Python `server.py` (`GET/POST/PATCH` endpoints).
-- Durable storage: SQLite (`data/moss_tracker.db`).
-- Offline fallback: `localStorage` + seed JSON.
-- Discovery controls: search, filters, nearby mode, ranked sorting.
-- Import/export: JSON round-trip for local portability.
+Reasoning:
+- curated editorial content does not need a write path
+- static delivery matches the product size and reduces maintenance burden
+- public submissions are intentionally deferred
 
-## Post-MVP reflection (2026-02-24)
+## Success criteria
 
-- MVP objective is met and runnable locally.
-- Anonymous public display is implemented end-to-end.
-- API durability and offline fallback coexist.
-- Discovery UX has first-pass quality controls.
+The MVP is working if:
+- Bernal can support 8 to 12 distinct, worth-walking stops
+- the walk feels coherent without explanation from the founder
+- the stop pages read like place-based stories rather than taxonomy blurbs
+- the UI feels like an atlas instead of a generic map database
 
-## Next execution menu
+## Scale path
 
-1. Operational hardening: request limits, abuse guardrails, backups.
-2. Moderation workflow: flag/review/hide pipeline.
-3. Automated testing: UI + API behavior tests.
-4. Deployment hardening: containerization, TLS domain, production config.
+If Bernal works, scale in this order:
+1. more San Francisco neighborhood chapters
+2. seasonal city walks
+3. fog-belt trail guides within roughly one hour of San Francisco
+
+## Out of scope
+
+Not in scope for this MVP:
+- public submissions
+- contributor identity systems
+- moderation workflows
+- route generation
+- citywide coverage at launch
+- regional trails directory at launch
+- full citizen-science workflow
+
+## Legacy prototype note
+
+The repository still contains the earlier community tracker prototype.
+
+That implementation remains useful as a reference, but it is no longer the product definition for MVP.

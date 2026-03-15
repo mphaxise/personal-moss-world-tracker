@@ -1,45 +1,54 @@
-# iNaturalist Enrichment Spike
+# iNaturalist Research Note
 
-## Pause checkpoint (2026-02-24)
+Date: 2026-03-15
+Status: retained as research input, not active MVP feature work
 
-Project is currently paused pending validation of persistence behavior.
-Next mandatory step before advancing this spike work:
-- Confirm latest entries/photos persist and reload correctly across refresh/reopen sessions.
+## Why this doc still matters
 
-## Spike date
+This repo originally used iNaturalist as a per-entry enrichment spike for the tracker prototype.
 
-- 2026-02-24
+For the current Bernal atlas direction, iNaturalist remains useful in a different role:
+- scouting support
+- species-distribution context
+- seasonal observation-window comparison
 
-## Goal
+It is no longer an active user-facing MVP requirement.
 
-Validate a lightweight enrichment path that can attach optional species context to a moss entry without blocking core submission and browsing flows.
+## Legacy spike summary
 
-## What was implemented
+The earlier prototype validated that iNaturalist could be queried from the client and attached to individual user entries.
 
-- Added per-entry action in UI: `Try iNaturalist enrichment`.
-- Added client-side lookup path to iNaturalist observations API:
-  - Endpoint: `https://api.inaturalist.org/v1/observations`
-  - Query mode A (preferred): `lat`, `lng`, `radius=2` for location-based nearest result.
-  - Query mode B (fallback): `q=<title>` and optional `place_guess=<location_label>`.
-- Persisted two optional entry fields in local app state:
-  - `inat_observation_id`
-  - `inat_summary`
+That work proved:
+- API access was straightforward
+- lightweight context could be shown without blocking the UI
+- match quality depended heavily on coordinates and photo context
 
-## Results
+## Current use in the atlas plan
 
-- Integration path is wired into the MVP and non-blocking.
-- If a result exists, UI shows a short summary (taxon, quality grade, observed date).
-- If no result exists, UI shows a clear no-match message.
-- Failures are surfaced per entry and do not break card/map rendering.
+For `Bernal Heights Moss Atlas`, iNaturalist should be used as:
+- a research and scouting layer during content development
+- a way to identify likely taxa and habitat patterns
+- a way to compare seasonal observation windows around Bernal-centered coordinates
 
-## Constraints and caveats
+It should not be used as:
+- a live runtime dependency for the public MVP
+- a substitute for Bernal field verification
+- the main product surface
 
-- This prototype performs direct client-side API calls; rate limits and network conditions are unmanaged.
-- Match quality can be weak when entries lack coordinates or when title text is ambiguous.
-- No server-side cache, retries, or confidence scoring in MVP scope.
+## Practical guidance
 
-## Recommendation for next increment
+Use iNaturalist to help answer:
+- what moss, liverwort, and lichen groups are common in San Francisco
+- what looks plausible in the Bernal scouting radius
+- whether post-rain windows produce stronger observation density than dry-season windows
 
-- Add confidence metadata and a small "why this match" explanation.
-- Prefer location-based lookups whenever coordinates are present.
-- Add optional backend proxy for caching and request controls if public traffic increases.
+Do not use iNaturalist alone to claim:
+- exact species at a Bernal stop without field confidence
+- that a specific candidate stop is strong enough to publish
+- that the atlas should be defined as a citizen-science product
+
+## Current recommendation
+
+Keep iNaturalist in the planning stack as a background research source.
+
+Do not include live enrichment in the first Bernal MVP.
