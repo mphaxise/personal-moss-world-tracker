@@ -1,8 +1,12 @@
 const CONTENT_URL = "./content/bernal-heights-atlas.json";
 const STORAGE_KEY = "bernal_walk_capture_v1";
+const PHOTO_DB_NAME = "bernal_walk_capture_photos";
+const PHOTO_STORE_NAME = "stop_photos";
 const DEFAULT_CENTER = [37.7398, -122.4139];
 const DEFAULT_ZOOM = 15;
 const TOAST_MS = 2600;
+const MAX_IMAGE_DIMENSION = 1600;
+const EXPORT_IMAGE_DIMENSION = 960;
 
 const state = {
   atlas: null,
@@ -20,6 +24,8 @@ const state = {
   watchId: null,
   hasFitRoute: false,
   toastTimer: 0,
+  photoDb: null,
+  photoUrls: new Map(),
 };
 
 const dom = {
@@ -49,13 +55,24 @@ async function boot() {
   dom.importKidBtn.addEventListener("click", () => dom.kidImportInput.click());
   dom.kidImportInput.addEventListener("change", handleKidImport);
   dom.offlineBtn.addEventListener("click", prepareOffline);
+  window.addEventListener("beforeunload", revokePhotoUrls);
+
+  try {
+    state.photoDb = await openPhotoDb();
+  } catch (error) {
+    console.error("Adult photo storage unavailable", error);
+  }
 
   try {
     state.atlas = await fetchAtlas();
     state.storage = loadStorage();
     state.selectedStopId = state.storage.lastSelectedStopId || getStops()[0]?.id || null;
     renderPage();
-    showToast("Walk capture page is ready. Edits will auto-save on this device.");
+    showToast(
+      state.photoDb
+        ? "Walk capture page is ready. Edits and adult photos will auto-save on this device."
+        : "Walk capture page is ready. Edits will auto-save on this device."
+    );
   } catch (error) {
     console.error(error);
     dom.heroText.textContent = `Could not load walk capture data: ${error.message}`;
@@ -92,6 +109,7 @@ function persistStorage() {
 
 function renderPage() {
   const { walk, collection } = state.atlas;
+  revokePhotoUrls();
   dom.routeTitle.textContent = `${collection.start_point.label} to ${getStops().length} scouting stops`;
   dom.heroText.textContent = `${walk.title} now has a mobile-first collection mode. The route starts at ${collection.start_point.label} and each stop form is pre-filled from the atlas JSON.`;
   dom.routeBtn.href = collection.google_maps_route_url || "#";
@@ -259,12 +277,14 @@ function createStopAccordion(stop) {
   if (kidScoutBlock) {
     form.append(kidScoutBlock);
   }
+  form.append(createCapturePhotoBlock(merged));
   form.append(createPhotoBlock(merged));
   form.append(createBottomNav(stop.id));
   wireForm(form, stop.id);
 
   details.append(summary, form);
   state.forms.set(stop.id, { details, form });
+  loadSavedAdultPhotoPreview(form, stop.id);
   return details;
 }
 
@@ -311,6 +331,8 @@ function wireForm(form, stopId) {
   form.querySelector('[data-action="next-stop"]').addEventListener("click", () => {
     selectNextStopFrom(stopId);
   });
+
+  wireAdultPhotoControls(form, stopId);
 }
 
 function saveForm(stopId, form) {
@@ -489,6 +511,166 @@ function createPhotoBlock(stop) {
 
   wrap.append(title, notes, grid);
   return wrap;
+}
+
+function createCapturePhotoBlock(stop) {
+  const wrap = document.createElement("section");
+  wrap.className = "capture-photo-block";
+
+  const title = document.createElement("h3");
+  title.textContent = "Walk photo";
+
+  const helper = document.createElement("p");
+  helper.className = "field-note";
+  helper.textContent = "Take one adult reference photo here. It saves on this device and is included in export or upload.";
+
+  const preview = document.createElement("div");
+  preview.className = "capture-photo-well";
+  preview.dataset.photoPreview = stop.id;
+  preview.innerHTML = `<div class="photo-empty">No saved adult photo yet for this stop.</div>`;
+
+  const meta = document.createElement("div");
+  meta.className = "capture-photo-meta";
+  meta.dataset.photoMeta = stop.id;
+  meta.textContent = stop.photo_updated_at
+    ? `Saved ${formatShortDateTime(stop.photo_updated_at)}${stop.photo_name ? ` • ${stop.photo_name}` : ""}`
+    : "No photo saved yet";
+
+  const input = document.createElement("input");
+  input.type = "file";
+  input.accept = "image/*";
+  input.capture = "environment";
+  input.className = "photo-upload";
+  input.dataset.photoInput = stop.id;
+
+  const addButton = document.createElement("label");
+  addButton.className = "inline-btn";
+  addButton.dataset.photoTrigger = stop.id;
+  addButton.textContent = stop.has_photo ? "Replace photo" : "Take photo";
+
+  const removeButton = document.createElement("button");
+  removeButton.type = "button";
+  removeButton.className = "inline-btn";
+  removeButton.dataset.removePhoto = stop.id;
+  removeButton.disabled = !stop.has_photo;
+  removeButton.textContent = "Remove photo";
+
+  wrap.append(title, helper, preview, meta, input);
+
+  const actions = document.createElement("div");
+  actions.className = "inline-actions";
+  actions.append(addButton, removeButton);
+  wrap.append(actions);
+
+  return wrap;
+}
+
+function wireAdultPhotoControls(form, stopId) {
+  const input = form.querySelector(`[data-photo-input="${stopId}"]`);
+  const removeButton = form.querySelector(`[data-remove-photo="${stopId}"]`);
+  const trigger = form.querySelector(`[data-photo-trigger="${stopId}"]`);
+
+  if (trigger instanceof HTMLLabelElement && input instanceof HTMLInputElement) {
+    if (!input.id) {
+      input.id = `adult-photo-${stopId}`;
+    }
+    trigger.htmlFor = input.id;
+  }
+
+  input?.addEventListener("change", async () => {
+    const file = input.files?.[0];
+    if (!file) {
+      return;
+    }
+
+    try {
+      await savePhotoForStop(stopId, file);
+      form.elements.photo_captured.checked = true;
+      if (!String(form.elements.hero_image.value || "").trim()) {
+        form.elements.hero_image.value = file.name || "adult-walk-photo.jpg";
+      }
+      saveForm(stopId, form);
+      await loadSavedAdultPhotoPreview(form, stopId);
+      showToast(`Saved an adult photo for ${getBaseStop(stopId)?.title || "this stop"}.`);
+    } catch (error) {
+      console.error(error);
+      showToast(`Could not save photo: ${error.message}`);
+    } finally {
+      input.value = "";
+    }
+  });
+
+  removeButton?.addEventListener("click", async () => {
+    try {
+      await deletePhotoForStop(stopId);
+      form.elements.photo_captured.checked = false;
+      saveForm(stopId, form);
+      await loadSavedAdultPhotoPreview(form, stopId);
+      showToast(`Removed the adult photo for ${getBaseStop(stopId)?.title || "this stop"}.`);
+    } catch (error) {
+      console.error(error);
+      showToast(`Could not remove photo: ${error.message}`);
+    }
+  });
+}
+
+async function loadSavedAdultPhotoPreview(form, stopId) {
+  const preview = form.querySelector(`[data-photo-preview="${stopId}"]`);
+  const meta = form.querySelector(`[data-photo-meta="${stopId}"]`);
+  const removeButton = form.querySelector(`[data-remove-photo="${stopId}"]`);
+  const trigger = form.querySelector(`[data-photo-trigger="${stopId}"]`);
+
+  if (!preview || !meta) {
+    return;
+  }
+
+  const savedState = state.storage.stops[stopId] || {};
+  if (!savedState.photo_captured || !state.photoDb) {
+    preview.innerHTML = `<div class="photo-empty">No saved adult photo yet for this stop.</div>`;
+    meta.textContent = savedState.photo_updated_at
+      ? `Saved ${formatShortDateTime(savedState.photo_updated_at)}${savedState.photo_name ? ` • ${savedState.photo_name}` : ""}`
+      : "No photo saved yet";
+    if (removeButton) {
+      removeButton.disabled = true;
+    }
+    if (trigger) {
+      trigger.textContent = "Take photo";
+    }
+    return;
+  }
+
+  const record = await readPhotoRecord(stopId);
+  if (!record) {
+    preview.innerHTML = `<div class="photo-empty">The saved adult photo was not found. You can add it again.</div>`;
+    meta.textContent = "No photo saved yet";
+    if (removeButton) {
+      removeButton.disabled = true;
+    }
+    if (trigger) {
+      trigger.textContent = "Take photo";
+    }
+    return;
+  }
+
+  preview.replaceChildren();
+  const image = document.createElement("img");
+  if (typeof record.dataUrl === "string" && record.dataUrl.startsWith("data:image/")) {
+    image.src = record.dataUrl;
+  } else if (record.blob instanceof Blob) {
+    image.src = rememberPhotoUrl(stopId, record.blob);
+  } else {
+    preview.innerHTML = `<div class="photo-empty">The saved adult photo could not be displayed. You can add it again.</div>`;
+    return;
+  }
+  image.alt = `Saved adult walk photo for ${getBaseStop(stopId)?.title || "this stop"}`;
+  preview.append(image);
+  meta.textContent = `Saved ${formatShortDateTime(record.updatedAt)}${record.name ? ` • ${record.name}` : ""}`;
+  if (removeButton) {
+    removeButton.disabled = false;
+  }
+  if (trigger) {
+    trigger.textContent = "Replace photo";
+  }
 }
 
 function createKidScoutBlock(stop) {
@@ -808,32 +990,55 @@ function selectNextStopFrom(stopId) {
   selectStop(next.id, { focusMap: true, fromToggle: false });
 }
 
-function exportNotes() {
-  const exported = buildAdultExportPayload();
+async function exportNotes() {
+  try {
+    showToast("Preparing the adult export...");
+    const exported = await buildAdultExportPayload();
 
-  const blob = new Blob([JSON.stringify(exported, null, 2)], { type: "application/json" });
-  const url = URL.createObjectURL(blob);
-  const anchor = document.createElement("a");
-  anchor.href = url;
-  anchor.download = `bernal-walk-capture-${new Date().toISOString().slice(0, 10)}.json`;
-  anchor.click();
-  URL.revokeObjectURL(url);
-  showToast("Exported current walk notes.");
+    const blob = new Blob([JSON.stringify(exported, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = `bernal-walk-capture-${new Date().toISOString().slice(0, 10)}.json`;
+    anchor.click();
+    URL.revokeObjectURL(url);
+    showToast("Exported current walk notes and adult photos.");
+  } catch (error) {
+    console.error(error);
+    showToast(`Could not export notes: ${error.message}`);
+  }
 }
 
-function buildAdultExportPayload() {
+async function buildAdultExportPayload() {
+  const exportedStops = [];
+  for (const stop of getStops()) {
+    const merged = getMergedStop(stop);
+    const exportedStop = { ...merged, photo_export_data_url: "" };
+
+    if (merged.photo_captured) {
+      const photoRecord = await readPhotoRecord(stop.id);
+      if (typeof photoRecord?.dataUrl === "string" && photoRecord.dataUrl.startsWith("data:image/")) {
+        exportedStop.photo_export_data_url = photoRecord.dataUrl;
+      } else if (photoRecord?.blob) {
+        exportedStop.photo_export_data_url = await createExportPhotoDataUrl(photoRecord.blob);
+      }
+    }
+
+    exportedStops.push(exportedStop);
+  }
+
   return {
     exported_at: new Date().toISOString(),
     mode: "adult-capture",
     device_label: "adult-phone",
     start_point: state.atlas.collection.start_point,
-    stops: getStops().map((stop) => getMergedStop(stop)),
+    stops: exportedStops,
   };
 }
 
 async function uploadCurrentBundle() {
   try {
-    const payload = buildAdultExportPayload();
+    const payload = await buildAdultExportPayload();
     const response = await fetch("/api/walk-bundles", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -1021,6 +1226,9 @@ function getMergedStop(stop) {
   const saved = state.storage.stops[stop.id] || {};
   return {
     ...stop,
+    photo_captured: false,
+    photo_name: "",
+    photo_updated_at: "",
     ...saved,
     kid_scout: state.kidImport.stops[stop.id] || saved.kid_scout || null,
   };
@@ -1120,6 +1328,208 @@ function formatShortDateTime(value) {
     hour: "numeric",
     minute: "2-digit",
   });
+}
+
+async function openPhotoDb() {
+  if (!("indexedDB" in window)) {
+    throw new Error("IndexedDB is not available in this browser.");
+  }
+
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open(PHOTO_DB_NAME, 1);
+    request.onerror = () => reject(request.error || new Error("Could not open photo storage."));
+    request.onupgradeneeded = () => {
+      const db = request.result;
+      if (!db.objectStoreNames.contains(PHOTO_STORE_NAME)) {
+        db.createObjectStore(PHOTO_STORE_NAME, { keyPath: "stopId" });
+      }
+    };
+    request.onsuccess = () => resolve(request.result);
+  });
+}
+
+async function savePhotoForStop(stopId, file) {
+  if (!state.photoDb) {
+    throw new Error("Photo persistence is not available in this browser.");
+  }
+
+  const normalized = await normalizeImageRecord(file);
+  const record = {
+    stopId,
+    dataUrl: normalized.dataUrl,
+    mimeType: normalized.mimeType,
+    name: file.name || "",
+    updatedAt: new Date().toISOString(),
+  };
+
+  await new Promise((resolve, reject) => {
+    const tx = state.photoDb.transaction(PHOTO_STORE_NAME, "readwrite");
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error || new Error("Could not save photo."));
+    tx.objectStore(PHOTO_STORE_NAME).put(record);
+  });
+
+  const previous = state.storage.stops[stopId] || {};
+  state.storage.stops[stopId] = {
+    ...previous,
+    photo_captured: true,
+    photo_name: file.name || "",
+    photo_updated_at: record.updatedAt,
+  };
+  persistStorage();
+}
+
+async function readPhotoRecord(stopId) {
+  if (!state.photoDb) {
+    return null;
+  }
+
+  return new Promise((resolve, reject) => {
+    const tx = state.photoDb.transaction(PHOTO_STORE_NAME, "readonly");
+    const request = tx.objectStore(PHOTO_STORE_NAME).get(stopId);
+    request.onerror = () => reject(request.error || new Error("Could not load photo."));
+    request.onsuccess = () => resolve(request.result || null);
+  });
+}
+
+async function deletePhotoForStop(stopId) {
+  if (!state.photoDb) {
+    return;
+  }
+
+  forgetPhotoUrl(stopId);
+
+  await new Promise((resolve, reject) => {
+    const tx = state.photoDb.transaction(PHOTO_STORE_NAME, "readwrite");
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error || new Error("Could not delete photo."));
+    tx.objectStore(PHOTO_STORE_NAME).delete(stopId);
+  });
+
+  const previous = state.storage.stops[stopId] || {};
+  state.storage.stops[stopId] = {
+    ...previous,
+    photo_captured: false,
+    photo_name: "",
+    photo_updated_at: "",
+  };
+  persistStorage();
+}
+
+async function normalizeImageRecord(file) {
+  if (!(file instanceof Blob) || !String(file.type || "").startsWith("image/")) {
+    throw new Error("The selected file is not an image.");
+  }
+
+  try {
+    const image = await loadImage(file);
+    const width = image.naturalWidth || image.width;
+    const height = image.naturalHeight || image.height;
+    const scale = Math.min(1, MAX_IMAGE_DIMENSION / Math.max(width, height));
+
+    if (scale >= 1 && file.size <= 1_800_000) {
+      return {
+        dataUrl: await blobToDataUrl(file),
+        mimeType: file.type || "image/jpeg",
+      };
+    }
+
+    const canvas = document.createElement("canvas");
+    canvas.width = Math.max(1, Math.round(width * scale));
+    canvas.height = Math.max(1, Math.round(height * scale));
+    const context = canvas.getContext("2d");
+    if (!context) {
+      return {
+        dataUrl: await blobToDataUrl(file),
+        mimeType: file.type || "image/jpeg",
+      };
+    }
+
+    context.drawImage(image, 0, 0, canvas.width, canvas.height);
+    return {
+      dataUrl: canvas.toDataURL("image/jpeg", 0.82),
+      mimeType: "image/jpeg",
+    };
+  } catch (error) {
+    console.error("Image normalization failed", error);
+    return {
+      dataUrl: await blobToDataUrl(file),
+      mimeType: file.type || "image/jpeg",
+    };
+  }
+}
+
+async function createExportPhotoDataUrl(blob) {
+  if (!(blob instanceof Blob) || !String(blob.type || "").startsWith("image/")) {
+    return "";
+  }
+
+  try {
+    const image = await loadImage(blob);
+    const width = image.naturalWidth || image.width;
+    const height = image.naturalHeight || image.height;
+    const scale = Math.min(1, EXPORT_IMAGE_DIMENSION / Math.max(width, height));
+
+    const canvas = document.createElement("canvas");
+    canvas.width = Math.max(1, Math.round(width * scale));
+    canvas.height = Math.max(1, Math.round(height * scale));
+    const context = canvas.getContext("2d");
+    if (!context) {
+      return "";
+    }
+
+    context.drawImage(image, 0, 0, canvas.width, canvas.height);
+    return canvas.toDataURL("image/jpeg", 0.74);
+  } catch (error) {
+    console.error("Export photo conversion failed", error);
+    return "";
+  }
+}
+
+function blobToDataUrl(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = () => reject(reader.error || new Error("Could not read the photo file."));
+    reader.onload = () => resolve(typeof reader.result === "string" ? reader.result : "");
+    reader.readAsDataURL(file);
+  });
+}
+
+function loadImage(file) {
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file);
+    const image = new Image();
+    image.onload = () => {
+      URL.revokeObjectURL(url);
+      resolve(image);
+    };
+    image.onerror = (error) => {
+      URL.revokeObjectURL(url);
+      reject(error);
+    };
+    image.src = url;
+  });
+}
+
+function rememberPhotoUrl(stopId, blob) {
+  forgetPhotoUrl(stopId);
+  const url = URL.createObjectURL(blob);
+  state.photoUrls.set(stopId, url);
+  return url;
+}
+
+function forgetPhotoUrl(stopId) {
+  const existing = state.photoUrls.get(stopId);
+  if (existing) {
+    URL.revokeObjectURL(existing);
+    state.photoUrls.delete(stopId);
+  }
+}
+
+function revokePhotoUrls() {
+  for (const stopId of state.photoUrls.keys()) {
+    forgetPhotoUrl(stopId);
+  }
 }
 
 function showToast(message) {
