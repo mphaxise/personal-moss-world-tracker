@@ -212,10 +212,24 @@ function createStopAccordion(stop) {
           <option value="published">published</option>
         </select>
       </label>
-      <label>
-        <span>Arrival time</span>
-        <input name="arrived_at" type="datetime-local" />
-      </label>
+      <div class="arrival-grid">
+        <label>
+          <span>Arrival time</span>
+          <input name="arrived_at" type="datetime-local" />
+        </label>
+        <label>
+          <span>Latitude</span>
+          <input name="latitude" type="number" step="any" />
+        </label>
+        <label>
+          <span>Longitude</span>
+          <input name="longitude" type="number" step="any" />
+        </label>
+        <div class="arrival-action">
+          <span>Capture</span>
+          <button type="button" class="inline-btn arrival-btn" data-action="use-location">Arrive now</button>
+        </div>
+      </div>
       <label>
         <span>Location hint</span>
         <input name="location_hint" type="text" />
@@ -223,14 +237,6 @@ function createStopAccordion(stop) {
       <label>
         <span>Google Maps address</span>
         <input name="google_maps_address" type="text" readonly />
-      </label>
-      <label>
-        <span>Latitude</span>
-        <input name="latitude" type="number" step="any" />
-      </label>
-      <label>
-        <span>Longitude</span>
-        <input name="longitude" type="number" step="any" />
       </label>
       <label>
         <span>Story angle</span>
@@ -263,7 +269,6 @@ function createStopAccordion(stop) {
     </label>
     <div class="form-actions">
       <div class="inline-actions">
-        <button type="button" class="inline-btn" data-action="use-location">Arrive now</button>
         <button type="button" class="inline-btn" data-action="focus-map">Focus on map</button>
       </div>
       <div class="inline-actions">
