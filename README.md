@@ -13,6 +13,7 @@ Planning direction is now set.
 What exists today:
 - a static Bernal atlas shell now loads the candidate content scaffold at the repo root
 - a dedicated walk collection page now lives at `collect.html`
+- the walk collection page now includes a Google Maps route handoff, reverse-geocoded stop addresses, and two recent nearby iNaturalist photos per stop
 - a legacy community-tracker prototype is still present in the codebase
 - founder review is complete
 - engineering review is complete
@@ -100,6 +101,12 @@ python3 server.py --host 127.0.0.1 --port 8080
 Then open [http://127.0.0.1:8080](http://127.0.0.1:8080).
 
 For the map-first field collection page, open [http://127.0.0.1:8080/collect.html](http://127.0.0.1:8080/collect.html).
+
+The walk collection page now supports:
+- start point at `418 Nevada Street`
+- a single `Open full route in Google Maps` handoff
+- reverse-geocoded stop addresses
+- two recent nearby iNaturalist photos per stop
 
 If you want the earlier tracker prototype, open [http://127.0.0.1:8080/legacy-tracker.html](http://127.0.0.1:8080/legacy-tracker.html).
 

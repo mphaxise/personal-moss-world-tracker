@@ -33,7 +33,8 @@
     },
     "route_mode": "walking-scout-loop",
     "auto_expand_radius_meters": 120,
-    "route_note": "This is a provisional scouting loop. Coordinates are good enough for field collection and should be refined after real stop verification."
+    "route_note": "This is a provisional scouting loop. Coordinates are good enough for field collection and should be refined after real stop verification.",
+    "google_maps_route_url": "https://www.google.com/maps/dir/?api=1&origin=37.7366411%2C-122.4117936&destination=37.7393%2C-122.41365&travelmode=walking&waypoints=37.73745%2C-122.4126%7C37.73825%2C-122.41355%7C37.7391%2C-122.41435%7C37.74005%2C-122.41505%7C37.74105%2C-122.4158%7C37.74305%2C-122.4148%7C37.74245%2C-122.4132%7C37.74145%2C-122.41225%7C37.74015%2C-122.41165&dir_action=navigate"
   },
   "stops": [
     {
@@ -57,7 +58,42 @@
         "field-bernal-2026-01",
         "inat-bernal-spring-window"
       ],
-      "status": "candidate"
+      "status": "candidate",
+      "reverse_geocode": {
+        "display_name": "465, Banks Street, Bernal Heights, Bayview District, San Francisco, California, 94134, United States",
+        "road": "Banks Street",
+        "house_number": "465",
+        "neighbourhood": "Bayview District",
+        "postcode": "94134"
+      },
+      "google_maps_address": "465, Banks Street, Bernal Heights, Bayview District, San Francisco, California, 94134, United States",
+      "google_maps_stop_url": "https://www.google.com/maps/search/?api=1&query=37.73745%2C-122.4126",
+      "inat_recent_photos": [
+        {
+          "observation_id": 331822556,
+          "observed_on": "2025-12-22",
+          "taxon_name": "Lecanoromycetes",
+          "common_name": "Common Lichens",
+          "place_guess": "Bernal Heights, San Francisco, CA, USA",
+          "observation_url": "https://www.inaturalist.org/observations/331822556",
+          "photo_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/602042813/medium.jpg",
+          "thumbnail_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/602042813/square.jpg",
+          "attribution": "(c) Ryth N, some rights reserved (CC BY-NC)",
+          "radius_km": 0.8
+        },
+        {
+          "observation_id": 338431176,
+          "observed_on": "2025-11-16",
+          "taxon_name": "Cladonia furcata",
+          "common_name": "many-forked cladonia",
+          "place_guess": "Manchester St, San Francisco, CA, US",
+          "observation_url": "https://www.inaturalist.org/observations/338431176",
+          "photo_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/615462433/medium.jpg",
+          "thumbnail_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/615462433/square.jpg",
+          "attribution": "(c) TeamTzibim, some rights reserved (CC BY-NC)",
+          "radius_km": 0.8
+        }
+      ]
     },
     {
       "id": "bernal-stop-02",
@@ -80,7 +116,42 @@
         "field-bernal-2026-01",
         "inat-bernal-spring-window"
       ],
-      "status": "candidate"
+      "status": "candidate",
+      "reverse_geocode": {
+        "display_name": "3900;3902, Folsom Street, Bernal Heights, Bayview District, San Francisco, California, 94134, United States",
+        "road": "Folsom Street",
+        "house_number": "3900;3902",
+        "neighbourhood": "Bayview District",
+        "postcode": "94134"
+      },
+      "google_maps_address": "3900;3902, Folsom Street, Bernal Heights, Bayview District, San Francisco, California, 94134, United States",
+      "google_maps_stop_url": "https://www.google.com/maps/search/?api=1&query=37.73825%2C-122.41355",
+      "inat_recent_photos": [
+        {
+          "observation_id": 268966299,
+          "observed_on": "2025-04-06",
+          "taxon_name": "Ulota crispa",
+          "common_name": "crisped pincushion",
+          "place_guess": "Bernal Heights, San Francisco, CA, USA",
+          "observation_url": "https://www.inaturalist.org/observations/268966299",
+          "photo_url": "https://static.inaturalist.org/photos/483532144/medium.jpeg",
+          "thumbnail_url": "https://static.inaturalist.org/photos/483532144/square.jpeg",
+          "attribution": "(c) Matthew Harrison Tedford, all rights reserved",
+          "radius_km": 0.35
+        },
+        {
+          "observation_id": 124643153,
+          "observed_on": "2022-07-03",
+          "taxon_name": "Lunularia cruciata",
+          "common_name": "Crescent-cup liverwort",
+          "place_guess": "Nevada St & Cortland Ave, San Francisco, CA 94110, USA",
+          "observation_url": "https://www.inaturalist.org/observations/124643153",
+          "photo_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/211284871/medium.jpeg",
+          "thumbnail_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/211284871/square.jpeg",
+          "attribution": "(c) edith1111, some rights reserved (CC BY-NC)",
+          "radius_km": 0.35
+        }
+      ]
     },
     {
       "id": "bernal-stop-03",
@@ -103,7 +174,42 @@
         "field-bernal-2026-01",
         "inat-sf-species-counts"
       ],
-      "status": "candidate"
+      "status": "candidate",
+      "reverse_geocode": {
+        "display_name": "813;817, Cortland Avenue, Bernal Heights, Bayview District, San Francisco, California, 94134, United States",
+        "road": "Cortland Avenue",
+        "house_number": "813;817",
+        "neighbourhood": "Bayview District",
+        "postcode": "94134"
+      },
+      "google_maps_address": "813;817, Cortland Avenue, Bernal Heights, Bayview District, San Francisco, California, 94134, United States",
+      "google_maps_stop_url": "https://www.google.com/maps/search/?api=1&query=37.7391%2C-122.41435",
+      "inat_recent_photos": [
+        {
+          "observation_id": 268966299,
+          "observed_on": "2025-04-06",
+          "taxon_name": "Ulota crispa",
+          "common_name": "crisped pincushion",
+          "place_guess": "Bernal Heights, San Francisco, CA, USA",
+          "observation_url": "https://www.inaturalist.org/observations/268966299",
+          "photo_url": "https://static.inaturalist.org/photos/483532144/medium.jpeg",
+          "thumbnail_url": "https://static.inaturalist.org/photos/483532144/square.jpeg",
+          "attribution": "(c) Matthew Harrison Tedford, all rights reserved",
+          "radius_km": 0.35
+        },
+        {
+          "observation_id": 220784089,
+          "observed_on": "2024-06-05",
+          "taxon_name": "Graphidaceae",
+          "common_name": "Script Lichens and Allies",
+          "place_guess": "Andover St, San Francisco, CA, US",
+          "observation_url": "https://www.inaturalist.org/observations/220784089",
+          "photo_url": "https://static.inaturalist.org/photos/390930143/medium.jpg",
+          "thumbnail_url": "https://static.inaturalist.org/photos/390930143/square.jpg",
+          "attribution": "(c) Charlie Kozak Donald, all rights reserved",
+          "radius_km": 0.35
+        }
+      ]
     },
     {
       "id": "bernal-stop-04",
@@ -126,7 +232,42 @@
         "field-bernal-2026-01",
         "inat-sf-species-counts"
       ],
-      "status": "candidate"
+      "status": "candidate",
+      "reverse_geocode": {
+        "display_name": "211, Anderson Street, Bernal Heights, Mission District, San Francisco, California, 94134, United States",
+        "road": "Anderson Street",
+        "house_number": "211",
+        "neighbourhood": "Mission District",
+        "postcode": "94134"
+      },
+      "google_maps_address": "211, Anderson Street, Bernal Heights, Mission District, San Francisco, California, 94134, United States",
+      "google_maps_stop_url": "https://www.google.com/maps/search/?api=1&query=37.74005%2C-122.41505",
+      "inat_recent_photos": [
+        {
+          "observation_id": 337289207,
+          "observed_on": "2025-11-10",
+          "taxon_name": "Teloschistes chrysophthalmus",
+          "common_name": "Golden-eye Lichen",
+          "place_guess": "Elsie St, San Francisco, CA, US",
+          "observation_url": "https://www.inaturalist.org/observations/337289207",
+          "photo_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/613112706/medium.jpg",
+          "thumbnail_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/613112706/square.jpg",
+          "attribution": "(c) TeamTzibim, some rights reserved (CC BY-NC)",
+          "radius_km": 0.35
+        },
+        {
+          "observation_id": 337289216,
+          "observed_on": "2025-11-10",
+          "taxon_name": "Polycauliona polycarpa",
+          "common_name": "Pin-cushion Sunburst Lichen",
+          "place_guess": "Elsie St, San Francisco, CA, US",
+          "observation_url": "https://www.inaturalist.org/observations/337289216",
+          "photo_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/613112716/medium.jpg",
+          "thumbnail_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/613112716/square.jpg",
+          "attribution": "(c) TeamTzibim, some rights reserved (CC BY-NC)",
+          "radius_km": 0.35
+        }
+      ]
     },
     {
       "id": "bernal-stop-05",
@@ -149,7 +290,42 @@
         "field-bernal-2026-01",
         "fog-meep-lab"
       ],
-      "status": "candidate"
+      "status": "candidate",
+      "reverse_geocode": {
+        "display_name": "242, Moultrie Street, Bernal Heights, San Francisco, California, 94134, United States",
+        "road": "Moultrie Street",
+        "house_number": "242",
+        "neighbourhood": "",
+        "postcode": "94134"
+      },
+      "google_maps_address": "242, Moultrie Street, Bernal Heights, San Francisco, California, 94134, United States",
+      "google_maps_stop_url": "https://www.google.com/maps/search/?api=1&query=37.74105%2C-122.4158",
+      "inat_recent_photos": [
+        {
+          "observation_id": 331822556,
+          "observed_on": "2025-12-22",
+          "taxon_name": "Lecanoromycetes",
+          "common_name": "Common Lichens",
+          "place_guess": "Bernal Heights, San Francisco, CA, USA",
+          "observation_url": "https://www.inaturalist.org/observations/331822556",
+          "photo_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/602042813/medium.jpg",
+          "thumbnail_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/602042813/square.jpg",
+          "attribution": "(c) Ryth N, some rights reserved (CC BY-NC)",
+          "radius_km": 0.35
+        },
+        {
+          "observation_id": 338431176,
+          "observed_on": "2025-11-16",
+          "taxon_name": "Cladonia furcata",
+          "common_name": "many-forked cladonia",
+          "place_guess": "Manchester St, San Francisco, CA, US",
+          "observation_url": "https://www.inaturalist.org/observations/338431176",
+          "photo_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/615462433/medium.jpg",
+          "thumbnail_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/615462433/square.jpg",
+          "attribution": "(c) TeamTzibim, some rights reserved (CC BY-NC)",
+          "radius_km": 0.35
+        }
+      ]
     },
     {
       "id": "bernal-stop-06",
@@ -173,7 +349,42 @@
         "cnps-niebla-note",
         "san-bruno-natural-features"
       ],
-      "status": "candidate"
+      "status": "candidate",
+      "reverse_geocode": {
+        "display_name": "Bernal Heights Boulevard, Bernal Heights, Mission District, San Francisco, California, 90110, United States",
+        "road": "Bernal Heights Boulevard",
+        "house_number": "",
+        "neighbourhood": "Mission District",
+        "postcode": "90110"
+      },
+      "google_maps_address": "Bernal Heights Boulevard, Bernal Heights, Mission District, San Francisco, California, 90110, United States",
+      "google_maps_stop_url": "https://www.google.com/maps/search/?api=1&query=37.74305%2C-122.4148",
+      "inat_recent_photos": [
+        {
+          "observation_id": 331822556,
+          "observed_on": "2025-12-22",
+          "taxon_name": "Lecanoromycetes",
+          "common_name": "Common Lichens",
+          "place_guess": "Bernal Heights, San Francisco, CA, USA",
+          "observation_url": "https://www.inaturalist.org/observations/331822556",
+          "photo_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/602042813/medium.jpg",
+          "thumbnail_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/602042813/square.jpg",
+          "attribution": "(c) Ryth N, some rights reserved (CC BY-NC)",
+          "radius_km": 0.35
+        },
+        {
+          "observation_id": 338431176,
+          "observed_on": "2025-11-16",
+          "taxon_name": "Cladonia furcata",
+          "common_name": "many-forked cladonia",
+          "place_guess": "Manchester St, San Francisco, CA, US",
+          "observation_url": "https://www.inaturalist.org/observations/338431176",
+          "photo_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/615462433/medium.jpg",
+          "thumbnail_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/615462433/square.jpg",
+          "attribution": "(c) TeamTzibim, some rights reserved (CC BY-NC)",
+          "radius_km": 0.35
+        }
+      ]
     },
     {
       "id": "bernal-stop-07",
@@ -196,7 +407,42 @@
         "field-bernal-2026-02",
         "inat-bernal-spring-window"
       ],
-      "status": "candidate"
+      "status": "candidate",
+      "reverse_geocode": {
+        "display_name": "649, Bernal Heights Boulevard, Bernal Heights, Mission District, San Francisco, California, 94110, United States",
+        "road": "Bernal Heights Boulevard",
+        "house_number": "649",
+        "neighbourhood": "Mission District",
+        "postcode": "94110"
+      },
+      "google_maps_address": "649, Bernal Heights Boulevard, Bernal Heights, Mission District, San Francisco, California, 94110, United States",
+      "google_maps_stop_url": "https://www.google.com/maps/search/?api=1&query=37.74245%2C-122.4132",
+      "inat_recent_photos": [
+        {
+          "observation_id": 331822556,
+          "observed_on": "2025-12-22",
+          "taxon_name": "Lecanoromycetes",
+          "common_name": "Common Lichens",
+          "place_guess": "Bernal Heights, San Francisco, CA, USA",
+          "observation_url": "https://www.inaturalist.org/observations/331822556",
+          "photo_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/602042813/medium.jpg",
+          "thumbnail_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/602042813/square.jpg",
+          "attribution": "(c) Ryth N, some rights reserved (CC BY-NC)",
+          "radius_km": 0.35
+        },
+        {
+          "observation_id": 338431176,
+          "observed_on": "2025-11-16",
+          "taxon_name": "Cladonia furcata",
+          "common_name": "many-forked cladonia",
+          "place_guess": "Manchester St, San Francisco, CA, US",
+          "observation_url": "https://www.inaturalist.org/observations/338431176",
+          "photo_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/615462433/medium.jpg",
+          "thumbnail_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/615462433/square.jpg",
+          "attribution": "(c) TeamTzibim, some rights reserved (CC BY-NC)",
+          "radius_km": 0.35
+        }
+      ]
     },
     {
       "id": "bernal-stop-08",
@@ -219,7 +465,42 @@
         "field-bernal-2026-02",
         "inat-sf-species-counts"
       ],
-      "status": "candidate"
+      "status": "candidate",
+      "reverse_geocode": {
+        "display_name": "688, Powhattan Avenue, Bernal Heights, San Francisco, California, 94124, United States",
+        "road": "Powhattan Avenue",
+        "house_number": "688",
+        "neighbourhood": "",
+        "postcode": "94124"
+      },
+      "google_maps_address": "688, Powhattan Avenue, Bernal Heights, San Francisco, California, 94124, United States",
+      "google_maps_stop_url": "https://www.google.com/maps/search/?api=1&query=37.74145%2C-122.41225",
+      "inat_recent_photos": [
+        {
+          "observation_id": 338431176,
+          "observed_on": "2025-11-16",
+          "taxon_name": "Cladonia furcata",
+          "common_name": "many-forked cladonia",
+          "place_guess": "Manchester St, San Francisco, CA, US",
+          "observation_url": "https://www.inaturalist.org/observations/338431176",
+          "photo_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/615462433/medium.jpg",
+          "thumbnail_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/615462433/square.jpg",
+          "attribution": "(c) TeamTzibim, some rights reserved (CC BY-NC)",
+          "radius_km": 0.35
+        },
+        {
+          "observation_id": 338431135,
+          "observed_on": "2025-11-16",
+          "taxon_name": "Polycauliona candelaria",
+          "common_name": "Shrubby Sunburst Lichen",
+          "place_guess": "Folsom St, San Francisco, CA, US",
+          "observation_url": "https://www.inaturalist.org/observations/338431135",
+          "photo_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/615462341/medium.jpg",
+          "thumbnail_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/615462341/square.jpg",
+          "attribution": "(c) TeamTzibim, some rights reserved (CC BY-NC)",
+          "radius_km": 0.35
+        }
+      ]
     },
     {
       "id": "bernal-stop-09",
@@ -241,7 +522,42 @@
       "source_ids": [
         "field-bernal-2026-02"
       ],
-      "status": "candidate"
+      "status": "candidate",
+      "reverse_geocode": {
+        "display_name": "182, Nevada Street, Bernal Heights, Bayview District, San Francisco, California, 94110, United States",
+        "road": "Nevada Street",
+        "house_number": "182",
+        "neighbourhood": "Bayview District",
+        "postcode": "94110"
+      },
+      "google_maps_address": "182, Nevada Street, Bernal Heights, Bayview District, San Francisco, California, 94110, United States",
+      "google_maps_stop_url": "https://www.google.com/maps/search/?api=1&query=37.74015%2C-122.41165",
+      "inat_recent_photos": [
+        {
+          "observation_id": 280095375,
+          "observed_on": "2025-05-10",
+          "taxon_name": "Cladonia",
+          "common_name": "pixie cup and reindeer lichens",
+          "place_guess": "San Francisco, CA, US",
+          "observation_url": "https://www.inaturalist.org/observations/280095375",
+          "photo_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/503026352/medium.jpg",
+          "thumbnail_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/503026352/square.jpg",
+          "attribution": "(c) Gregory Luckert, some rights reserved (CC BY-NC)",
+          "radius_km": 0.35
+        },
+        {
+          "observation_id": 152323678,
+          "observed_on": "2023-03-24",
+          "taxon_name": "Lecanoromycetes",
+          "common_name": "Common Lichens",
+          "place_guess": "Bernal Heights, San Francisco, CA, USA",
+          "observation_url": "https://www.inaturalist.org/observations/152323678",
+          "photo_url": "https://static.inaturalist.org/photos/262938241/medium.jpeg",
+          "thumbnail_url": "https://static.inaturalist.org/photos/262938241/square.jpeg",
+          "attribution": "(c) Max Benningfield, all rights reserved",
+          "radius_km": 0.35
+        }
+      ]
     },
     {
       "id": "bernal-stop-10",
@@ -263,7 +579,42 @@
       "source_ids": [
         "field-bernal-2026-02"
       ],
-      "status": "candidate"
+      "status": "candidate",
+      "reverse_geocode": {
+        "display_name": "3780, Folsom Street, Bernal Heights, Bayview District, San Francisco, California, 94134, United States",
+        "road": "Folsom Street",
+        "house_number": "3780",
+        "neighbourhood": "Bayview District",
+        "postcode": "94134"
+      },
+      "google_maps_address": "3780, Folsom Street, Bernal Heights, Bayview District, San Francisco, California, 94134, United States",
+      "google_maps_stop_url": "https://www.google.com/maps/search/?api=1&query=37.7393%2C-122.41365",
+      "inat_recent_photos": [
+        {
+          "observation_id": 268966299,
+          "observed_on": "2025-04-06",
+          "taxon_name": "Ulota crispa",
+          "common_name": "crisped pincushion",
+          "place_guess": "Bernal Heights, San Francisco, CA, USA",
+          "observation_url": "https://www.inaturalist.org/observations/268966299",
+          "photo_url": "https://static.inaturalist.org/photos/483532144/medium.jpeg",
+          "thumbnail_url": "https://static.inaturalist.org/photos/483532144/square.jpeg",
+          "attribution": "(c) Matthew Harrison Tedford, all rights reserved",
+          "radius_km": 0.35
+        },
+        {
+          "observation_id": 220784089,
+          "observed_on": "2024-06-05",
+          "taxon_name": "Graphidaceae",
+          "common_name": "Script Lichens and Allies",
+          "place_guess": "Andover St, San Francisco, CA, US",
+          "observation_url": "https://www.inaturalist.org/observations/220784089",
+          "photo_url": "https://static.inaturalist.org/photos/390930143/medium.jpg",
+          "thumbnail_url": "https://static.inaturalist.org/photos/390930143/square.jpg",
+          "attribution": "(c) Charlie Kozak Donald, all rights reserved",
+          "radius_km": 0.35
+        }
+      ]
     }
   ],
   "sources": [

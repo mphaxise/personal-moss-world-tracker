@@ -19,6 +19,7 @@ Completed in this planning phase:
 - Bernal atlas candidate content scaffold written
 - Bernal atlas shell implemented at repo root
 - Bernal walk capture page implemented at `collect.html`
+- Bernal walk capture enriched with Google Maps route handoff and iNaturalist photo previews
 - Legacy tracker prototype preserved at `legacy-tracker.html`
 
 Current reality of the codebase:

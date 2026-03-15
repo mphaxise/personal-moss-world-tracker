@@ -26,6 +26,7 @@ const dom = {
   trackBtn: document.querySelector("#trackBtn"),
   nextBtn: document.querySelector("#nextBtn"),
   exportBtn: document.querySelector("#exportBtn"),
+  routeBtn: document.querySelector("#routeBtn"),
   routeTitle: document.querySelector("#routeTitle"),
   routeMeta: document.querySelector("#routeMeta"),
   captureMap: document.querySelector("#captureMap"),
@@ -84,6 +85,7 @@ function renderPage() {
   const { walk, collection } = state.atlas;
   dom.routeTitle.textContent = `${collection.start_point.label} to ${getStops().length} scouting stops`;
   dom.heroText.textContent = `${walk.title} now has a mobile-first collection mode. The route starts at ${collection.start_point.label} and each stop form is pre-filled from the atlas JSON.`;
+  dom.routeBtn.href = collection.google_maps_route_url || "#";
   renderRouteMeta();
   renderStopForms();
   ensureMap();
@@ -187,6 +189,10 @@ function createStopAccordion(stop) {
         <input name="location_hint" type="text" />
       </label>
       <label>
+        <span>Google Maps address</span>
+        <input name="google_maps_address" type="text" readonly />
+      </label>
+      <label>
         <span>Latitude</span>
         <input name="latitude" type="number" step="any" />
       </label>
@@ -229,12 +235,13 @@ function createStopAccordion(stop) {
         <button type="button" class="inline-btn" data-action="focus-map">Focus on map</button>
       </div>
       <div class="inline-actions">
-        <a class="action-link" data-action="directions" target="_blank" rel="noreferrer">Open in Maps</a>
+        <a class="action-link" data-action="directions" target="_blank" rel="noreferrer">Open in Google Maps</a>
       </div>
     </div>
   `;
 
   hydrateForm(form, merged);
+  form.append(createPhotoBlock(merged));
   wireForm(form, stop.id);
 
   details.append(summary, form);
@@ -247,6 +254,7 @@ function hydrateForm(form, merged) {
   form.elements.status.value = merged.status || "candidate";
   form.elements.arrived_at.value = merged.arrived_at || "";
   form.elements.location_hint.value = merged.location_hint || "";
+  form.elements.google_maps_address.value = merged.google_maps_address || "";
   form.elements.latitude.value = toFormNumber(merged.latitude);
   form.elements.longitude.value = toFormNumber(merged.longitude);
   form.elements.story_angle.value = merged.story_angle || "";
@@ -301,6 +309,7 @@ function saveForm(stopId, form) {
     field_notes: form.elements.field_notes.value.trim(),
     hero_image: form.elements.hero_image.value.trim(),
     photo_captured: form.elements.photo_captured.checked,
+    google_maps_address: previousSaved.google_maps_address || previousBase.google_maps_address || "",
   };
 
   state.storage.stops[stopId] = next;
@@ -337,6 +346,62 @@ function updateSummary(stopId, baseStop, saved, options = {}) {
   if (options.refreshMap) {
     renderRouteMap({ fitBounds: false });
   }
+}
+
+function createPhotoBlock(stop) {
+  const wrap = document.createElement("section");
+  wrap.className = "photo-block";
+
+  const title = document.createElement("h3");
+  title.textContent = "Recent nearby iNaturalist photos";
+
+  const notes = document.createElement("p");
+  notes.className = "field-note";
+  notes.textContent = "These are the two most recent nearby moss, liverwort, or lichen observations with photos around this provisional stop anchor.";
+
+  const grid = document.createElement("div");
+  grid.className = "photo-grid";
+
+  const photos = Array.isArray(stop.inat_recent_photos) ? stop.inat_recent_photos : [];
+  if (photos.length === 0) {
+    const empty = document.createElement("p");
+    empty.className = "field-note";
+    empty.textContent = "No nearby iNaturalist photos were found for this stop yet.";
+    wrap.append(title, notes, empty);
+    return wrap;
+  }
+
+  for (const photo of photos) {
+    const link = document.createElement("a");
+    link.className = "photo-card";
+    link.href = photo.observation_url;
+    link.target = "_blank";
+    link.rel = "noreferrer";
+
+    const image = document.createElement("img");
+    image.loading = "lazy";
+    image.src = photo.photo_url;
+    image.alt = `${photo.taxon_name || "Observation"} from iNaturalist`;
+
+    const caption = document.createElement("div");
+    caption.className = "photo-caption";
+
+    const line1 = document.createElement("strong");
+    line1.textContent = photo.common_name || photo.taxon_name || "Observation";
+
+    const line2 = document.createElement("span");
+    line2.textContent = `${photo.observed_on || "date unknown"}${photo.place_guess ? ` • ${photo.place_guess}` : ""}`;
+
+    const line3 = document.createElement("span");
+    line3.textContent = photo.attribution || "iNaturalist photo";
+
+    caption.append(line1, line2, line3);
+    link.append(image, caption);
+    grid.append(link);
+  }
+
+  wrap.append(title, notes, grid);
+  return wrap;
 }
 
 function ensureMap() {
@@ -700,9 +765,9 @@ function createChip(text) {
 
 function buildMapsLink(latitude, longitude, title) {
   if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) {
-    return "https://maps.apple.com/?q=" + encodeURIComponent(title || "Bernal stop");
+    return "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(title || "Bernal stop");
   }
-  return `https://maps.apple.com/?daddr=${latitude},${longitude}&dirflg=w`;
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${latitude},${longitude}`)}`;
 }
 
 function currentDateTimeLocal() {
