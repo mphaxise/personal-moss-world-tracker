@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bernal Kid Scout Mode</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+    <link rel="stylesheet" href="kid-collect.css" />
+  </head>
+  <body>
+    <div class="kid-shell">
+      <header class="kid-hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Companion kid mode</p>
+          <h1>Bernal Kid Scout Mode</h1>
+          <p class="hero-text" id="heroText">
+            Loading the same 10-stop Bernal walk in a lighter scout flow.
+          </p>
+        </div>
+        <div class="hero-actions">
+          <button type="button" id="trackBtn" class="primary-btn">Enable location tracking</button>
+          <button type="button" id="nextBtn" class="ghost-btn">Next stop</button>
+          <button type="button" id="exportBtn" class="ghost-btn">Export kid notes</button>
+          <a id="routeBtn" class="ghost-link" target="_blank" rel="noreferrer">Open full route in Google Maps</a>
+          <a class="ghost-link" href="collect.html">Open adult page</a>
+          <a class="ghost-link" href="/">Open atlas</a>
+        </div>
+      </header>
+
+      <main class="kid-grid">
+        <section class="panel route-panel">
+          <div class="section-head">
+            <p class="section-label">Walk map</p>
+            <h2 id="routeTitle">418 Nevada Street to 10 moss stops</h2>
+          </div>
+          <div id="kidMap" aria-label="Kid scout walk map"></div>
+          <div class="progress-row" id="progressRow"></div>
+          <div class="route-meta" id="routeMeta"></div>
+          <div class="stop-rail" id="stopRail"></div>
+        </section>
+
+        <section class="panel scout-panel">
+          <div class="section-head">
+            <p class="section-label">Current stop</p>
+            <h2>Quick scout form</h2>
+            <p class="section-copy">
+              One photo and a few taps are enough. Adult notes stay on the phone. Kid notes and
+              photos save on this device.
+            </p>
+          </div>
+          <div id="activeStop" class="active-stop" aria-live="polite"></div>
+        </section>
+      </main>
+    </div>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
+    <script type="module" src="kid-collect.js"></script>
+  </body>
+</html>

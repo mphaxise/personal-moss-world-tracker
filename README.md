@@ -13,6 +13,7 @@ Planning direction is now set.
 What exists today:
 - a static Bernal atlas shell now loads the candidate content scaffold at the repo root
 - a dedicated walk collection page now lives at `collect.html`
+- a companion kid scout page now lives at `kid-collect.html`
 - the walk collection page now includes a Google Maps route handoff, reverse-geocoded stop addresses, and two recent nearby iNaturalist photos per stop
 - a legacy community-tracker prototype is still present in the codebase
 - founder review is complete
@@ -43,6 +44,7 @@ Supporting strategy docs:
 Execution scaffold:
 - [content/bernal-heights-atlas.json](/Users/praneet/personal-moss-world-tracker/content/bernal-heights-atlas.json)
 - [collect.html](/Users/praneet/personal-moss-world-tracker/collect.html)
+- [kid-collect.html](/Users/praneet/personal-moss-world-tracker/kid-collect.html)
 
 ## Selected MVP
 
@@ -102,11 +104,21 @@ Then open [http://127.0.0.1:8080](http://127.0.0.1:8080).
 
 For the map-first field collection page, open [http://127.0.0.1:8080/collect.html](http://127.0.0.1:8080/collect.html).
 
+For the lighter companion iPad page, open [http://127.0.0.1:8080/kid-collect.html](http://127.0.0.1:8080/kid-collect.html).
+
 The walk collection page now supports:
 - start point at `418 Nevada Street`
 - a single `Open full route in Google Maps` handoff
 - reverse-geocoded stop addresses
 - two recent nearby iNaturalist photos per stop
+- a linked companion `kid mode` for a second device
+
+The kid scout page supports:
+- the same 10-stop Bernal route
+- large-touch stop selection and quick `found / maybe / skip` decisions
+- simple habitat and texture tags
+- one-photo capture with on-device persistence
+- separate local save from the adult page so phone and iPad notes do not overwrite each other
 
 If you want the earlier tracker prototype, open [http://127.0.0.1:8080/legacy-tracker.html](http://127.0.0.1:8080/legacy-tracker.html).
 
