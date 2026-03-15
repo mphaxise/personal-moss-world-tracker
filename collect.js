@@ -325,7 +325,7 @@ function wireForm(form, stopId) {
       });
     } catch (error) {
       console.error(error);
-      showToast(error.message || "Could not get your device location.");
+      recordArrivalWithFallback(stopId, form, error);
     }
   });
 
@@ -438,6 +438,10 @@ async function ensureCurrentPosition() {
     return state.currentPosition;
   }
 
+  if (!canUsePreciseDeviceLocation()) {
+    throw new Error("This phone can open the page, but exact device location needs HTTPS or localhost.");
+  }
+
   if (!navigator.geolocation) {
     throw new Error("This browser does not support location access.");
   }
@@ -460,6 +464,39 @@ async function ensureCurrentPosition() {
 
   renderRouteMap({ fitBounds: false });
   return state.currentPosition;
+}
+
+function canUsePreciseDeviceLocation() {
+  const hostname = window.location.hostname;
+  return window.isSecureContext || hostname === "localhost" || hostname === "127.0.0.1" || hostname === "[::1]";
+}
+
+function recordArrivalWithFallback(stopId, form, error) {
+  const baseStop = getBaseStop(stopId);
+  const merged = getMergedStop(baseStop);
+
+  form.elements.arrived_at.value = currentDateTimeLocal();
+
+  const latitude = Number.isFinite(merged?.latitude) ? merged.latitude : null;
+  const longitude = Number.isFinite(merged?.longitude) ? merged.longitude : null;
+  if (latitude !== null) {
+    form.elements.latitude.value = latitude.toFixed(6);
+  }
+  if (longitude !== null) {
+    form.elements.longitude.value = longitude.toFixed(6);
+  }
+
+  saveForm(stopId, form);
+  renderRouteMap({ fitBounds: false });
+  selectStop(stopId, { focusMap: true, fromToggle: false });
+
+  const message = String(error?.message || "");
+  if (message.includes("HTTPS or localhost")) {
+    showToast("Recorded arrival time. This iPhone blocks exact location on local-network HTTP pages, so the stop coordinates were kept.");
+    return;
+  }
+
+  showToast("Recorded arrival time. Exact device location was unavailable, so the stop coordinates were kept.");
 }
 
 function createPhotoBlock(stop) {
@@ -863,6 +900,11 @@ function createUserIcon() {
 }
 
 function toggleTracking() {
+  if (!canUsePreciseDeviceLocation()) {
+    showToast("Live device tracking needs HTTPS or localhost on this phone. You can still use Arrive now to record time with the stop coordinates.");
+    return;
+  }
+
   if (state.watchId !== null) {
     navigator.geolocation.clearWatch(state.watchId);
     state.watchId = null;
@@ -898,7 +940,12 @@ function handlePosition(position) {
 
 function handlePositionError(error) {
   console.error(error);
-  showToast(`Location error: ${error.message}`);
+  const message = String(error?.message || "");
+  if (message.includes("does not have permission") || message.includes("Only secure origins")) {
+    showToast("This phone only allows exact device location on HTTPS or localhost. Use Arrive now to record time with the stop coordinates.");
+    return;
+  }
+  showToast(`Location error: ${message}`);
 }
 
 function maybeAutoSelectNearestStop() {
