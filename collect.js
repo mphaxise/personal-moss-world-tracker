@@ -242,6 +242,7 @@ function createStopAccordion(stop) {
 
   hydrateForm(form, merged);
   form.append(createPhotoBlock(merged));
+  form.append(createBottomNav(stop.id));
   wireForm(form, stop.id);
 
   details.append(summary, form);
@@ -289,6 +290,10 @@ function wireForm(form, stopId) {
 
   form.querySelector('[data-action="focus-map"]').addEventListener("click", () => {
     selectStop(stopId, { focusMap: true, fromToggle: false });
+  });
+
+  form.querySelector('[data-action="next-stop"]').addEventListener("click", () => {
+    selectNextStopFrom(stopId);
   });
 }
 
@@ -401,6 +406,22 @@ function createPhotoBlock(stop) {
   }
 
   wrap.append(title, notes, grid);
+  return wrap;
+}
+
+function createBottomNav(stopId) {
+  const next = getNextStop(stopId);
+  const wrap = document.createElement("div");
+  wrap.className = "form-footer";
+
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "primary-btn next-stop-btn";
+  button.dataset.action = "next-stop";
+  button.textContent = next ? `Next stop: ${next.walk_order}` : "Last stop";
+  button.disabled = !next;
+
+  wrap.append(button);
   return wrap;
 }
 
@@ -630,13 +651,17 @@ function focusSelectedStop(openPopup = true) {
 }
 
 function selectNextStop() {
-  const stops = getStops();
-  const index = stops.findIndex((stop) => stop.id === state.selectedStopId);
-  const nextIndex = Math.min(stops.length - 1, Math.max(0, index + 1));
-  const next = stops[nextIndex];
-  if (next) {
-    selectStop(next.id, { focusMap: true, fromToggle: false });
+  selectNextStopFrom(state.selectedStopId);
+}
+
+function selectNextStopFrom(stopId) {
+  const next = getNextStop(stopId);
+  if (!next) {
+    showToast("You are already on the last stop.");
+    return;
   }
+
+  selectStop(next.id, { focusMap: true, fromToggle: false });
 }
 
 function exportNotes() {
@@ -703,6 +728,15 @@ function getNearestStop(origin) {
 function getSelectedStop() {
   const stop = getBaseStop(state.selectedStopId);
   return stop ? getMergedStop(stop) : null;
+}
+
+function getNextStop(stopId) {
+  const stops = getStops();
+  const index = stops.findIndex((stop) => stop.id === stopId);
+  if (index === -1) {
+    return stops[0] || null;
+  }
+  return stops[index + 1] || null;
 }
 
 function getBaseStop(stopId) {

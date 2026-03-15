@@ -106,6 +106,9 @@ For the map-first field collection page, open [http://127.0.0.1:8080/collect.htm
 
 For the lighter companion iPad page, open [http://127.0.0.1:8080/kid-collect.html](http://127.0.0.1:8080/kid-collect.html).
 
+If the iPad will be offline on the walk, load `kid-collect.html` at home and keep the tab open during the walk.
+After the walk, use `Export kid notes` to pull the data back out of the device.
+
 The walk collection page now supports:
 - start point at `418 Nevada Street`
 - a single `Open full route in Google Maps` handoff

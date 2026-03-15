@@ -237,6 +237,7 @@ label span {
 .summary-top,
 .summary-meta,
 .form-actions,
+.form-footer,
 .inline-actions,
 .field-row,
 .coord-row,
@@ -366,6 +367,15 @@ summary:focus-visible {
 .photo-block {
   display: grid;
   gap: 0.75rem;
+}
+
+.form-footer {
+  justify-content: flex-end;
+  padding-top: 0.1rem;
+}
+
+.next-stop-btn {
+  min-width: 156px;
 }
 
 .photo-grid {

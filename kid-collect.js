@@ -294,9 +294,9 @@ function renderActiveStop() {
   card.append(createChoiceGroup(stop));
   card.append(createTagGroup(stop, "Habitat tags", "What is it growing on?", HABITAT_TAGS, "habitat_tags"));
   card.append(createTagGroup(stop, "Texture tags", "What does it feel like to look at?", TEXTURE_TAGS, "texture_tags"));
-  card.append(createNoteGroup(stop));
   card.append(createPhotoGroup(stop));
   card.append(createReferenceGroup(stop));
+  card.append(createBottomNav(stop.id));
 
   dom.activeStop.append(card);
 
@@ -306,8 +306,8 @@ function renderActiveStop() {
 
   wireChoiceGroup(stop);
   wireTagGroups(stop);
-  wireNoteGroup(stop);
   wirePhotoGroup(stop);
+  wireBottomNav(stop.id);
   loadSelectedPhotoPreview(stop.id);
 }
 
@@ -415,39 +415,6 @@ function wireTagGroups(stop) {
       renderPage();
     });
   }
-}
-
-function createNoteGroup(stop) {
-  const section = document.createElement("section");
-  section.className = "note-group";
-
-  const heading = document.createElement("h3");
-  heading.textContent = "What did you notice?";
-
-  const helper = document.createElement("p");
-  helper.className = "section-copy";
-  helper.textContent = "A short sentence is enough. Example: tiny bright patch on the shady wall.";
-
-  const textarea = document.createElement("textarea");
-  textarea.className = "note-input";
-  textarea.id = "kidNote";
-  textarea.maxLength = 180;
-  textarea.placeholder = "Type one quick note";
-  textarea.value = stop.note || "";
-
-  section.append(heading, helper, textarea);
-  return section;
-}
-
-function wireNoteGroup(stop) {
-  const note = dom.activeStop.querySelector("#kidNote");
-  if (!note) {
-    return;
-  }
-
-  note.addEventListener("input", () => {
-    saveStop(stop.id, { note: note.value });
-  });
 }
 
 function createPhotoGroup(stop) {
@@ -592,6 +559,28 @@ function createReferenceGroup(stop) {
 
   section.append(heading, helper, grid);
   return section;
+}
+
+function createBottomNav(stopId) {
+  const next = getNextStop(stopId);
+  const wrap = document.createElement("div");
+  wrap.className = "card-footer";
+
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "primary-btn next-stop-btn";
+  button.id = "cardNextBtn";
+  button.textContent = next ? `Next stop: ${next.walk_order}` : "Last stop";
+  button.disabled = !next;
+
+  wrap.append(button);
+  return wrap;
+}
+
+function wireBottomNav(stopId) {
+  dom.activeStop.querySelector("#cardNextBtn")?.addEventListener("click", () => {
+    selectNextStopFrom(stopId);
+  });
 }
 
 async function loadSelectedPhotoPreview(stopId) {
@@ -848,13 +837,17 @@ function focusSelectedStop(openPopup = true) {
 }
 
 function selectNextStop() {
-  const stops = getStops();
-  const index = stops.findIndex((stop) => stop.id === state.selectedStopId);
-  const nextIndex = Math.min(stops.length - 1, Math.max(0, index + 1));
-  const next = stops[nextIndex];
-  if (next) {
-    selectStop(next.id, { focusMap: true });
+  selectNextStopFrom(state.selectedStopId);
+}
+
+function selectNextStopFrom(stopId) {
+  const next = getNextStop(stopId);
+  if (!next) {
+    showToast("You are already on the last stop.");
+    return;
   }
+
+  selectStop(next.id, { focusMap: true });
 }
 
 function exportNotes() {
@@ -891,7 +884,6 @@ function saveStop(stopId, patch) {
     favorite: false,
     habitat_tags: [],
     texture_tags: [],
-    note: "",
     visited_at: "",
     has_photo: false,
     photo_name: "",
@@ -958,6 +950,15 @@ function getSelectedStop() {
   return stop ? getMergedStop(stop) : null;
 }
 
+function getNextStop(stopId) {
+  const stops = getStops();
+  const index = stops.findIndex((stop) => stop.id === stopId);
+  if (index === -1) {
+    return stops[0] || null;
+  }
+  return stops[index + 1] || null;
+}
+
 function getStops() {
   return [...(state.atlas?.stops || [])].sort((a, b) => a.walk_order - b.walk_order);
 }
@@ -973,7 +974,6 @@ function getMergedStop(stop) {
     favorite: false,
     habitat_tags: [],
     texture_tags: [],
-    note: "",
     visited_at: "",
     has_photo: false,
     photo_name: "",

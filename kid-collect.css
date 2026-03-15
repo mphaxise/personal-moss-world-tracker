@@ -397,7 +397,6 @@ h1 {
 
 .choice-group,
 .tag-group,
-.note-group,
 .photo-group,
 .reference-group {
   display: grid;
@@ -410,7 +409,6 @@ h1 {
 
 .choice-group h3,
 .tag-group h3,
-.note-group h3,
 .photo-group h3,
 .reference-group h3 {
   margin: 0;
@@ -455,16 +453,6 @@ h1 {
 
 .favorite-btn {
   min-width: 160px;
-}
-
-.note-input {
-  width: 100%;
-  min-height: 112px;
-  border-radius: 1rem;
-  border: 1px solid rgba(79, 112, 66, 0.16);
-  padding: 0.9rem 1rem;
-  resize: vertical;
-  background: rgba(255, 255, 255, 0.8);
 }
 
 .photo-upload {
@@ -534,6 +522,15 @@ h1 {
   color: var(--ink-soft);
   font-size: 0.9rem;
   line-height: 1.45;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.next-stop-btn {
+  min-width: 170px;
 }
 
 .route-start-marker,
