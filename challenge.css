@@ -427,6 +427,31 @@ textarea {
   margin-top: 14px;
 }
 
+.merge-summary {
+  display: grid;
+  gap: 12px;
+  margin: 16px 0;
+  padding: 16px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.68);
+  border: 1px solid rgba(48, 82, 65, 0.12);
+}
+
+.merge-summary h3,
+.kid-celebration h3 {
+  margin: 0;
+}
+
+.merge-copy,
+.recap-note {
+  margin: 0;
+  color: var(--muted);
+}
+
+.recap-actions {
+  margin-top: 4px;
+}
+
 .recap-card {
   padding: 14px;
   border-radius: 18px;
@@ -436,6 +461,41 @@ textarea {
 
 .recap-card.is-done {
   background: rgba(214, 226, 210, 0.6);
+}
+
+.recap-head {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.recap-response-grid {
+  display: grid;
+  gap: 12px;
+  margin-top: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.recap-response {
+  padding: 12px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.66);
+  border: 1px solid rgba(48, 82, 65, 0.1);
+  display: grid;
+  gap: 8px;
+}
+
+.recap-response-title {
+  margin: 0;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.recap-note-empty {
+  font-style: italic;
 }
 
 .recap-photo {
@@ -479,6 +539,44 @@ textarea {
   grid-template-columns: auto 1fr;
   gap: 14px;
   align-items: start;
+}
+
+.kid-card.is-complete {
+  border-color: rgba(63, 124, 96, 0.28);
+  background:
+    radial-gradient(circle at top right, rgba(214, 226, 210, 0.7), transparent 42%),
+    rgba(255, 255, 255, 0.7);
+}
+
+.kid-celebration {
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+  border-radius: 18px;
+  border: 1px solid rgba(63, 124, 96, 0.22);
+  background:
+    radial-gradient(circle at top left, rgba(255, 243, 204, 0.9), transparent 38%),
+    linear-gradient(180deg, rgba(226, 242, 231, 0.98) 0%, rgba(214, 226, 210, 0.88) 100%);
+  box-shadow: 0 12px 24px rgba(63, 124, 96, 0.12);
+  animation: pop-in 0.24s ease-out;
+}
+
+.kid-celebration p {
+  margin: 0;
+  color: #2c493b;
+}
+
+.celebration-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 54px;
+  padding: 14px 20px;
+  border-radius: 999px;
+  border: 1px solid rgba(48, 82, 65, 0.16);
+  background: rgba(255, 255, 255, 0.76);
+  font-weight: 700;
+  box-shadow: 0 6px 16px rgba(29, 44, 34, 0.08);
 }
 
 .choice-grid {
@@ -613,6 +711,26 @@ textarea {
   background: rgba(214, 226, 210, 0.36);
 }
 
+.mini-ghost-btn {
+  border: 1px solid rgba(48, 82, 65, 0.16);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.76);
+  color: var(--text);
+  padding: 8px 12px;
+  min-height: 40px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.mini-ghost-btn:hover {
+  transform: translateY(-1px);
+}
+
+.mini-ghost-btn:focus-visible {
+  outline: 3px solid rgba(48, 82, 65, 0.28);
+  outline-offset: 3px;
+}
+
 .toast {
   position: fixed;
   left: 50%;
@@ -632,6 +750,18 @@ textarea {
 .toast.is-visible {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
+}
+
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 @media (max-width: 920px) {
@@ -671,6 +801,10 @@ textarea {
   .card-pill {
     width: 100%;
     justify-content: flex-start;
+  }
+
+  .recap-response-grid {
+    grid-template-columns: 1fr;
   }
 }
 

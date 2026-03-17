@@ -171,9 +171,11 @@ function renderActiveCard() {
 
   const own = getOwnState(card.id);
   const complete = isCardComplete(card, own, null);
+  const completedCount = countCompletedCards(state.pack, state.storage.cards, {});
+  const totalCount = sortedCards(state.pack).length;
 
   const wrap = document.createElement("div");
-  wrap.className = "kid-card";
+  wrap.className = `kid-card ${complete ? "is-complete" : ""}`;
   wrap.innerHTML = `
     <div class="kid-card-head">
       <span class="active-order">${card.order}</span>
@@ -194,6 +196,9 @@ function renderActiveCard() {
 
   const content = document.createElement("div");
   content.className = "kid-card-content";
+  if (complete) {
+    content.append(createKidCelebration(card, completedCount, totalCount));
+  }
   if (isChoiceCard(card)) {
     content.append(createChoiceButtons(card, own));
   }
@@ -217,13 +222,14 @@ function createChoiceButtons(card, own) {
     button.dataset.color = String(option).toLowerCase();
     button.textContent = option;
     button.addEventListener("click", () => {
+      const wasComplete = isCardComplete(card, own, null);
       saveOwnState(card.id, {
         choice: option,
         status: "done",
         completed_at: new Date().toISOString(),
       });
       renderPage();
-      showToast(`Saved ${option}.`);
+      celebrateKidProgress(card, wasComplete, `Saved ${option}.`);
     });
     wrap.append(button);
   }
@@ -287,6 +293,7 @@ function createKidPhotoBlock(card, own) {
     }
     try {
       const record = await savePhotoRecord(state.photoDb, makePhotoKey(state.pack.meta.id, ROLE, card.id), file);
+      const wasComplete = isCardComplete(card, own, null);
       saveOwnState(card.id, {
         has_photo: true,
         photo_name: file.name || "",
@@ -295,7 +302,7 @@ function createKidPhotoBlock(card, own) {
         completed_at: record.updatedAt,
       });
       renderPage();
-      showToast("Saved the photo.");
+      celebrateKidProgress(card, wasComplete, "Saved the photo.");
     } catch (error) {
       console.error(error);
       showToast(`Could not save the photo: ${error.message}`);
@@ -326,6 +333,8 @@ async function loadPreview(container, cardId, hasPhoto) {
 function createKidActions(card) {
   const row = document.createElement("div");
   row.className = "action-row";
+  const isDone = isCardComplete(card, getOwnState(card.id), null);
+  const next = getNextCard(state.pack, card.id) || getFirstIncompleteCard(state.pack, state.storage.cards);
 
   const skipButton = document.createElement("button");
   skipButton.type = "button";
@@ -356,11 +365,48 @@ function createKidActions(card) {
   const nextButton = document.createElement("button");
   nextButton.type = "button";
   nextButton.className = "primary-btn";
-  nextButton.textContent = "Show next card";
+  nextButton.textContent = isDone ? (next ? "Great, next card" : "See finished cards") : "Show next card";
   nextButton.addEventListener("click", () => selectNextCardFrom(card.id));
 
-  row.append(skipButton, resetButton, nextButton);
+  if (!isDone) {
+    row.append(skipButton);
+  }
+  row.append(resetButton, nextButton);
   return row;
+}
+
+function createKidCelebration(card, completedCount, totalCount) {
+  const wrap = document.createElement("section");
+  wrap.className = "kid-celebration";
+
+  const title = document.createElement("h3");
+  title.textContent = completedCount === totalCount ? "Challenge finished" : "You got it";
+
+  const copy = document.createElement("p");
+  copy.textContent =
+    completedCount === totalCount
+      ? `You finished all ${totalCount} cards in this challenge.`
+      : `${card.title} is done for ${card.points} points. ${completedCount} of ${totalCount} cards are complete.`;
+
+  const actionRow = document.createElement("div");
+  actionRow.className = "action-row compact-actions";
+  const next = getNextCard(state.pack, card.id) || getFirstIncompleteCard(state.pack, state.storage.cards);
+  if (next && next.id !== card.id) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "primary-btn";
+    button.textContent = `Go to card ${next.order}`;
+    button.addEventListener("click", () => selectNextCardFrom(card.id));
+    actionRow.append(button);
+  } else {
+    const doneChip = document.createElement("div");
+    doneChip.className = "celebration-chip";
+    doneChip.textContent = "All cards done";
+    actionRow.append(doneChip);
+  }
+
+  wrap.append(title, copy, actionRow);
+  return wrap;
 }
 
 function getSelectedCard() {
@@ -477,4 +523,21 @@ function showToast(message) {
   state.toastTimer = window.setTimeout(() => {
     dom.toast.classList.remove("is-visible");
   }, TOAST_MS);
+}
+
+function celebrateKidProgress(card, wasComplete, fallbackMessage) {
+  const isCompleteNow = isCardComplete(card, getOwnState(card.id), null);
+  const completedCount = countCompletedCards(state.pack, state.storage.cards, {});
+  const totalCount = sortedCards(state.pack).length;
+
+  if (isCompleteNow && !wasComplete) {
+    if (completedCount === totalCount) {
+      showToast(`You finished ${state.pack.pack.title}.`);
+      return;
+    }
+    showToast(`${card.title} is complete. ${completedCount} of ${totalCount} done.`);
+    return;
+  }
+
+  showToast(fallbackMessage);
 }

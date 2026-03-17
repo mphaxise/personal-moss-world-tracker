@@ -111,6 +111,7 @@ function renderPage() {
   const pack = state.pack;
   dom.title.textContent = pack.pack.title;
   dom.heroText.textContent = `${pack.pack.summary} Use this on the phone, and use kid mode on the iPad if you want a paired walk.`;
+  dom.importKidBtn.textContent = hasKidImport() ? "Replace kid export" : "Import kid export";
   dom.kidLink.href = `kid-collect.html?pack=${encodeURIComponent(pack.meta.id)}`;
   dom.pickerLink.href = `index.html?pack=${encodeURIComponent(pack.meta.id)}`;
   dom.atlasLink.href = "atlas.html";
@@ -174,6 +175,8 @@ function renderRecap() {
     bonusList.append(createMetaChip(rule));
   }
 
+  const mergeSummary = createMergeSummary(cards, completed.length);
+
   const recapGrid = document.createElement("div");
   recapGrid.className = "recap-grid";
   for (const card of cards) {
@@ -182,30 +185,34 @@ function renderRecap() {
     recapGrid.append(createRecapCard(card, own, kid));
   }
 
-  dom.recap.append(head, message, bonusList, recapGrid);
+  dom.recap.append(head, message, mergeSummary, bonusList, recapGrid);
 }
 
 function createRecapCard(card, own, kid) {
   const article = document.createElement("article");
   article.className = `recap-card ${isCardComplete(card, own, kid) ? "is-done" : ""}`;
 
+  const head = document.createElement("div");
+  head.className = "recap-head";
   const title = document.createElement("h3");
   title.textContent = card.title;
+  const openButton = document.createElement("button");
+  openButton.type = "button";
+  openButton.className = "mini-ghost-btn";
+  openButton.textContent = "Open card";
+  openButton.addEventListener("click", () => selectCard(card.id));
+  head.append(title, openButton);
+
   const status = document.createElement("p");
   status.className = "recap-status";
   status.textContent = isCardComplete(card, own, kid) ? `Complete for ${card.points} points` : "Not complete yet";
 
-  const meta = document.createElement("div");
-  meta.className = "meta-row";
-  if (own.status === "done") {
-    meta.append(createMetaChip(`adult ${own.choice || "done"}`));
-  }
-  if (kid.status === "done") {
-    meta.append(createMetaChip(`kid ${kid.choice || "done"}`));
-  }
-  if (meta.childNodes.length === 0) {
-    meta.append(createMetaChip("pending"));
-  }
+  const responseGrid = document.createElement("div");
+  responseGrid.className = "recap-response-grid";
+  responseGrid.append(
+    createRecapParticipantBlock("adult", own),
+    createRecapParticipantBlock("kid", kid)
+  );
 
   const previewRow = document.createElement("div");
   previewRow.className = "recap-photo-row";
@@ -216,8 +223,103 @@ function createRecapCard(card, own, kid) {
     previewRow.append(createRecapPhoto("Kid", kid.photo_data_url));
   }
 
-  article.append(title, status, meta, previewRow);
+  article.append(head, status, responseGrid, previewRow);
   return article;
+}
+
+function createMergeSummary(cards, completedCount) {
+  const wrap = document.createElement("section");
+  wrap.className = "merge-summary";
+
+  const importedCount = Object.keys(state.kidImport.cards).length;
+  const adultDone = countCompletedCards(state.pack, state.storage.cards, {});
+  const kidDone = countCompletedCards(state.pack, state.kidImport.cards, {});
+  const score = sumBaseScore(state.pack, state.storage.cards, state.kidImport.cards);
+
+  const heading = document.createElement("h3");
+  heading.textContent = importedCount ? "Merged recap is ready" : "Bring in the kid handoff";
+
+  const copy = document.createElement("p");
+  copy.className = "merge-copy";
+  if (importedCount === 0) {
+    copy.textContent = "Use the kid export from the iPad here, then review the combined recap before you upload the family bundle.";
+  } else {
+    copy.textContent = `Kid handoff imported for ${importedCount} cards. Review the combined cards here, then upload one merged bundle from the phone.`;
+  }
+
+  const stats = document.createElement("div");
+  stats.className = "meta-row";
+  stats.append(
+    createMetaChip(`shared done ${completedCount}/${cards.length}`),
+    createMetaChip(`adult ready ${adultDone}`),
+    createMetaChip(`kid imported ${kidDone}`),
+    createMetaChip(`score ${score}`)
+  );
+  if (state.kidImport.exportedAt) {
+    stats.append(createMetaChip(`kid export ${formatShortDateTime(state.kidImport.exportedAt)}`));
+  }
+  if (state.kidImport.importedAt) {
+    stats.append(createMetaChip(`imported here ${formatShortDateTime(state.kidImport.importedAt)}`));
+  }
+
+  const actions = document.createElement("div");
+  actions.className = "action-row recap-actions";
+
+  const importButton = document.createElement("button");
+  importButton.type = "button";
+  importButton.className = "ghost-btn";
+  importButton.textContent = importedCount ? "Replace kid export" : "Import kid export";
+  importButton.addEventListener("click", () => dom.kidImportInput.click());
+
+  const uploadButton = document.createElement("button");
+  uploadButton.type = "button";
+  uploadButton.className = "primary-btn";
+  uploadButton.textContent = importedCount ? "Upload merged bundle" : "Upload adult bundle";
+  uploadButton.addEventListener("click", uploadCurrentBundle);
+
+  const exportButton = document.createElement("button");
+  exportButton.type = "button";
+  exportButton.className = "ghost-btn";
+  exportButton.textContent = importedCount ? "Save merged export" : "Save adult export";
+  exportButton.addEventListener("click", exportNotes);
+
+  actions.append(importButton, uploadButton, exportButton);
+  wrap.append(heading, copy, stats, actions);
+  return wrap;
+}
+
+function createRecapParticipantBlock(role, response) {
+  const block = document.createElement("section");
+  block.className = "recap-response";
+
+  const title = document.createElement("p");
+  title.className = "recap-response-title";
+  title.textContent = makeRoleLabel(role);
+
+  const chips = document.createElement("div");
+  chips.className = "meta-row";
+  const status = response.status || "pending";
+  chips.append(createMetaChip(status === "done" ? `${makeRoleLabel(role).toLowerCase()} done` : status));
+  if (response.choice) {
+    chips.append(createMetaChip(response.choice));
+  }
+  if (response.has_photo) {
+    chips.append(createMetaChip("photo"));
+  }
+
+  const note = document.createElement("p");
+  note.className = "recap-note";
+  if (response.note) {
+    note.textContent = response.note;
+  } else if (response.completed_at) {
+    note.textContent = `Saved ${formatShortDateTime(response.completed_at)}.`;
+  } else {
+    note.textContent = "No response yet.";
+    note.classList.add("recap-note-empty");
+  }
+
+  block.append(title, chips, note);
+  return block;
 }
 
 function createRecapPhoto(labelText, src) {
@@ -502,6 +604,15 @@ function createActionRow(card) {
   return row;
 }
 
+function selectCard(cardId) {
+  state.selectedCardId = cardId;
+  state.storage.lastSelectedCardId = cardId;
+  persistCurrentStorage();
+  renderCards();
+  const panel = dom.cardList.querySelector(`[data-card-id="${cardId}"]`);
+  panel?.scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
 async function loadPreview(container, cardId, hasPhoto, role) {
   container.replaceChildren();
   if (!hasPhoto) {
@@ -670,6 +781,10 @@ function normalizeImportedCardState(value) {
 
 function sanitizeShortText(value) {
   return String(value || "").trim().slice(0, 240);
+}
+
+function hasKidImport() {
+  return Object.keys(state.kidImport.cards).length > 0;
 }
 
 async function prepareOffline() {
