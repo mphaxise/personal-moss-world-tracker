@@ -149,26 +149,7 @@ function renderRecap() {
   const cards = sortedCards(state.pack);
   const completed = cards.filter((card) => isCardComplete(card, state.storage.cards[card.id], state.kidImport.cards[card.id]));
   dom.recap.replaceChildren();
-
-  const head = document.createElement("div");
-  head.className = "section-head compact-head";
-  const label = document.createElement("p");
-  label.className = "section-label";
-  label.textContent = "Recap";
-  const title = document.createElement("h2");
-  title.textContent = state.pack.recap.title;
-  head.append(label, title);
-
-  const message = document.createElement("p");
-  message.className = "sidebar-note";
-  if (completed.length === 0) {
-    message.textContent = state.pack.recap.empty_message;
-  } else if (completed.length === cards.length) {
-    message.textContent = state.pack.recap.success_message;
-  } else {
-    message.textContent = state.pack.recap.partial_message;
-  }
-
+  const resultsHero = createResultsHero(cards, completed.length);
   const bonusList = document.createElement("div");
   bonusList.className = "meta-row";
   for (const rule of state.pack.rules.bonus_rules || []) {
@@ -185,7 +166,85 @@ function renderRecap() {
     recapGrid.append(createRecapCard(card, own, kid));
   }
 
-  dom.recap.append(head, message, mergeSummary, bonusList, recapGrid);
+  dom.recap.append(resultsHero, mergeSummary, bonusList, recapGrid);
+}
+
+function createResultsHero(cards, completedCount) {
+  const totalCount = cards.length;
+  const score = sumBaseScore(state.pack, state.storage.cards, state.kidImport.cards);
+  const importedCount = Object.keys(state.kidImport.cards).length;
+  const adultPhotos = Object.values(state.storage.cards).filter((card) => card.has_photo).length;
+  const kidPhotos = Object.values(state.kidImport.cards).filter((card) => card.has_photo).length;
+  const photoMoments = adultPhotos + kidPhotos;
+  const teamCards = cards.filter((card) => {
+    const own = state.storage.cards[card.id] || defaultCardState();
+    const kid = state.kidImport.cards[card.id] || defaultCardState();
+    return hasMeaningfulResponse(own) && hasMeaningfulResponse(kid);
+  }).length;
+  const featuredCards = cards
+    .filter((card) => isCardComplete(card, state.storage.cards[card.id], state.kidImport.cards[card.id]))
+    .slice(0, 3);
+
+  const wrap = document.createElement("section");
+  wrap.className = "results-hero";
+
+  const label = document.createElement("p");
+  label.className = "section-label";
+  label.textContent = "Family walk results";
+
+  const title = document.createElement("h2");
+  if (completedCount === 0) {
+    title.textContent = "Your shared recap starts here";
+  } else if (completedCount === totalCount) {
+    title.textContent = "Challenge complete";
+  } else {
+    title.textContent = `${completedCount} of ${totalCount} cards are now in the recap`;
+  }
+
+  const lead = document.createElement("p");
+  lead.className = "results-lead";
+  if (completedCount === 0) {
+    lead.textContent = importedCount
+      ? "Both devices are connected. Finish a few cards and this page will turn into your family walk story."
+      : "Import the kid export from the iPad and this panel will turn into a combined family walk story.";
+  } else if (completedCount === totalCount) {
+    lead.textContent = `${state.pack.recap.success_message} ${importedCount ? "Both devices are already folded into the result below." : "You can still import the kid export to make it fully shared."}`;
+  } else {
+    lead.textContent = importedCount
+      ? `You already have a real shared walk result. ${state.pack.recap.partial_message}`
+      : `${state.pack.recap.partial_message} Bring in the kid export when you are ready to complete the family view.`;
+  }
+
+  const statGrid = document.createElement("div");
+  statGrid.className = "results-stat-grid";
+  statGrid.append(
+    createResultStat("Done", `${completedCount}/${totalCount}`),
+    createResultStat("Score", String(score)),
+    createResultStat("Team cards", String(teamCards)),
+    createResultStat("Photo moments", String(photoMoments))
+  );
+
+  wrap.append(label, title, lead, statGrid);
+
+  if (featuredCards.length > 0) {
+    const featured = document.createElement("div");
+    featured.className = "results-featured";
+
+    const featuredLabel = document.createElement("p");
+    featuredLabel.className = "results-featured-label";
+    featuredLabel.textContent = featuredCards.length === 1 ? "Featured find" : "Featured finds";
+
+    const featuredRow = document.createElement("div");
+    featuredRow.className = "results-featured-row";
+    for (const card of featuredCards) {
+      featuredRow.append(createResultMoment(card));
+    }
+
+    featured.append(featuredLabel, featuredRow);
+    wrap.append(featured);
+  }
+
+  return wrap;
 }
 
 function createRecapCard(card, own, kid) {
@@ -286,6 +345,34 @@ function createMergeSummary(cards, completedCount) {
   actions.append(importButton, uploadButton, exportButton);
   wrap.append(heading, copy, stats, actions);
   return wrap;
+}
+
+function createResultStat(labelText, value) {
+  const block = document.createElement("div");
+  block.className = "result-stat";
+
+  const strong = document.createElement("strong");
+  strong.textContent = value;
+  const label = document.createElement("span");
+  label.textContent = labelText;
+
+  block.append(strong, label);
+  return block;
+}
+
+function createResultMoment(card) {
+  const pill = document.createElement("button");
+  pill.type = "button";
+  pill.className = "result-moment";
+  pill.addEventListener("click", () => selectCard(card.id));
+
+  const title = document.createElement("strong");
+  title.textContent = card.title;
+  const sub = document.createElement("span");
+  sub.textContent = `${card.points} points`;
+
+  pill.append(title, sub);
+  return pill;
 }
 
 function createRecapParticipantBlock(role, response) {
@@ -785,6 +872,10 @@ function sanitizeShortText(value) {
 
 function hasKidImport() {
   return Object.keys(state.kidImport.cards).length > 0;
+}
+
+function hasMeaningfulResponse(response) {
+  return Boolean(response?.status || response?.choice || response?.note || response?.has_photo);
 }
 
 async function prepareOffline() {
