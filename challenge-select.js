@@ -2,19 +2,23 @@ import {
   buildPackLink,
   createMetaChip,
   fetchManifest,
-  readLastPackId,
+  getRequestedPackId,
   rememberLastPackId,
+  resolvePackId,
 } from "./challenge-core.js";
 
 const state = {
   manifest: null,
-  lastPackId: readLastPackId(),
+  selectedPackId: "",
+  requestedPackId: getRequestedPackId(),
 };
 
 const dom = {
   status: document.querySelector("#statusText"),
   packGrid: document.querySelector("#packGrid"),
   lastPack: document.querySelector("#lastPack"),
+  heroAdultLink: document.querySelector("#heroAdultLink"),
+  heroKidLink: document.querySelector("#heroKidLink"),
 };
 
 boot();
@@ -22,6 +26,10 @@ boot();
 async function boot() {
   try {
     state.manifest = await fetchManifest();
+    state.selectedPackId = resolvePackId(state.manifest, state.requestedPackId);
+    if (state.selectedPackId) {
+      rememberLastPackId(state.selectedPackId);
+    }
     render();
   } catch (error) {
     console.error(error);
@@ -36,16 +44,23 @@ function render() {
     return;
   }
 
-  const lastPack = packs.find((pack) => pack.id === state.lastPackId);
+  const activePack = packs.find((pack) => pack.id === state.selectedPackId) || packs[0];
+  if (activePack?.id !== state.selectedPackId) {
+    state.selectedPackId = activePack?.id || "";
+  }
   dom.status.textContent = "Pick a challenge before the walk, then open adult mode on the phone and kid mode on the iPad.";
-  dom.lastPack.textContent = lastPack ? `Last used challenge: ${lastPack.title}` : "No challenge selected yet.";
+  dom.lastPack.textContent = activePack ? `Selected challenge: ${activePack.title}` : "No challenge selected yet.";
+  if (activePack) {
+    dom.heroAdultLink.href = buildPackLink("collect.html", activePack.id);
+    dom.heroKidLink.href = buildPackLink("kid-collect.html", activePack.id);
+  }
   dom.packGrid.replaceChildren(...packs.map(createPackCard));
 }
 
 function createPackCard(pack) {
   const article = document.createElement("article");
   article.className = "pack-card";
-  if (pack.id === state.lastPackId) {
+  if (pack.id === state.selectedPackId) {
     article.classList.add("is-last-used");
   }
 
@@ -87,7 +102,7 @@ function createPackCard(pack) {
   useButton.textContent = "Choose this challenge";
   useButton.addEventListener("click", () => {
     rememberLastPackId(pack.id);
-    state.lastPackId = pack.id;
+    state.selectedPackId = pack.id;
     render();
   });
 

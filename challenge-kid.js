@@ -454,7 +454,7 @@ async function prepareOffline() {
   try {
     const additionalUrls = [
       `/content/challenges/manifest.json`,
-      `/content/challenges/${state.pack.meta.id}.json`,
+      state.pack.meta.path,
       `/collect.html?pack=${encodeURIComponent(state.pack.meta.id)}`,
       `/kid-collect.html?pack=${encodeURIComponent(state.pack.meta.id)}`,
     ];

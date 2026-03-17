@@ -215,12 +215,13 @@ def save_walk_bundle(payload: dict) -> dict:
     safe_mode = re.sub(r"[^a-z0-9_-]+", "-", mode).strip("-") or "walk-bundle"
     safe_device = re.sub(r"[^a-z0-9_-]+", "-", device_label).strip("-")
     timestamp = datetime.now(tz=timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    unique_token = uuid.uuid4().hex[:6]
     suffix = f"-{safe_device}" if safe_device else ""
-    filename = f"{timestamp}-{safe_mode}{suffix}.json"
+    filename = f"{timestamp}-{safe_mode}{suffix}-{unique_token}.json"
     path = UPLOADS_DIR / filename
 
     with path.open("w", encoding="utf-8") as handle:
-      json.dump(payload, handle, indent=2)
+        json.dump(payload, handle, indent=2)
 
     return {
         "filename": filename,
